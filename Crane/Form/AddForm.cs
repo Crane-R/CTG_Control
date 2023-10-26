@@ -13,6 +13,7 @@ namespace CTG_Control.crane.form
 {
     public partial class AddForm : Form
     {
+
         public AddForm()
         {
             this.StartPosition = FormStartPosition.CenterParent;
