@@ -32,6 +32,7 @@ namespace CTG_Control.crane.form
             //在Java中这里应该是this.Text而C#是addSourcePath.Text
             if (Constants.ADD_SOURCE_PATH_BLANK.Equals(addSourcePath.Text))
             {
+
                 addSourcePath.Text = null;
             }
         }
