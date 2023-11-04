@@ -4,11 +4,14 @@ namespace CTG_Control
 {
     public partial class MainForm : Form
     {
+        public static ListView mainTableData;
+
         public MainForm()
         {
             //窗体初始化
             this.StartPosition = FormStartPosition.CenterScreen;
             InitializeComponent();
+            mainTableData = mainTable;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -22,8 +25,10 @@ namespace CTG_Control
             mainTable.Items.AddRange(lvs);
 
             //定义表格行高
-            ImageList imgList = new ImageList();
-            imgList.ImageSize = new Size(1, 30);
+            ImageList imgList = new()
+            {
+                ImageSize = new Size(1, 30)
+            };
             mainTable.SmallImageList = imgList;
 
             for (int i = 0; i < mainTable.Items.Count; i++)

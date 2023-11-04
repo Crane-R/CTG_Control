@@ -28,50 +28,51 @@
         /// </summary>
         private void InitializeComponent()
         {
-            sureBtn = new Button();
+            SureBtn = new Button();
             addSourcePath = new TextBox();
             addTargetPath = new TextBox();
+            ChooseSourcePath = new FolderBrowserDialog();
+            ChooseTargetPath = new FolderBrowserDialog();
             SuspendLayout();
             // 
-            // sureBtn
+            // SureBtn
             // 
-            sureBtn.Location = new Point(460, 15);
-            sureBtn.Name = "sureBtn";
-            sureBtn.Size = new Size(93, 29);
-            sureBtn.TabIndex = 0;
-            sureBtn.Text = "确认";
-            sureBtn.UseVisualStyleBackColor = true;
+            SureBtn.Location = new Point(640, 107);
+            SureBtn.Name = "SureBtn";
+            SureBtn.Size = new Size(100, 30);
+            SureBtn.TabIndex = 0;
+            SureBtn.Text = "确认";
+            SureBtn.UseVisualStyleBackColor = true;
+            SureBtn.Click += SureBtn_Click;
             // 
             // addSourcePath
             // 
             addSourcePath.ForeColor = SystemColors.ScrollBar;
-            addSourcePath.Location = new Point(15, 15);
+            addSourcePath.Location = new Point(40, 12);
             addSourcePath.Name = "addSourcePath";
-            addSourcePath.Size = new Size(200, 27);
+            addSourcePath.Size = new Size(700, 27);
             addSourcePath.TabIndex = 1;
-            addSourcePath.Text = "点我选择他妈的源路径";
             addSourcePath.Click += AddSourcePath_Click;
             // 
             // addTargetPath
             // 
             addTargetPath.ForeColor = Color.Silver;
-            addTargetPath.Location = new Point(230, 15);
+            addTargetPath.Location = new Point(40, 59);
             addTargetPath.Name = "addTargetPath";
-            addTargetPath.Size = new Size(200, 27);
+            addTargetPath.Size = new Size(700, 27);
             addTargetPath.TabIndex = 2;
-            addTargetPath.Text = "点我选择TM的目标路径";
             addTargetPath.Click += AddTargetPath_Click;
             // 
             // AddForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(582, 74);
+            ClientSize = new Size(782, 154);
             Controls.Add(addTargetPath);
             Controls.Add(addSourcePath);
-            Controls.Add(sureBtn);
+            Controls.Add(SureBtn);
             Name = "AddForm";
-            Text = "AddForm";
+            Text = "添加项";
             Load += AddForm_Load;
             ResumeLayout(false);
             PerformLayout();
@@ -79,8 +80,10 @@
 
         #endregion
 
-        private Button sureBtn;
+        private Button SureBtn;
         private TextBox addSourcePath;
         private TextBox addTargetPath;
+        private FolderBrowserDialog ChooseSourcePath;
+        private FolderBrowserDialog ChooseTargetPath;
     }
 }
