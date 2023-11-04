@@ -1,4 +1,7 @@
 using CTG_Control.crane.form;
+using CTG_Control.Crane.Model.Bean;
+using CTG_Control.Crane.Model.Dao;
+using CTG_Control.Crane.Model.Service;
 
 namespace CTG_Control
 {
@@ -18,10 +21,14 @@ namespace CTG_Control
         {
 
             //表格数据初始化
-            ListViewItem[] lvs = new ListViewItem[3];
-            lvs[0] = new ListViewItem(new string[] { "行1列11", "行1列2", "" });
-            lvs[1] = new ListViewItem(new string[] { "行2列1", "行2列2", "" });
-            lvs[2] = new ListViewItem(new string[] { "行3列1", "行3列2", "" });
+            List<CompassItem> compassItems = AllDataDao.ReadAll();
+            int count = compassItems.Count;
+            ListViewItem[] lvs = new ListViewItem[count];
+            for (int i = 0; i < count; i++)
+            {
+                CompassItem compassItem = compassItems[i];
+                lvs[i] = new ListViewItem(new string[] { compassItem.SourcePath, compassItem.TargetPath, "" });
+            }
             mainTable.Items.AddRange(lvs);
 
             //定义表格行高

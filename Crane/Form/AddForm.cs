@@ -1,4 +1,6 @@
 ﻿using CTG_Control.Crane.Constant;
+using CTG_Control.Crane.Model.Bean;
+using CTG_Control.Crane.Model.Dao;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -77,6 +79,9 @@ namespace CTG_Control.crane.form
             { new ListViewItem(new string[] { sourcePath, targetPath, "" }) };
             MainForm.mainTableData.Items.AddRange(lvs);
 
+            //写数据
+            AllDataDao.Write(new CompassItem(sourcePath, targetPath));
+
             //添加按钮
             Button executeBtn = new()
             {
@@ -92,7 +97,7 @@ namespace CTG_Control.crane.form
                 MainForm.mainTableData.Width - MainForm.mainTableData.Columns[2].Width,
                     (MainForm.mainTableData.Items.Count) * 30
                 );
-            MainForm.mainTableData.Controls.Add( executeBtn );
+            MainForm.mainTableData.Controls.Add(executeBtn);
             Close();
         }
 

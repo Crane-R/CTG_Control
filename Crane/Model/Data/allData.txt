@@ -1,0 +1,1 @@
+[{"SourcePathValue":"D:\\VirtualMachines\\win10","TargetPathValue":"D:\\VirtualMachines\\win10\\caches"}]
