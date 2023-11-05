@@ -6,10 +6,10 @@ namespace CTG_Control.Crane.Model.Bean
     /// 压缩项目类，单个对象指向一条执行项目
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    internal class CompassItem
+    internal class CompressItem
     {
 
-        public CompassItem(string SourcePath, string TargetPath)
+        public CompressItem(string SourcePath, string TargetPath)
         {
             SourcePathValue = SourcePath;
             TargetPathValue = TargetPath;

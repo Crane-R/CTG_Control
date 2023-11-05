@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CTG_Control.Crane.Model.Service
+﻿namespace CTG_Control.Crane.Service
 {
     internal class PathService
     {
@@ -12,9 +6,16 @@ namespace CTG_Control.Crane.Model.Service
         public static string GetApplicationPath()
         {
             string path = Application.StartupPath;
-            string folderName = String.Empty;
+            //如果程序路径不包含bin说明是正式环境，直接跳
+            if (!path.Contains("\\bin\\"))
+            {
+                return path;
+            }
+            string folderName = string.Empty;
+            Console.WriteLine("获取到的Application.StartupPath：" + path);
             while (folderName.ToLower() != "bin")
             {
+                Console.WriteLine("获取到的Application.StartupPath：" + path);
                 path = path.Substring(0, path.LastIndexOf("\\"));
                 folderName = path.Substring(path.LastIndexOf("\\") + 1);
             }

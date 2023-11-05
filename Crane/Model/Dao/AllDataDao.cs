@@ -1,7 +1,7 @@
 ﻿using CTG_Control.Crane.Model.Bean;
 using System.Text;
 using Newtonsoft.Json;
-using CTG_Control.Crane.Model.Service;
+using CTG_Control.Crane.Service;
 
 namespace CTG_Control.Crane.Model.Dao
 {
@@ -14,17 +14,33 @@ namespace CTG_Control.Crane.Model.Dao
         private static string DATA_PATH = PathService.GetApplicationPath()
             + "Crane\\Model\\Data\\allData.txt";
 
-        public static void Write(CompassItem compassItem)
+        /// <summary>
+        /// 添加一个项
+        /// </summary>
+        /// <param name="compassItem"></param>
+        public static void Add(CompressItem compressItem)
         {
-            List<CompassItem> compassItems = ReadAll();
-            compassItems.Add(compassItem);
-            File.WriteAllText(DATA_PATH, JsonConvert.SerializeObject(compassItems));
+            List<CompressItem> compressItems = ReadAll();
+            compressItems.Add(compressItem);
+            File.WriteAllText(DATA_PATH, JsonConvert.SerializeObject(compressItems));
         }
 
-        public static List<CompassItem> ReadAll()
+        /// <summary>
+        /// 读取全部项
+        /// </summary>
+        /// <returns></returns>
+        public static List<CompressItem> ReadAll()
         {
-            List<CompassItem>? compassItems = JsonConvert.DeserializeObject<List<CompassItem>>(File.ReadAllText(DATA_PATH, Encoding.UTF8));
-            return compassItems == null ? new List<CompassItem> { } : compassItems;
+            List<CompressItem>? compassItems = JsonConvert.DeserializeObject<List<CompressItem>>(File.ReadAllText(DATA_PATH, Encoding.UTF8));
+            return compassItems == null ? new List<CompressItem> { } : compassItems;
+        }
+
+        /// <summary>
+        /// 覆盖全部
+        /// </summary>
+        public static void WriteAll(List<CompressItem> compressItems)
+        {
+            File.WriteAllText(DATA_PATH, JsonConvert.SerializeObject(compressItems));
         }
 
     }

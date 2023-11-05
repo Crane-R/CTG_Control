@@ -28,45 +28,44 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             folderBrowserDialog1 = new FolderBrowserDialog();
-            mainTable = new ListView();
-            sourcePath = new ColumnHeader();
-            targetPath = new ColumnHeader();
-            execution = new ColumnHeader();
+            contextMenuMain = new ContextMenuStrip(components);
+            sssToolStripMenuItem = new ToolStripMenuItem();
+            DeleteCurrent = new ToolStripMenuItem();
             addBtn = new Button();
             AllExecuteBtn = new Button();
+            mainTable = new DataGridView();
+            SourcePath = new DataGridViewTextBoxColumn();
+            TargetPath = new DataGridViewTextBoxColumn();
+            contextMenuMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)mainTable).BeginInit();
             SuspendLayout();
             // 
-            // mainTable
+            // contextMenuMain
             // 
-            mainTable.Columns.AddRange(new ColumnHeader[] { sourcePath, targetPath, execution });
-            mainTable.Location = new Point(12, 12);
-            mainTable.Name = "mainTable";
-            mainTable.Size = new Size(800, 400);
-            mainTable.TabIndex = 3;
-            mainTable.UseCompatibleStateImageBehavior = false;
-            mainTable.View = View.Details;
-            mainTable.SelectedIndexChanged += listView1_SelectedIndexChanged;
+            contextMenuMain.ImageScalingSize = new Size(20, 20);
+            contextMenuMain.Items.AddRange(new ToolStripItem[] { sssToolStripMenuItem, DeleteCurrent });
+            contextMenuMain.Name = "contextMenuMain";
+            contextMenuMain.Size = new Size(383, 52);
             // 
-            // sourcePath
+            // sssToolStripMenuItem
             // 
-            sourcePath.Text = "源路径";
-            sourcePath.Width = 300;
+            sssToolStripMenuItem.Name = "sssToolStripMenuItem";
+            sssToolStripMenuItem.Size = new Size(382, 24);
+            sssToolStripMenuItem.Text = "执行压缩（！注意确认左边三角标选择行）";
+            sssToolStripMenuItem.Click += ExecuteBtn_Click;
             // 
-            // targetPath
+            // DeleteCurrent
             // 
-            targetPath.Text = "目标路径";
-            targetPath.Width = 300;
-            // 
-            // execution
-            // 
-            execution.Text = "操作";
-            execution.TextAlign = HorizontalAlignment.Center;
-            execution.Width = 200;
+            DeleteCurrent.Name = "DeleteCurrent";
+            DeleteCurrent.Size = new Size(382, 24);
+            DeleteCurrent.Text = "删除当前指向行项";
+            DeleteCurrent.Click += DeleteCurrent_Click;
             // 
             // addBtn
             // 
-            addBtn.Location = new Point(820, 12);
+            addBtn.Location = new Point(1020, 12);
             addBtn.Name = "addBtn";
             addBtn.Size = new Size(150, 50);
             addBtn.TabIndex = 4;
@@ -76,34 +75,69 @@
             // 
             // AllExecuteBtn
             // 
-            AllExecuteBtn.Location = new Point(820, 68);
+            AllExecuteBtn.Location = new Point(1020, 68);
             AllExecuteBtn.Name = "AllExecuteBtn";
             AllExecuteBtn.Size = new Size(150, 50);
             AllExecuteBtn.TabIndex = 5;
             AllExecuteBtn.Text = "一键执行";
             AllExecuteBtn.UseVisualStyleBackColor = true;
+            AllExecuteBtn.Click += AllExecuteBtn_Click;
+            // 
+            // mainTable
+            // 
+            mainTable.AllowUserToAddRows = false;
+            mainTable.AllowUserToDeleteRows = false;
+            mainTable.BackgroundColor = SystemColors.Control;
+            mainTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            mainTable.Columns.AddRange(new DataGridViewColumn[] { SourcePath, TargetPath });
+            mainTable.ContextMenuStrip = contextMenuMain;
+            mainTable.Location = new Point(12, 12);
+            mainTable.Name = "mainTable";
+            mainTable.RowHeadersWidth = 51;
+            mainTable.RowTemplate.Height = 29;
+            mainTable.Size = new Size(1002, 430);
+            mainTable.TabIndex = 6;
+            mainTable.CellContentClick += mainTable_CellContentClick;
+            mainTable.CellMouseDown += MainTable_CellMouseDown;
+            // 
+            // SourcePath
+            // 
+            SourcePath.HeaderText = "源路径";
+            SourcePath.MinimumWidth = 500;
+            SourcePath.Name = "SourcePath";
+            SourcePath.Width = 500;
+            // 
+            // TargetPath
+            // 
+            TargetPath.HeaderText = "目标路径";
+            TargetPath.MinimumWidth = 500;
+            TargetPath.Name = "TargetPath";
+            TargetPath.Width = 500;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(982, 454);
+            ClientSize = new Size(1182, 454);
+            Controls.Add(mainTable);
             Controls.Add(AllExecuteBtn);
             Controls.Add(addBtn);
-            Controls.Add(mainTable);
             Name = "MainForm";
-            Text = "CTG_Control v0.01";
             Load += MainForm_Load;
+            contextMenuMain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)mainTable).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
         private FolderBrowserDialog folderBrowserDialog1;
-        public ListView mainTable;
-        private ColumnHeader targetPath;
-        private ColumnHeader execution;
         private Button addBtn;
         private Button AllExecuteBtn;
-        private ColumnHeader sourcePath;
+        private ContextMenuStrip contextMenuMain;
+        private DataGridView mainTable;
+        private DataGridViewTextBoxColumn SourcePath;
+        private DataGridViewTextBoxColumn TargetPath;
+        private ToolStripMenuItem sssToolStripMenuItem;
+        private ToolStripMenuItem DeleteCurrent;
     }
 }

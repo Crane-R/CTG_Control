@@ -1,26 +1,21 @@
 ﻿using CTG_Control.Crane.Constant;
 using CTG_Control.Crane.Model.Bean;
 using CTG_Control.Crane.Model.Dao;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace CTG_Control.crane.form
 {
     public partial class AddForm : Form
     {
 
-        public AddForm()
+        //记载主窗体
+        private readonly MainForm mainForm;
+
+        public AddForm(MainForm mainForm)
         {
             this.StartPosition = FormStartPosition.CenterParent;
 
             InitializeComponent();
+            this.mainForm = mainForm;
         }
 
         private void AddForm_Load(object sender, EventArgs e)
@@ -75,36 +70,11 @@ namespace CTG_Control.crane.form
                 MessageBox.Show("请确认源路径和目标路径不为空", "提示");
                 return;
             }
-            ListViewItem[] lvs = new ListViewItem[1]
-            { new ListViewItem(new string[] { sourcePath, targetPath, "" }) };
-            MainForm.mainTableData.Items.AddRange(lvs);
 
             //写数据
-            AllDataDao.Write(new CompassItem(sourcePath, targetPath));
-
-            //添加按钮
-            Button executeBtn = new()
-            {
-                Visible = true,
-                Text = "执行"
-            };
-            executeBtn.Click += ExecuteBtn_Click;
-            executeBtn.Size = new Size(
-                MainForm.mainTableData.Columns[2].Width - 10,
-                30
-                );
-            executeBtn.Location = new Point(
-                MainForm.mainTableData.Width - MainForm.mainTableData.Columns[2].Width,
-                    (MainForm.mainTableData.Items.Count) * 30
-                );
-            MainForm.mainTableData.Controls.Add(executeBtn);
+            AllDataDao.Add(new CompressItem(sourcePath, targetPath));
+            mainForm.MainForm_Load(null, null);
             Close();
-        }
-
-        ///执行按钮事件
-        private void ExecuteBtn_Click(object sender, EventArgs e)
-        {
-
         }
 
     }
