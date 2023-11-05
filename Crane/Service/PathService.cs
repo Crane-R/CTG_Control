@@ -12,10 +12,8 @@
                 return path;
             }
             string folderName = string.Empty;
-            Console.WriteLine("获取到的Application.StartupPath：" + path);
             while (folderName.ToLower() != "bin")
-            {
-                Console.WriteLine("获取到的Application.StartupPath：" + path);
+            {        
                 path = path.Substring(0, path.LastIndexOf("\\"));
                 folderName = path.Substring(path.LastIndexOf("\\") + 1);
             }
