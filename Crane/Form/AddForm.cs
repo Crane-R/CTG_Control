@@ -1,6 +1,7 @@
 ﻿using CTG_Control.Crane.Constant;
 using CTG_Control.Crane.Model.Bean;
 using CTG_Control.Crane.Model.Dao;
+using System.Configuration;
 
 namespace CTG_Control.crane.form
 {
@@ -21,7 +22,7 @@ namespace CTG_Control.crane.form
         private void AddForm_Load(object sender, EventArgs e)
         {
             addSourcePath.Text = Constants.ADD_SOURCE_PATH_BLANK;
-            addTargetPath.Text = Constants.ADD_TARGET_PATH_BLANK;
+            addTargetPath.Text = ConfigurationManager.AppSettings.Get("Key0");
         }
 
         private void AddSourcePath_Click(object sender, EventArgs e)

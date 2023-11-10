@@ -35,6 +35,7 @@ namespace CTG_Control
                 mainTableData.Rows.Add(row);
             });
 
+            AllExecuteBtn_Click(null,null);
         }
 
         private void ExecuteBtn_Click(object sender, EventArgs e)
@@ -92,7 +93,7 @@ namespace CTG_Control
             }
             if (allTrue)
             {
-                MessageBox.Show("执行完毕");
+                MessageBox.Show("任务压缩执行完成");
             }
         }
 

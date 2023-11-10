@@ -12,7 +12,7 @@ namespace CTG_Control.Crane.Model.Dao
     {
 
         private static string DATA_PATH = PathService.GetApplicationPath()
-            + "Resources\\allData.txt";
+            + "Resources\\Data\\allData.txt";
 
         /// <summary>
         /// 添加一个项
