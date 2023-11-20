@@ -10,6 +10,11 @@ namespace CTG_Control
     {
         public static DataGridView mainTableData;
 
+        private readonly int ID_INDEX = 0;
+        private readonly int SOURCE_PATH_INDEX = 1;
+        private readonly int TARGET_PATH_INDEX = 2;
+        private readonly int LATELY_DATE_INDEX = 3;
+
         public MainForm()
         {
             //窗体初始化
@@ -28,10 +33,10 @@ namespace CTG_Control
             {
                 DataGridViewRow row = new DataGridViewRow();
                 row.CreateCells(mainTableData);
-                row.Cells[0].Value = item.SourcePath;
-                row.Cells[1].Value = item.TargetPath;
-                row.Cells[2].Value = item.LatelyDate;
-                row.Cells[3].Value = item.Id;
+                row.Cells[SOURCE_PATH_INDEX].Value = item.SourcePath;
+                row.Cells[TARGET_PATH_INDEX].Value = item.TargetPath;
+                row.Cells[LATELY_DATE_INDEX].Value = item.LatelyDate;
+                row.Cells[ID_INDEX].Value = item.Id;
                 mainTableData.Rows.Add(row);
             });
 
@@ -47,12 +52,12 @@ namespace CTG_Control
 
             int index = mainTableData.CurrentRow.Index;
             DataGridViewRow dataGridViewRow = mainTableData.Rows[index];
-            _ = DateTime.TryParse(dataGridViewRow.Cells[2].Value.ToString(), out DateTime dateTime);
+            _ = DateTime.TryParse(dataGridViewRow.Cells[LATELY_DATE_INDEX].Value.ToString(), out DateTime dateTime);
             CompressItem compressItem = new CompressItem(
-                dataGridViewRow.Cells[0].Value.ToString(),
-                dataGridViewRow.Cells[1].Value.ToString(),
+                dataGridViewRow.Cells[SOURCE_PATH_INDEX].Value.ToString(),
+                dataGridViewRow.Cells[TARGET_PATH_INDEX].Value.ToString(),
                 dateTime,
-                IdService.GenerateId()
+                Convert.ToInt32(dataGridViewRow.Cells[0].Value.ToString())
             );
             bool result = ExecuteCompress(compressItem, false);
             if (result)
@@ -101,10 +106,11 @@ namespace CTG_Control
             CompressItem compressItem = new();
             for (int i = 0; i < count; i++)
             {
-                compressItem.SourcePath = mainTableData.Rows[i].Cells[0].Value.ToString() ?? "源路径为空";
-                compressItem.TargetPath = mainTableData.Rows[i].Cells[1].Value.ToString() ?? "目标路径为空";
-                _ = DateTime.TryParse(mainTableData.Rows[i].Cells[1].Value.ToString(), out DateTime dateTime);
+                compressItem.SourcePath = mainTableData.Rows[i].Cells[SOURCE_PATH_INDEX].Value.ToString() ?? "源路径为空";
+                compressItem.TargetPath = mainTableData.Rows[i].Cells[TARGET_PATH_INDEX].Value.ToString() ?? "目标路径为空";
+                _ = DateTime.TryParse(mainTableData.Rows[i].Cells[LATELY_DATE_INDEX].Value.ToString(), out DateTime dateTime);
                 compressItem.LatelyDate = dateTime;
+                compressItem.Id = Convert.ToInt32(mainTableData.Rows[i].Cells[ID_INDEX].Value.ToString());
                 if (!ExecuteCompress(compressItem, true))
                 {
                     MessageBox.Show("执行过程中遇到目录为空的错误，执行停止。\r\n" + (i + 1) + "行之前（不含" + (i + 1) + "行）已执行完成",

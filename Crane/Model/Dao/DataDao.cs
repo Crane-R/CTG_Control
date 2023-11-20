@@ -25,6 +25,7 @@ namespace CTG_Control.Crane.Model.Dao
             compressItems.Add(compressItem);
             File.WriteAllText(DATA_PATH, JsonConvert.SerializeObject(compressItems));
             ConfigService.DataCountIncrement();
+            ConfigService.SetValue("NextId", (Convert.ToInt32(ConfigService.GetValue("NextId")) + 1).ToString());
         }
 
         /// <summary>

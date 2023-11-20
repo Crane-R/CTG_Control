@@ -36,10 +36,10 @@
             addBtn = new Button();
             AllExecuteBtn = new Button();
             mainTable = new DataGridView();
+            id = new DataGridViewTextBoxColumn();
             SourcePath = new DataGridViewTextBoxColumn();
             TargetPath = new DataGridViewTextBoxColumn();
             LatelyDate = new DataGridViewTextBoxColumn();
-            id = new DataGridViewTextBoxColumn();
             contextMenuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)mainTable).BeginInit();
             SuspendLayout();
@@ -91,7 +91,7 @@
             mainTable.AllowUserToDeleteRows = false;
             mainTable.BackgroundColor = SystemColors.Control;
             mainTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            mainTable.Columns.AddRange(new DataGridViewColumn[] { SourcePath, TargetPath, LatelyDate, id });
+            mainTable.Columns.AddRange(new DataGridViewColumn[] { id, SourcePath, TargetPath, LatelyDate });
             mainTable.ContextMenuStrip = contextMenuMain;
             mainTable.Location = new Point(12, 12);
             mainTable.Name = "mainTable";
@@ -101,6 +101,15 @@
             mainTable.TabIndex = 6;
             mainTable.CellContentClick += mainTable_CellContentClick;
             mainTable.CellMouseDown += MainTable_CellMouseDown;
+            // 
+            // id
+            // 
+            id.Frozen = true;
+            id.HeaderText = "ID";
+            id.MinimumWidth = 6;
+            id.Name = "id";
+            id.ReadOnly = true;
+            id.Width = 50;
             // 
             // SourcePath
             // 
@@ -127,15 +136,6 @@
             LatelyDate.ReadOnly = true;
             LatelyDate.Width = 250;
             // 
-            // id
-            // 
-            id.Frozen = true;
-            id.HeaderText = "ID";
-            id.MinimumWidth = 6;
-            id.Name = "id";
-            id.ReadOnly = true;
-            id.Width = 50;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -159,9 +159,9 @@
         private DataGridView mainTable;
         private ToolStripMenuItem sssToolStripMenuItem;
         private ToolStripMenuItem DeleteCurrent;
+        private DataGridViewTextBoxColumn id;
         private DataGridViewTextBoxColumn SourcePath;
         private DataGridViewTextBoxColumn TargetPath;
         private DataGridViewTextBoxColumn LatelyDate;
-        private DataGridViewTextBoxColumn id;
     }
 }

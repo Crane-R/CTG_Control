@@ -14,9 +14,7 @@ namespace CTG_Control.Crane.Service
 
         public static int GenerateId()
         {
-            int nextId = Convert.ToInt32(ConfigService.GetValue("NextId"));
-            ConfigService.SetValue("NextId", (nextId + 1).ToString());
-            return nextId;
+            return Convert.ToInt32(ConfigService.GetValue("NextId"));
         }
 
     }
