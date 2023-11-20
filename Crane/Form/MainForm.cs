@@ -3,8 +3,6 @@ using CTG_Control.Crane.Constant;
 using CTG_Control.Crane.Model.Bean;
 using CTG_Control.Crane.Model.Dao;
 using CTG_Control.Crane.Service;
-using System;
-using System.Windows.Forms;
 
 namespace CTG_Control
 {
@@ -35,7 +33,7 @@ namespace CTG_Control
                 mainTableData.Rows.Add(row);
             });
 
-            AllExecuteBtn_Click(null,null);
+            //AllExecuteBtn_Click(null,null);
         }
 
         private void ExecuteBtn_Click(object sender, EventArgs e)

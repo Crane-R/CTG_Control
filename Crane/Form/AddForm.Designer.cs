@@ -33,6 +33,7 @@
             addTargetPath = new TextBox();
             ChooseSourcePath = new FolderBrowserDialog();
             ChooseTargetPath = new FolderBrowserDialog();
+            DefaultUpPathCBox = new CheckBox();
             SuspendLayout();
             // 
             // SureBtn
@@ -56,18 +57,29 @@
             // 
             // addTargetPath
             // 
-            addTargetPath.ForeColor = Color.Silver;
+            addTargetPath.ForeColor = Color.Black;
             addTargetPath.Location = new Point(40, 59);
             addTargetPath.Name = "addTargetPath";
             addTargetPath.Size = new Size(700, 27);
             addTargetPath.TabIndex = 2;
             addTargetPath.Click += AddTargetPath_Click;
             // 
+            // DefaultUpPathCBox
+            // 
+            DefaultUpPathCBox.AutoSize = true;
+            DefaultUpPathCBox.Location = new Point(323, 111);
+            DefaultUpPathCBox.Name = "DefaultUpPathCBox";
+            DefaultUpPathCBox.Size = new Size(252, 24);
+            DefaultUpPathCBox.TabIndex = 3;
+            DefaultUpPathCBox.Text = "将该次目标地址设为默认上传点";
+            DefaultUpPathCBox.UseVisualStyleBackColor = true;
+            // 
             // AddForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(782, 154);
+            Controls.Add(DefaultUpPathCBox);
             Controls.Add(addTargetPath);
             Controls.Add(addSourcePath);
             Controls.Add(SureBtn);
@@ -85,5 +97,6 @@
         private TextBox addTargetPath;
         private FolderBrowserDialog ChooseSourcePath;
         private FolderBrowserDialog ChooseTargetPath;
+        private CheckBox DefaultUpPathCBox;
     }
 }

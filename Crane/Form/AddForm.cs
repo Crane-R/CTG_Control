@@ -1,6 +1,7 @@
 ﻿using CTG_Control.Crane.Constant;
 using CTG_Control.Crane.Model.Bean;
 using CTG_Control.Crane.Model.Dao;
+using CTG_Control.Crane.Service;
 using System.Configuration;
 
 namespace CTG_Control.crane.form
@@ -22,7 +23,7 @@ namespace CTG_Control.crane.form
         private void AddForm_Load(object sender, EventArgs e)
         {
             addSourcePath.Text = Constants.ADD_SOURCE_PATH_BLANK;
-            addTargetPath.Text = ConfigurationManager.AppSettings.Get("Key0");
+            addTargetPath.Text = ConfigService.GetValue("DefaultTargetPath");
         }
 
         private void AddSourcePath_Click(object sender, EventArgs e)
@@ -75,6 +76,13 @@ namespace CTG_Control.crane.form
             //写数据
             AllDataDao.Add(new CompressItem(sourcePath, targetPath));
             mainForm.MainForm_Load(null, null);
+
+            //是否修改默认上传地址
+            if (DefaultUpPathCBox.Checked == true)
+            {
+                ConfigService.SetValue("DefaultTargetPath", targetPath);
+            }
+
             Close();
         }
 

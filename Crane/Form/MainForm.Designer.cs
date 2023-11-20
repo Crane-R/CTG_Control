@@ -38,6 +38,7 @@
             mainTable = new DataGridView();
             SourcePath = new DataGridViewTextBoxColumn();
             TargetPath = new DataGridViewTextBoxColumn();
+            LatelyDate = new DataGridViewTextBoxColumn();
             contextMenuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)mainTable).BeginInit();
             SuspendLayout();
@@ -65,7 +66,7 @@
             // 
             // addBtn
             // 
-            addBtn.Location = new Point(1020, 12);
+            addBtn.Location = new Point(1213, 12);
             addBtn.Name = "addBtn";
             addBtn.Size = new Size(150, 50);
             addBtn.TabIndex = 4;
@@ -75,7 +76,7 @@
             // 
             // AllExecuteBtn
             // 
-            AllExecuteBtn.Location = new Point(1020, 68);
+            AllExecuteBtn.Location = new Point(1213, 79);
             AllExecuteBtn.Name = "AllExecuteBtn";
             AllExecuteBtn.Size = new Size(150, 50);
             AllExecuteBtn.TabIndex = 5;
@@ -89,19 +90,20 @@
             mainTable.AllowUserToDeleteRows = false;
             mainTable.BackgroundColor = SystemColors.Control;
             mainTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            mainTable.Columns.AddRange(new DataGridViewColumn[] { SourcePath, TargetPath });
+            mainTable.Columns.AddRange(new DataGridViewColumn[] { SourcePath, TargetPath, LatelyDate });
             mainTable.ContextMenuStrip = contextMenuMain;
             mainTable.Location = new Point(12, 12);
             mainTable.Name = "mainTable";
             mainTable.RowHeadersWidth = 51;
             mainTable.RowTemplate.Height = 29;
-            mainTable.Size = new Size(1002, 430);
+            mainTable.Size = new Size(1195, 620);
             mainTable.TabIndex = 6;
             mainTable.CellContentClick += mainTable_CellContentClick;
             mainTable.CellMouseDown += MainTable_CellMouseDown;
             // 
             // SourcePath
             // 
+            SourcePath.Frozen = true;
             SourcePath.HeaderText = "源路径";
             SourcePath.MinimumWidth = 500;
             SourcePath.Name = "SourcePath";
@@ -109,16 +111,26 @@
             // 
             // TargetPath
             // 
+            TargetPath.Frozen = true;
             TargetPath.HeaderText = "目标路径";
             TargetPath.MinimumWidth = 500;
             TargetPath.Name = "TargetPath";
             TargetPath.Width = 500;
             // 
+            // LatelyDate
+            // 
+            LatelyDate.Frozen = true;
+            LatelyDate.HeaderText = "最近执行日期";
+            LatelyDate.MinimumWidth = 6;
+            LatelyDate.Name = "LatelyDate";
+            LatelyDate.ReadOnly = true;
+            LatelyDate.Width = 195;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1182, 454);
+            ClientSize = new Size(1375, 644);
             Controls.Add(mainTable);
             Controls.Add(AllExecuteBtn);
             Controls.Add(addBtn);
@@ -135,9 +147,10 @@
         private Button AllExecuteBtn;
         private ContextMenuStrip contextMenuMain;
         private DataGridView mainTable;
-        private DataGridViewTextBoxColumn SourcePath;
-        private DataGridViewTextBoxColumn TargetPath;
         private ToolStripMenuItem sssToolStripMenuItem;
         private ToolStripMenuItem DeleteCurrent;
+        private DataGridViewTextBoxColumn SourcePath;
+        private DataGridViewTextBoxColumn TargetPath;
+        private DataGridViewTextBoxColumn LatelyDate;
     }
 }
