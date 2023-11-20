@@ -65,5 +65,21 @@ namespace CTG_Control.Crane.Service
             SetValue("system", key, value);
         }
 
+        /// <summary>
+        /// Id--
+        /// </summary>
+        public static void DataCountDecrement()
+        {
+            ConfigService.SetValue("CurrentDataCount", (Convert.ToInt32(ConfigService.GetValue("CurrentDataCount")) - 1).ToString());
+        }
+
+        /// <summary>
+        /// Id++
+        /// </summary>
+        public static void DataCountIncrement()
+        {
+            ConfigService.SetValue("CurrentDataCount", (Convert.ToInt32(ConfigService.GetValue("CurrentDataCount")) + 1).ToString());
+        }
+
     }
 }

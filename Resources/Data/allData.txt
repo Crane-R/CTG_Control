@@ -1,1 +1,0 @@
-[{"SourcePathValue":"E:\\Events\\231104CTG压缩测试\\资料仓库","TargetPathValue":"E:\\Events\\231104CTG压缩测试\\百度网盘备份目录"},{"SourcePathValue":"E:\\Events\\CTG_Control v0.01\\231105打包程序运行测试\\百度","TargetPathValue":"E:\\Events\\CTG_Control v0.01\\231105打包程序运行测试\\百度"}]

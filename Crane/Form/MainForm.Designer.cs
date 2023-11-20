@@ -39,6 +39,7 @@
             SourcePath = new DataGridViewTextBoxColumn();
             TargetPath = new DataGridViewTextBoxColumn();
             LatelyDate = new DataGridViewTextBoxColumn();
+            id = new DataGridViewTextBoxColumn();
             contextMenuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)mainTable).BeginInit();
             SuspendLayout();
@@ -66,7 +67,7 @@
             // 
             // addBtn
             // 
-            addBtn.Location = new Point(1213, 12);
+            addBtn.Location = new Point(1375, 12);
             addBtn.Name = "addBtn";
             addBtn.Size = new Size(150, 50);
             addBtn.TabIndex = 4;
@@ -76,7 +77,7 @@
             // 
             // AllExecuteBtn
             // 
-            AllExecuteBtn.Location = new Point(1213, 79);
+            AllExecuteBtn.Location = new Point(1375, 68);
             AllExecuteBtn.Name = "AllExecuteBtn";
             AllExecuteBtn.Size = new Size(150, 50);
             AllExecuteBtn.TabIndex = 5;
@@ -90,13 +91,13 @@
             mainTable.AllowUserToDeleteRows = false;
             mainTable.BackgroundColor = SystemColors.Control;
             mainTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            mainTable.Columns.AddRange(new DataGridViewColumn[] { SourcePath, TargetPath, LatelyDate });
+            mainTable.Columns.AddRange(new DataGridViewColumn[] { SourcePath, TargetPath, LatelyDate, id });
             mainTable.ContextMenuStrip = contextMenuMain;
             mainTable.Location = new Point(12, 12);
             mainTable.Name = "mainTable";
             mainTable.RowHeadersWidth = 51;
             mainTable.RowTemplate.Height = 29;
-            mainTable.Size = new Size(1195, 620);
+            mainTable.Size = new Size(1352, 620);
             mainTable.TabIndex = 6;
             mainTable.CellContentClick += mainTable_CellContentClick;
             mainTable.CellMouseDown += MainTable_CellMouseDown;
@@ -124,13 +125,22 @@
             LatelyDate.MinimumWidth = 6;
             LatelyDate.Name = "LatelyDate";
             LatelyDate.ReadOnly = true;
-            LatelyDate.Width = 195;
+            LatelyDate.Width = 250;
+            // 
+            // id
+            // 
+            id.Frozen = true;
+            id.HeaderText = "ID";
+            id.MinimumWidth = 6;
+            id.Name = "id";
+            id.ReadOnly = true;
+            id.Width = 50;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1375, 644);
+            ClientSize = new Size(1537, 644);
             Controls.Add(mainTable);
             Controls.Add(AllExecuteBtn);
             Controls.Add(addBtn);
@@ -152,5 +162,6 @@
         private DataGridViewTextBoxColumn SourcePath;
         private DataGridViewTextBoxColumn TargetPath;
         private DataGridViewTextBoxColumn LatelyDate;
+        private DataGridViewTextBoxColumn id;
     }
 }

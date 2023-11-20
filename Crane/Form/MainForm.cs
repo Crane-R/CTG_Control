@@ -22,7 +22,7 @@ namespace CTG_Control
         internal void MainForm_Load(object sender, EventArgs e)
         {
             //表格数据初始化
-            List<CompressItem> compassItems = AllDataDao.ReadAll();
+            List<CompressItem> compassItems = DataDao.ReadAll();
             mainTableData.Rows.Clear();
             compassItems.ForEach(item =>
             {
@@ -30,6 +30,8 @@ namespace CTG_Control
                 row.CreateCells(mainTableData);
                 row.Cells[0].Value = item.SourcePath;
                 row.Cells[1].Value = item.TargetPath;
+                row.Cells[2].Value = item.LatelyDate;
+                row.Cells[3].Value = item.Id;
                 mainTableData.Rows.Add(row);
             });
 
@@ -45,16 +47,30 @@ namespace CTG_Control
 
             int index = mainTableData.CurrentRow.Index;
             DataGridViewRow dataGridViewRow = mainTableData.Rows[index];
-            bool result = ExecuteCompress(dataGridViewRow.Cells[0].Value, dataGridViewRow.Cells[1].Value, false);
+            _ = DateTime.TryParse(dataGridViewRow.Cells[2].Value.ToString(), out DateTime dateTime);
+            CompressItem compressItem = new CompressItem(
+                dataGridViewRow.Cells[0].Value.ToString(),
+                dataGridViewRow.Cells[1].Value.ToString(),
+                dateTime,
+                IdService.GenerateId()
+            );
+            bool result = ExecuteCompress(compressItem, false);
             if (result)
             {
+                MainFormRefresh();
                 MessageBox.Show("执行完毕");
             }
         }
 
-        private bool ExecuteCompress(object sourcePathValue, object targetPathValue, bool isOneKey)
+        private bool ExecuteCompress(CompressItem compressItem, bool isOneKey)
         {
-            if (sourcePathValue is null || targetPathValue is null)
+            //时间检测：如果距离上次同步时间少于12h，则不同步
+            if (DateTime.Now.Subtract(compressItem.LatelyDate).TotalHours < 12)
+            {
+                return false;
+            }
+
+            if (compressItem.SourcePath is null || compressItem.TargetPath is null)
             {
                 if (!isOneKey)
                 {
@@ -63,10 +79,13 @@ namespace CTG_Control
                 return false;
             }
             //TODO：这里无法处理object调用toString为空的情况，暂时返回特殊字符串
-            string sourcePath = sourcePathValue.ToString() ?? "ToString is null";
-            string targetPath = targetPathValue.ToString() +
+            string sourcePath = compressItem.SourcePath;
+            string targetPath = compressItem.TargetPath +
               "\\" + sourcePath.Substring(sourcePath.LastIndexOf("\\") + 1) + ".rar";
             CompressService.CompressRar(sourcePath, targetPath);
+            //执行完毕压缩后更新日期
+            compressItem.LatelyDate = DateTime.Now;
+            DataDao.UpdateOne(compressItem);
             return true;
         }
 
@@ -79,18 +98,23 @@ namespace CTG_Control
         {
             int count = mainTableData.RowCount;
             bool allTrue = true;
+            CompressItem compressItem = new();
             for (int i = 0; i < count; i++)
             {
-                if (!ExecuteCompress(mainTableData.Rows[i].Cells[0].Value, mainTableData.Rows[i].Cells[1].Value, true))
+                compressItem.SourcePath = mainTableData.Rows[i].Cells[0].Value.ToString() ?? "源路径为空";
+                compressItem.TargetPath = mainTableData.Rows[i].Cells[1].Value.ToString() ?? "目标路径为空";
+                _ = DateTime.TryParse(mainTableData.Rows[i].Cells[1].Value.ToString(), out DateTime dateTime);
+                compressItem.LatelyDate = dateTime;
+                if (!ExecuteCompress(compressItem, true))
                 {
                     MessageBox.Show("执行过程中遇到目录为空的错误，执行停止。\r\n" + (i + 1) + "行之前（不含" + (i + 1) + "行）已执行完成",
                         "地址为空", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     allTrue = false;
                 }
-
             }
             if (allTrue)
             {
+                MainFormRefresh();
                 MessageBox.Show("任务压缩执行完成");
             }
         }
@@ -115,10 +139,12 @@ namespace CTG_Control
         /// <param name="e"></param>
         private void DeleteCurrent_Click(object sender, EventArgs e)
         {
-            int index = mainTableData.CurrentRow.Index;
-            List<CompressItem> compressItems = AllDataDao.ReadAll();
-            compressItems.RemoveAt(index);
-            AllDataDao.WriteAll(compressItems);
+            DataDao.DeleteByIndex(mainTableData.CurrentRow.Index);
+            MainFormRefresh();
+        }
+
+        public void MainFormRefresh()
+        {
             MainForm_Load(null, null);
         }
 
