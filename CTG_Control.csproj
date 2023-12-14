@@ -6,7 +6,17 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>ctgv0.4.2.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\ctgv0.4.2.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ctgv0.4.2.ico" />
+    <Content Include="Resources\ctgv0.4.2.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

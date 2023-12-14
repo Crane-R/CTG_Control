@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using CTG_Control.Crane.Model.Bean;
+using CTG_Control.Crane.Model.Dao;
+using Microsoft.Win32;
 using System.Diagnostics;
 
 namespace CTG_Control.Crane.Service
@@ -9,6 +11,8 @@ namespace CTG_Control.Crane.Service
     internal class CompressService
     {
 
+        private static readonly string WINRAR_KEY = @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\WinRAR.exe";
+
         private CompressService() { }
 
         /// <summary>
@@ -18,9 +22,7 @@ namespace CTG_Control.Crane.Service
         public static bool NotExistsWinRar()
         {
             string result = string.Empty;
-
-            string key = @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\WinRAR.exe";
-            RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(key);
+            RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(WINRAR_KEY);
             if (registryKey != null)
             {
                 result = registryKey.GetValue("").ToString();
@@ -37,11 +39,10 @@ namespace CTG_Control.Crane.Service
         /// <param name="saveDir">解压后要保存到的目录</param>
         public static void DeCompressRar(string rarFileName, string saveDir)
         {
-            string regKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\WinRAR.exe";
-            RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(regKey);
+            RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(WINRAR_KEY);
             string winrarPath = registryKey.GetValue("").ToString();
             registryKey.Close();
-            string winrarDir = System.IO.Path.GetDirectoryName(winrarPath);
+            string winrarDir = Path.GetDirectoryName(winrarPath);
             String commandOptions = string.Format("x {0} {1} -y", rarFileName, saveDir);
 
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
@@ -57,20 +58,27 @@ namespace CTG_Control.Crane.Service
         }
 
         /// <summary>
-        /// 将目录和文件压缩为rar格式并保存到指定的目录
+        /// 压缩核心
         /// </summary>
-        /// <param name="soruceDir">要压缩的文件夹目录</param>
-        /// <param name="rarFileName">压缩后的rar保存路径</param>
-        public static void CompressRar(string soruceDir, string rarFileName)
+        /// <param name="compressItem"></param>
+        public static void CompressRar(CompressItem compressItem)
         {
-            string regKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\WinRAR.exe";
-            RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(regKey);
+            string sourcePath = compressItem.SourcePath;
+            string targetFileName = compressItem.TargetPath +
+              "\\" + sourcePath.Substring(sourcePath.LastIndexOf("\\") + 1) + ".rar";
+            //前置检测
+            if (sourcePath is null || targetFileName is null)
+            {
+                return;
+            }
+
+            RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(WINRAR_KEY);
             string winrarPath = registryKey.GetValue("").ToString();
             registryKey.Close();
             string winrarDir = Path.GetDirectoryName(winrarPath);
             string commandOptions = string.Format(
                 "a -r -agYYMMDDHHMM -ep1 -ibck \"{0}\" \"{1}\""
-                , rarFileName, soruceDir);
+                , targetFileName, sourcePath);
 
             ProcessStartInfo processStartInfo = new()
             {
@@ -82,9 +90,15 @@ namespace CTG_Control.Crane.Service
             {
                 StartInfo = processStartInfo
             };
+            process.StartInfo.CreateNoWindow = true;
+
             process.Start();
             process.WaitForExit();
             process.Close();
+
+            //执行完成更新日期
+            compressItem.LatelyDate = DateTime.Now;
+            DataDao.UpdateOne(compressItem);
         }
 
     }
