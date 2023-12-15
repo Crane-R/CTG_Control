@@ -1,10 +1,10 @@
 using CTG_Control.crane.form;
-using CTG_Control.Crane;
 using CTG_Control.Crane.Constant;
 using CTG_Control.Crane.Model.Bean;
 using CTG_Control.Crane.Model.Dao;
 using CTG_Control.Crane.Service;
-using System.Timers;
+using System.IO;
+using System.Windows.Forms;
 
 namespace CTG_Control
 {
@@ -19,7 +19,8 @@ namespace CTG_Control
 
         //倒计时文本
         private readonly string COUNTDOWN_LABEL = "秒后启动同步程序";
-        private int COUNTDOWN_TIME = 10;
+        private int COUNTDOWN_TIME = ConfigService.GetValueByInt("countDownTime");
+        private int SHUT_DOWN_TIME = ConfigService.GetValueByInt("shutDownTime");
 
         private Thread countDownThread;
         private ManualResetEvent countDownChoke = new ManualResetEvent(true);
@@ -40,7 +41,7 @@ namespace CTG_Control
             if (ConfigService.GetValue("isNotify").Equals("1"))
             {
                 notification.Checked = true;
-                mainNotifyIcon.BalloonTipText = "正在同步";
+                mainNotifyIcon.BalloonTipText = ConfigService.GetValue("notificationText");
                 //其实此参数已经弃用，具体时间由操作系统控制
                 mainNotifyIcon.ShowBalloonTip(2000);
             }
@@ -51,6 +52,16 @@ namespace CTG_Control
 
             timeJudgeCheckBox.Checked = ConfigService.GetValue("isTimeJudge").Equals("1");
 
+            //判定开机自启
+            if (ConfigService.GetValueByBool("isStartUp"))
+            {
+                new StartUpService().OpenStartUp();
+            }
+            else
+            {
+                new StartUpService().CloseStartUp();
+            }
+
             CheckForIllegalCrossThreadCalls = false;
 
             //启动同步倒计时
@@ -58,12 +69,9 @@ namespace CTG_Control
             {
                 for (int i = COUNTDOWN_TIME; i >= 0; i--)
                 {
-                    if (!countDownChoke.WaitOne())
-                    {
-                        break;
-                    }
-                    Thread.Sleep(1000);
+                    countDownChoke.WaitOne();
                     SyCountDownLabel.Text = COUNTDOWN_TIME-- + COUNTDOWN_LABEL;
+                    Thread.Sleep(1000);
                 }
                 SyCountDownLabel.Text = "同步指令已经下达";
                 SyExecuteAll();
@@ -72,21 +80,30 @@ namespace CTG_Control
 
         }
 
-        internal void MainForm_Load(object sender, EventArgs e)
+        public void init()
         {
-            //表格数据初始化
-            List<CompressItem> compassItems = DataDao.ReadAll();
-            mainTableData.Rows.Clear();
-            compassItems.ForEach(item =>
+            //https://blog.csdn.net/cxwl3sxl/article/details/8807763
+            this.BeginInvoke(new Action(() =>
             {
-                DataGridViewRow row = new DataGridViewRow();
-                row.CreateCells(mainTableData);
-                row.Cells[SOURCE_PATH_INDEX].Value = item.SourcePath;
-                row.Cells[TARGET_PATH_INDEX].Value = item.TargetPath;
-                row.Cells[LATELY_DATE_INDEX].Value = item.LatelyDate;
-                row.Cells[ID_INDEX].Value = item.Id;
-                mainTableData.Rows.Add(row);
-            });
+                //表格数据初始化
+                List<CompressItem> compassItems = DataDao.ReadAll();
+                mainTableData.Rows.Clear();
+                compassItems.ForEach(item =>
+                {
+                    DataGridViewRow row = new DataGridViewRow();
+                    row.CreateCells(mainTableData);
+                    row.Cells[SOURCE_PATH_INDEX].Value = item.SourcePath;
+                    row.Cells[TARGET_PATH_INDEX].Value = item.TargetPath;
+                    row.Cells[LATELY_DATE_INDEX].Value = item.LatelyDate;
+                    row.Cells[ID_INDEX].Value = item.Id;
+                    mainTableData.Rows.Add(row);
+                });
+            }));
+        }
+
+        internal async void MainForm_Load(object sender, EventArgs e)
+        {
+            init();
         }
 
         /// <summary>
@@ -120,8 +137,24 @@ namespace CTG_Control
                 return false;
             }
 
+            //开始执行前禁用按钮
+            controlFunction(false);
+
             CompressService.CompressRar(compressItem);
+            controlFunction(true);
             return true;
+        }
+
+        private void controlFunction(bool isAble)
+        {
+            addBtn.Enabled = isAble;
+            AllExecuteBtn.Enabled = isAble;
+            contextMenuMain.Enabled = isAble;
+            sfxCheckBox.Enabled = isAble;
+            isStartUpCheckBox.Enabled = isAble;
+            timeJudgeCheckBox.Enabled = isAble;
+            notification.Enabled = isAble;
+            StopSyBtn.Enabled = isAble;
         }
 
         /// <summary>
@@ -150,13 +183,9 @@ namespace CTG_Control
                 dateTime,
                 Convert.ToInt32(dataGridViewRow.Cells[0].Value.ToString())
             );
+            new ProgressService().StartProgress(new FileCountService().FileLengthCount(compressItem.SourcePath), compressItem);
             ExecuteCompress(compressItem, true, false);
-            new ProgressService().StartProgress(
-                (int)(new FileCountService().FileLengthCount(compressItem.SourcePath) / 10000),
-                compressItem.SourcePath + " -> " + compressItem.TargetPath);
-
-
-
+            init();
         }
 
         /// <summary>
@@ -175,7 +204,24 @@ namespace CTG_Control
                 compressItem.Id = Convert.ToInt32(mainTableData.Rows[i].Cells[ID_INDEX].Value.ToString());
                 ExecuteCompress(compressItem, false, true);
             }
-            SyCountDownLabel.Text = "自动同步已经完成";
+            init();
+            try
+            {
+                Thread shutdownThread = new(new ThreadStart(() =>
+                {
+                    for (int i = SHUT_DOWN_TIME; i >= 0; i--)
+                    {
+                        SyCountDownLabel.Text = "自动同步已经完成，" + i + "秒后结束程序";
+                        Thread.Sleep(1000);
+                    }
+                    System.Environment.Exit(0);
+                }));
+                shutdownThread.Start();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
 
         private void AllExecuteBtn_Click(object sender, EventArgs e)
@@ -213,7 +259,7 @@ namespace CTG_Control
             {
                 MessageBox.Show("任务压缩执行完成");
             }
-            MainFormRefresh();
+            init();
         }
 
         private void MainTable_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
@@ -237,12 +283,7 @@ namespace CTG_Control
         private void DeleteCurrent_Click(object sender, EventArgs e)
         {
             DataDao.DeleteByIndex(mainTableData.CurrentRow.Index);
-            MainFormRefresh();
-        }
-
-        public void MainFormRefresh()
-        {
-            MainForm_Load(null, null);
+            init();
         }
 
         private void mainTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -300,7 +341,9 @@ namespace CTG_Control
         private void StopSyBtn_Click(object sender, EventArgs e)
         {
             countDownChoke.Reset();
+            SyCountDownLabel.Text = "自动同步已被终结，下次启动还原";
             this.StopSyBtn.Enabled = false;
+            StopSyBtn.Hide();
         }
 
         /// <summary>
@@ -323,5 +366,73 @@ namespace CTG_Control
             ConfigService.SetValue("isTimeJudge", timeJudgeCheckBox.Checked ? "1" : "0");
         }
 
+        private void isStartUpCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            ConfigService.SetValue("isStartUp", isStartUpCheckBox.Checked ? "1" : "0");
+        }
+
+        private void sfxCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            ConfigService.SetValue("sfx", sfxCheckBox.Checked ? "1" : "0");
+        }
+
+        /// <summary>
+        /// 还原菜单
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void restoreItem_Click(object sender, EventArgs e)
+        {
+            if (restoreItem.DropDownItems.Count == 0)
+            {
+                MessageBox.Show("该项没有可以还原的文件");
+                return;
+            }
+            restoreSecondMenuClick(null, null);
+        }
+
+        /// <summary>
+        /// 动态加载二级菜单
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void restoreItem_MouseHover(object sender, EventArgs e)
+        {
+            List<ToolStripMenuItem> toolStripMenuItems = new List<ToolStripMenuItem>();
+            DataGridViewRow currentRow = mainTableData.Rows[mainTableData.CurrentRow.Index];
+            string[] files = Directory.GetFiles(currentRow.Cells[TARGET_PATH_INDEX].Value.ToString());
+            int len = files.Length;
+            restoreItem.DropDownItems.Clear();
+            for (int i = 0; i < len; i++)
+            {
+                ToolStripMenuItem menu_item = new ToolStripMenuItem();
+                if (!files[i].ToString().EndsWith(".rar"))
+                {
+                    continue;
+                }
+                menu_item.Name = files[i].ToString();
+                menu_item.Text = files[i].ToString();
+                menu_item.Click += restoreSecondMenuClick;
+                restoreItem.DropDownItems.Add(menu_item);
+            }
+        }
+
+        private void restoreSecondMenuClick(object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = sender != null ? (ToolStripMenuItem)sender : (ToolStripMenuItem)restoreItem.DropDownItems[0];
+            string rarFileName = item.Text;
+            DataGridViewRow currentRow = mainTableData.Rows[mainTableData.CurrentRow.Index];
+            string sourceDir = currentRow.Cells[SOURCE_PATH_INDEX].Value.ToString();
+            DirectoryInfo directory = new DirectoryInfo(sourceDir);
+            DirectoryInfo? parentDir = directory.Parent;
+            directory.Delete(true);
+            new ProgressService().StartProgress(new FileCountService().FileLengthCount(rarFileName), "项还原执行");
+            CompressService.DeCompressRar(rarFileName, parentDir.FullName);
+        }
+
+        private void exitBtn_Click(object sender, EventArgs e)
+        {
+            System.Environment.Exit(0);
+        }
     }
 }

@@ -34,6 +34,16 @@ namespace CTG_Control.Crane.Model.Dao
         /// <returns></returns>
         public static List<CompressItem> ReadAll()
         {
+            //文件检测
+            if (!File.Exists(DATA_PATH))
+            {
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo() ;
+                startInfo.FileName = DATA_PATH;
+                //设置启动动作,确保以管理员身份运行
+                startInfo.Verb = "runas";
+                System.Diagnostics.Process.Start(startInfo);
+                File.Create(DATA_PATH);
+            }
             List<CompressItem>? compassItems = JsonConvert.DeserializeObject<List<CompressItem>>(File.ReadAllText(DATA_PATH, Encoding.UTF8));
             return compassItems == null ? new List<CompressItem> { } : compassItems;
         }

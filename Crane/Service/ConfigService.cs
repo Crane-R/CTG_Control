@@ -54,6 +54,15 @@ namespace CTG_Control.Crane.Service
             return GetValue("system", key);
         }
 
+        public static bool GetValueByBool(string key)
+        {
+            return GetValue(key).Equals("1");
+        }
+
+        public static int GetValueByInt(string key) { 
+            return Convert.ToInt32(GetValue(key));
+        }
+
         /*写配置文件*/
         public static void SetValue(string section, string key, string value)
         {

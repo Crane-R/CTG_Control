@@ -26,7 +26,7 @@ namespace CTG_Control.Crane.Service
             executingForm.Text = title;
             executingForm.Show();
             this.progressBar = executingForm.progressBar;
-            this.fileCount = (int)(fileCount / 10000);
+            this.fileCount = (int)(fileCount / (ConfigService.GetValueByBool("sfx") ? 5000 : 10000));
             this.progressLabel = executingForm.progressBarLabel;
             Thread progressBarThread = new(new ThreadStart(InnerExecute))
             {
@@ -38,7 +38,7 @@ namespace CTG_Control.Crane.Service
 
         public void StartProgress(long fileCount, CompressItem compressItem)
         {
-            new ProgressService().StartProgress((int)(fileCount / 10000), compressItem.SourcePath + " -> " + compressItem.TargetPath);
+            new ProgressService().StartProgress(fileCount, compressItem.SourcePath + " -> " + compressItem.TargetPath);
         }
 
         private void InnerExecute()

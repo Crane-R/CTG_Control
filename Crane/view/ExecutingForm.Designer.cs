@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExecutingForm));
             progressBar = new ProgressBar();
             progressBarLabel = new Label();
             SuspendLayout();
@@ -46,9 +47,9 @@
             progressBarLabel.Font = new Font("Microsoft YaHei UI", 12.1008406F, FontStyle.Bold, GraphicsUnit.Point);
             progressBarLabel.Location = new Point(72, 132);
             progressBarLabel.Name = "progressBarLabel";
-            progressBarLabel.Size = new Size(92, 27);
+            progressBarLabel.Size = new Size(292, 27);
             progressBarLabel.TabIndex = 1;
-            progressBarLabel.Text = "进度显示";
+            progressBarLabel.Text = "结束太快了，进度条没反应过来";
             // 
             // ExecutingForm
             // 
@@ -57,6 +58,7 @@
             ClientSize = new Size(765, 196);
             Controls.Add(progressBarLabel);
             Controls.Add(progressBar);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ExecutingForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "ExecutingForm";

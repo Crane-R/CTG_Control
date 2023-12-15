@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddForm));
             SureBtn = new Button();
             addSourcePath = new TextBox();
             addTargetPath = new TextBox();
@@ -38,9 +39,9 @@
             // 
             // SureBtn
             // 
-            SureBtn.Location = new Point(640, 107);
+            SureBtn.Location = new Point(720, 107);
             SureBtn.Name = "SureBtn";
-            SureBtn.Size = new Size(100, 30);
+            SureBtn.Size = new Size(112, 30);
             SureBtn.TabIndex = 0;
             SureBtn.Text = "确认";
             SureBtn.UseVisualStyleBackColor = true;
@@ -49,40 +50,41 @@
             // addSourcePath
             // 
             addSourcePath.ForeColor = SystemColors.ScrollBar;
-            addSourcePath.Location = new Point(40, 12);
+            addSourcePath.Location = new Point(45, 12);
             addSourcePath.Name = "addSourcePath";
-            addSourcePath.Size = new Size(700, 27);
+            addSourcePath.Size = new Size(787, 27);
             addSourcePath.TabIndex = 1;
             addSourcePath.Click += AddSourcePath_Click;
             // 
             // addTargetPath
             // 
             addTargetPath.ForeColor = Color.Black;
-            addTargetPath.Location = new Point(40, 59);
+            addTargetPath.Location = new Point(45, 59);
             addTargetPath.Name = "addTargetPath";
-            addTargetPath.Size = new Size(700, 27);
+            addTargetPath.Size = new Size(787, 27);
             addTargetPath.TabIndex = 2;
             addTargetPath.Click += AddTargetPath_Click;
             // 
             // DefaultUpPathCBox
             // 
             DefaultUpPathCBox.AutoSize = true;
-            DefaultUpPathCBox.Location = new Point(323, 111);
+            DefaultUpPathCBox.Location = new Point(363, 111);
             DefaultUpPathCBox.Name = "DefaultUpPathCBox";
-            DefaultUpPathCBox.Size = new Size(252, 24);
+            DefaultUpPathCBox.Size = new Size(238, 24);
             DefaultUpPathCBox.TabIndex = 3;
             DefaultUpPathCBox.Text = "将该次目标地址设为默认上传点";
             DefaultUpPathCBox.UseVisualStyleBackColor = true;
             // 
             // AddForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(782, 154);
+            ClientSize = new Size(880, 154);
             Controls.Add(DefaultUpPathCBox);
             Controls.Add(addTargetPath);
             Controls.Add(addSourcePath);
             Controls.Add(SureBtn);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "AddForm";
             Text = "添加项";
             Load += AddForm_Load;

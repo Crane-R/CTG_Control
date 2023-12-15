@@ -34,6 +34,7 @@
             contextMenuMain = new ContextMenuStrip(components);
             sssToolStripMenuItem = new ToolStripMenuItem();
             DeleteCurrent = new ToolStripMenuItem();
+            restoreItem = new ToolStripMenuItem();
             addBtn = new Button();
             AllExecuteBtn = new Button();
             mainTable = new DataGridView();
@@ -50,7 +51,9 @@
             StopSyBtn = new Button();
             notification = new CheckBox();
             timeJudgeCheckBox = new CheckBox();
-            checkBox1 = new CheckBox();
+            isStartUpCheckBox = new CheckBox();
+            sfxCheckBox = new CheckBox();
+            exitBtn = new Button();
             contextMenuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)mainTable).BeginInit();
             mainContextMenuStrip.SuspendLayout();
@@ -59,9 +62,9 @@
             // contextMenuMain
             // 
             contextMenuMain.ImageScalingSize = new Size(20, 20);
-            contextMenuMain.Items.AddRange(new ToolStripItem[] { sssToolStripMenuItem, DeleteCurrent });
+            contextMenuMain.Items.AddRange(new ToolStripItem[] { sssToolStripMenuItem, DeleteCurrent, restoreItem });
             contextMenuMain.Name = "contextMenuMain";
-            contextMenuMain.Size = new Size(364, 52);
+            contextMenuMain.Size = new Size(364, 76);
             // 
             // sssToolStripMenuItem
             // 
@@ -77,24 +80,39 @@
             DeleteCurrent.Text = "删除当前指向行项";
             DeleteCurrent.Click += DeleteCurrent_Click;
             // 
+            // restoreItem
+            // 
+            restoreItem.Name = "restoreItem";
+            restoreItem.Size = new Size(363, 24);
+            restoreItem.Text = "从目标地址覆盖还原（点我默认第一个）";
+            restoreItem.Click += restoreItem_Click;
+            restoreItem.MouseHover += restoreItem_MouseHover;
+            // 
             // addBtn
             // 
-            addBtn.Location = new Point(1369, 12);
+            addBtn.BackColor = Color.SandyBrown;
+            addBtn.Cursor = Cursors.Hand;
+            addBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
+            addBtn.Location = new Point(1369, 15);
             addBtn.Name = "addBtn";
             addBtn.Size = new Size(155, 50);
             addBtn.TabIndex = 4;
             addBtn.Text = "添加项";
-            addBtn.UseVisualStyleBackColor = true;
+            addBtn.UseVisualStyleBackColor = false;
             addBtn.Click += AddBtn_Click;
             // 
             // AllExecuteBtn
             // 
-            AllExecuteBtn.Location = new Point(1369, 78);
+            AllExecuteBtn.BackColor = SystemColors.ActiveCaption;
+            AllExecuteBtn.Cursor = Cursors.Hand;
+            AllExecuteBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
+            AllExecuteBtn.ForeColor = SystemColors.ActiveCaptionText;
+            AllExecuteBtn.Location = new Point(1369, 86);
             AllExecuteBtn.Name = "AllExecuteBtn";
             AllExecuteBtn.Size = new Size(155, 50);
             AllExecuteBtn.TabIndex = 5;
             AllExecuteBtn.Text = "一键执行";
-            AllExecuteBtn.UseVisualStyleBackColor = true;
+            AllExecuteBtn.UseVisualStyleBackColor = false;
             AllExecuteBtn.Click += AllExecuteBtn_Click;
             // 
             // mainTable
@@ -109,7 +127,7 @@
             mainTable.Name = "mainTable";
             mainTable.RowHeadersWidth = 51;
             mainTable.RowTemplate.Height = 29;
-            mainTable.Size = new Size(1317, 580);
+            mainTable.Size = new Size(1317, 564);
             mainTable.TabIndex = 6;
             mainTable.CellContentClick += mainTable_CellContentClick;
             mainTable.CellMouseDown += MainTable_CellMouseDown;
@@ -188,23 +206,28 @@
             // SyCountDownLabel
             // 
             SyCountDownLabel.AutoSize = true;
-            SyCountDownLabel.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
+            SyCountDownLabel.Font = new Font("Microsoft YaHei UI", 12.1008406F, FontStyle.Bold, GraphicsUnit.Point);
             SyCountDownLabel.ForeColor = Color.FromArgb(192, 0, 0);
-            SyCountDownLabel.Location = new Point(1358, 301);
+            SyCountDownLabel.Location = new Point(34, 588);
             SyCountDownLabel.MaximumSize = new Size(0, 155);
             SyCountDownLabel.Name = "SyCountDownLabel";
-            SyCountDownLabel.Size = new Size(166, 24);
+            SyCountDownLabel.Size = new Size(196, 27);
             SyCountDownLabel.TabIndex = 8;
             SyCountDownLabel.Text = "10秒后启动同步程序";
+            SyCountDownLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // StopSyBtn
             // 
-            StopSyBtn.Location = new Point(1369, 146);
+            StopSyBtn.BackColor = Color.IndianRed;
+            StopSyBtn.Cursor = Cursors.Hand;
+            StopSyBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
+            StopSyBtn.ForeColor = SystemColors.ButtonHighlight;
+            StopSyBtn.Location = new Point(1369, 229);
             StopSyBtn.Name = "StopSyBtn";
             StopSyBtn.Size = new Size(155, 50);
             StopSyBtn.TabIndex = 7;
             StopSyBtn.Text = "点击终止同步";
-            StopSyBtn.UseVisualStyleBackColor = true;
+            StopSyBtn.UseVisualStyleBackColor = false;
             StopSyBtn.Click += StopSyBtn_Click;
             // 
             // notification
@@ -212,11 +235,11 @@
             notification.AutoSize = true;
             notification.Checked = true;
             notification.CheckState = CheckState.Checked;
-            notification.Location = new Point(1369, 568);
+            notification.Location = new Point(1369, 552);
             notification.Name = "notification";
-            notification.Size = new Size(148, 24);
+            notification.Size = new Size(118, 24);
             notification.TabIndex = 9;
-            notification.Text = "自动同步是否通知";
+            notification.Text = "自动同步通知";
             notification.UseVisualStyleBackColor = true;
             notification.CheckedChanged += notification_CheckedChanged;
             // 
@@ -225,32 +248,63 @@
             timeJudgeCheckBox.AutoSize = true;
             timeJudgeCheckBox.Checked = true;
             timeJudgeCheckBox.CheckState = CheckState.Checked;
-            timeJudgeCheckBox.Location = new Point(1369, 526);
+            timeJudgeCheckBox.Location = new Point(1369, 510);
             timeJudgeCheckBox.Name = "timeJudgeCheckBox";
-            timeJudgeCheckBox.Size = new Size(118, 24);
+            timeJudgeCheckBox.Size = new Size(88, 24);
             timeJudgeCheckBox.TabIndex = 10;
-            timeJudgeCheckBox.Text = "是否时间检测";
+            timeJudgeCheckBox.Text = "时间检测";
             timeJudgeCheckBox.UseVisualStyleBackColor = true;
             timeJudgeCheckBox.CheckedChanged += timeJudgeCheckBox_CheckedChanged;
             // 
-            // checkBox1
+            // isStartUpCheckBox
             // 
-            checkBox1.AutoSize = true;
-            checkBox1.Checked = true;
-            checkBox1.CheckState = CheckState.Checked;
-            checkBox1.Location = new Point(1369, 480);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(163, 24);
-            checkBox1.TabIndex = 11;
-            checkBox1.Text = "是否开机自启（待）";
-            checkBox1.UseVisualStyleBackColor = true;
+            isStartUpCheckBox.AutoSize = true;
+            isStartUpCheckBox.Checked = true;
+            isStartUpCheckBox.CheckState = CheckState.Checked;
+            isStartUpCheckBox.Location = new Point(1369, 468);
+            isStartUpCheckBox.Name = "isStartUpCheckBox";
+            isStartUpCheckBox.Size = new Size(88, 24);
+            isStartUpCheckBox.TabIndex = 11;
+            isStartUpCheckBox.Text = "开机自启";
+            isStartUpCheckBox.UseVisualStyleBackColor = true;
+            isStartUpCheckBox.CheckedChanged += isStartUpCheckBox_CheckedChanged;
+            // 
+            // sfxCheckBox
+            // 
+            sfxCheckBox.AutoSize = true;
+            sfxCheckBox.Checked = true;
+            sfxCheckBox.CheckState = CheckState.Checked;
+            sfxCheckBox.Location = new Point(1369, 425);
+            sfxCheckBox.Name = "sfxCheckBox";
+            sfxCheckBox.Size = new Size(103, 24);
+            sfxCheckBox.TabIndex = 12;
+            sfxCheckBox.Text = "创建自解压";
+            sfxCheckBox.UseVisualStyleBackColor = true;
+            sfxCheckBox.CheckedChanged += sfxCheckBox_CheckedChanged;
+            // 
+            // exitBtn
+            // 
+            exitBtn.BackColor = SystemColors.ControlDarkDark;
+            exitBtn.Cursor = Cursors.Hand;
+            exitBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
+            exitBtn.ForeColor = SystemColors.ButtonHighlight;
+            exitBtn.Location = new Point(1369, 158);
+            exitBtn.Name = "exitBtn";
+            exitBtn.Size = new Size(155, 50);
+            exitBtn.TabIndex = 13;
+            exitBtn.Text = "退出程序";
+            exitBtn.UseVisualStyleBackColor = false;
+            exitBtn.Click += exitBtn_Click;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.Control;
             ClientSize = new Size(1536, 627);
-            Controls.Add(checkBox1);
+            Controls.Add(exitBtn);
+            Controls.Add(sfxCheckBox);
+            Controls.Add(isStartUpCheckBox);
             Controls.Add(timeJudgeCheckBox);
             Controls.Add(notification);
             Controls.Add(mainTable);
@@ -291,6 +345,9 @@
         private Button StopSyBtn;
         private CheckBox notification;
         private CheckBox timeJudgeCheckBox;
-        private CheckBox checkBox1;
+        private CheckBox isStartUpCheckBox;
+        private CheckBox sfxCheckBox;
+        private ToolStripMenuItem restoreItem;
+        private Button exitBtn;
     }
 }

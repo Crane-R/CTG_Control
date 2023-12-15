@@ -43,7 +43,7 @@ namespace CTG_Control.Crane.Service
             string winrarPath = registryKey.GetValue("").ToString();
             registryKey.Close();
             string winrarDir = Path.GetDirectoryName(winrarPath);
-            String commandOptions = string.Format("x {0} {1} -y", rarFileName, saveDir);
+            String commandOptions = string.Format("x {0} {1} -ibck -y", rarFileName, saveDir);
 
             ProcessStartInfo processStartInfo = new ProcessStartInfo();
             processStartInfo.FileName = System.IO.Path.Combine(winrarDir, "rar.exe");
@@ -91,10 +91,29 @@ namespace CTG_Control.Crane.Service
                 StartInfo = processStartInfo
             };
             process.StartInfo.CreateNoWindow = true;
-
             process.Start();
             process.WaitForExit();
             process.Close();
+
+            if (ConfigService.GetValueByBool("sfx")) {
+                string commandOptions2 = string.Format(
+                   "a -r -agYYMMDDHHMM -sfx -ep1 -ibck \"{0}\" \"{1}\""
+                   , targetFileName, sourcePath);
+                ProcessStartInfo processStartInfo2 = new()
+                {
+                    FileName = Path.Combine(winrarDir, "rar.exe"),
+                    Arguments = commandOptions2,
+                    WindowStyle = ProcessWindowStyle.Hidden
+                };
+                Process process2 = new()
+                {
+                    StartInfo = processStartInfo2
+                };
+                process2.StartInfo.CreateNoWindow = true;
+                process2.Start();
+                process2.WaitForExit();
+                process2.Close();
+            }
 
             //执行完成更新日期
             compressItem.LatelyDate = DateTime.Now;
