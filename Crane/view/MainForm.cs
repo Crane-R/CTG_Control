@@ -227,7 +227,6 @@ namespace CTG_Control
         private void AllExecuteBtn_Click(object sender, EventArgs e)
         {
             int count = mainTableData.RowCount;
-            bool allTrue = true;
             List<CompressItem> compressItems = new List<CompressItem>();
             long fileCount = 0;
             FileCountService fileCountService = new FileCountService();
@@ -241,24 +240,13 @@ namespace CTG_Control
                 compressItem.Id = Convert.ToInt32(mainTableData.Rows[i].Cells[ID_INDEX].Value.ToString());
                 fileCount += fileCountService.FileLengthCount(compressItem.SourcePath);
                 compressItems.Add(compressItem);
-
-
             }
             new ProgressService().StartProgress(fileCount, "一键执行");
             for (int i = 0; i < count; i++)
             {
-                if (!ExecuteCompress(compressItems[i], false, true))
-                {
-                    MessageBox.Show("执行过程中遇到目录为空的错误，执行停止。\r\n" + (i + 1) + "行之前（不含" + (i + 1) + "行）已执行完成",
-                        "地址为空", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    allTrue = false;
-                }
+                ExecuteCompress(compressItems[i], false, true);
             }
-
-            if (allTrue)
-            {
-                MessageBox.Show("任务压缩执行完成");
-            }
+            MessageBox.Show("任务压缩执行完成");
             init();
         }
 

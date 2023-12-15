@@ -1,1 +1,1 @@
-[{"SourcePathValue":"E:\\CTGv0.4.0\\example","TargetPathValue":"E:\\CTGv0.4.0\\231212目的地","LatelyDateValue":"2023-12-15T11:01:28.0909543+08:00","IdValue":0},{"SourcePathValue":"E:\\CTGv0.4.0\\231212测试","TargetPathValue":"E:\\CTGv0.4.0\\231212目的地","LatelyDateValue":"2023-12-15T11:02:47.4614005+08:00","IdValue":1},{"SourcePathValue":"E:\\CTGv0.4.0\\还原测试\\源","TargetPathValue":"E:\\CTGv0.4.0\\还原测试\\目的","LatelyDateValue":"2023-12-15T14:10:59.1352658+08:00","IdValue":2}]
+[]
