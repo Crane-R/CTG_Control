@@ -3,8 +3,6 @@ using CTG_Control.Crane.Constant;
 using CTG_Control.Crane.Model.Bean;
 using CTG_Control.Crane.Model.Dao;
 using CTG_Control.Crane.Service;
-using System.IO;
-using System.Windows.Forms;
 
 namespace CTG_Control
 {
@@ -195,6 +193,7 @@ namespace CTG_Control
         {
             int count = mainTableData.RowCount;
             CompressItem compressItem = new();
+            DeleteService deleteService = new DeleteService();
             for (int i = 0; i < count; i++)
             {
                 compressItem.SourcePath = mainTableData.Rows[i].Cells[SOURCE_PATH_INDEX].Value.ToString() ?? "源路径为空";
@@ -203,6 +202,10 @@ namespace CTG_Control
                 compressItem.LatelyDate = dateTime;
                 compressItem.Id = Convert.ToInt32(mainTableData.Rows[i].Cells[ID_INDEX].Value.ToString());
                 ExecuteCompress(compressItem, false, true);
+
+                //自动检测删除
+                deleteService.AutoJudgeDelete(compressItem.TargetPath, 0);
+
             }
             init();
             try
@@ -214,7 +217,7 @@ namespace CTG_Control
                         SyCountDownLabel.Text = "自动同步已经完成，" + i + "秒后结束程序";
                         Thread.Sleep(1000);
                     }
-                    System.Environment.Exit(0);
+                    Environment.Exit(0);
                 }));
                 shutdownThread.Start();
             }
@@ -326,6 +329,11 @@ namespace CTG_Control
                 FormWindowState.Normal : FormWindowState.Minimized;
         }
 
+        /// <summary>
+        /// 终止按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void StopSyBtn_Click(object sender, EventArgs e)
         {
             countDownChoke.Reset();

@@ -65,7 +65,7 @@ namespace CTG_Control.Crane.Service
         {
             string sourcePath = compressItem.SourcePath;
             string targetFileName = compressItem.TargetPath +
-              "\\" + sourcePath.Substring(sourcePath.LastIndexOf("\\") + 1) + ".rar";
+              "\\" + sourcePath.Substring(sourcePath.LastIndexOf("\\") + 1) + "-.rar";
             //前置检测
             if (sourcePath is null || targetFileName is null)
             {
@@ -77,7 +77,7 @@ namespace CTG_Control.Crane.Service
             registryKey.Close();
             string winrarDir = Path.GetDirectoryName(winrarPath);
             string commandOptions = string.Format(
-                "a -r -agYYMMDDHHMM -ep1 -ibck \"{0}\" \"{1}\""
+                "a -r -agyyyyMMddHHmm -ep1 -ibck \"{0}\" \"{1}\""
                 , targetFileName, sourcePath);
 
             ProcessStartInfo processStartInfo = new()
@@ -97,7 +97,7 @@ namespace CTG_Control.Crane.Service
 
             if (ConfigService.GetValueByBool("sfx")) {
                 string commandOptions2 = string.Format(
-                   "a -r -agYYMMDDHHMM -sfx -ep1 -ibck \"{0}\" \"{1}\""
+                   "a -r -agyyyyMMddHHmm -sfx -ep1 -ibck \"{0}\" \"{1}\""
                    , targetFileName, sourcePath);
                 ProcessStartInfo processStartInfo2 = new()
                 {
