@@ -204,7 +204,7 @@ namespace CTG_Control
                 ExecuteCompress(compressItem, false, true);
 
                 //×Ô¶¯¼ì²âÉ¾³ý
-                deleteService.AutoJudgeDelete(compressItem.TargetPath, 0);
+                deleteService.AutoJudgeDelete(compressItem.TargetPath, 72);
 
             }
             init();
