@@ -65,7 +65,7 @@ namespace CTG_Control.Crane.Service
         {
             string sourcePath = compressItem.SourcePath;
             string targetFileName = compressItem.TargetPath +
-              "\\" + sourcePath.Substring(sourcePath.LastIndexOf("\\") + 1) + "-.rar";
+              "\\" + sourcePath.Substring(sourcePath.LastIndexOf("\\") + 1) + "@.rar";
             //前置检测
             if (sourcePath is null || targetFileName is null)
             {

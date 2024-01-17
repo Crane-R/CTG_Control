@@ -23,7 +23,7 @@ namespace CTG_Control.Crane.Service
             DateTime now = DateTime.Now;
             foreach (string fileName in files)
             {
-                string v = fileName.Split("-")[1].Split(".")[0];
+                string v = fileName.Split("@")[1].Split(".")[0];
                 DateTime dt = DateTime.ParseExact(v, "yyyyMMddHHmm", CultureInfo.InvariantCulture);
                 if (now.Subtract(dt).TotalHours > delayHours) { 
                     File.Delete(fileName);
