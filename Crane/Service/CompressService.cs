@@ -39,6 +39,7 @@ namespace CTG_Control.Crane.Service
         /// <param name="saveDir">解压后要保存到的目录</param>
         public static void DeCompressRar(string rarFileName, string saveDir)
         {
+
             RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(WINRAR_KEY);
             string winrarPath = registryKey.GetValue("").ToString();
             registryKey.Close();
