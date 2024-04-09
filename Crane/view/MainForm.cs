@@ -78,7 +78,7 @@ namespace CTG_Control
 
         }
 
-        public void init()
+        public void Init()
         {
             //https://blog.csdn.net/cxwl3sxl/article/details/8807763
             this.BeginInvoke(new Action(() =>
@@ -101,7 +101,7 @@ namespace CTG_Control
 
         internal async void MainForm_Load(object sender, EventArgs e)
         {
-            init();
+            Init();
         }
 
         /// <summary>
@@ -136,14 +136,14 @@ namespace CTG_Control
             }
 
             //开始执行前禁用按钮
-            controlFunction(false);
+            ControlFunction(false);
 
             CompressService.CompressRar(compressItem);
-            controlFunction(true);
+            ControlFunction(true);
             return true;
         }
 
-        private void controlFunction(bool isAble)
+        private void ControlFunction(bool isAble)
         {
             addBtn.Enabled = isAble;
             AllExecuteBtn.Enabled = isAble;
@@ -181,9 +181,9 @@ namespace CTG_Control
                 dateTime,
                 Convert.ToInt32(dataGridViewRow.Cells[0].Value.ToString())
             );
-            new ProgressService().StartProgress(new FileCountService().FileLengthCount(compressItem.SourcePath), compressItem);
+            //new ProgressService().StartProgress(new FileCountService().FileLengthCount(compressItem.SourcePath), compressItem);
             ExecuteCompress(compressItem, true, false);
-            init();
+            Init();
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace CTG_Control
                 deleteService.AutoJudgeDelete(compressItem.TargetPath, 72);
 
             }
-            init();
+            Init();
             try
             {
                 Thread shutdownThread = new(new ThreadStart(() =>
@@ -244,13 +244,13 @@ namespace CTG_Control
                 fileCount += fileCountService.FileLengthCount(compressItem.SourcePath);
                 compressItems.Add(compressItem);
             }
-            new ProgressService().StartProgress(fileCount, "一键执行");
+            //new ProgressService().StartProgress(fileCount, "一键执行");
             for (int i = 0; i < count; i++)
             {
                 ExecuteCompress(compressItems[i], false, true);
             }
             MessageBox.Show("任务压缩执行完成");
-            init();
+            Init();
         }
 
         private void MainTable_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
@@ -274,7 +274,7 @@ namespace CTG_Control
         private void DeleteCurrent_Click(object sender, EventArgs e)
         {
             DataDao.DeleteByIndex(mainTableData.CurrentRow.Index);
-            init();
+            Init();
         }
 
         private void mainTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -426,7 +426,7 @@ namespace CTG_Control
             CompressService.DeCompressRar(rarFileName, parentDir.FullName);
         }
 
-        private void exitBtn_Click(object sender, EventArgs e)
+        private void ExitBtn_Click(object sender, EventArgs e)
         {
             System.Environment.Exit(0);
         }

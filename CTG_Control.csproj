@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <Content Include="ctgv0.4.2.ico" />
-    <Content Include="Resources\ctgv0.4.2.ico" />
+    <Content Include="Resources\img\ctgv0.4.2.ico" />
   </ItemGroup>
 
   <ItemGroup>
