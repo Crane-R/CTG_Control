@@ -75,7 +75,7 @@ namespace CTG_Control.crane.form
 
             //写数据
             DataDao.Add(new CompressItem(sourcePath, targetPath, DateTime.MinValue,IdService.GenerateId()));
-            mainForm.init(); 
+            mainForm.Init(); 
 
             //是否修改默认上传地址
             if (DefaultUpPathCBox.Checked == true)

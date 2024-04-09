@@ -6,7 +6,6 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>ctgv0.4.2.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="ctgv0.4.2.ico" />
-    <Content Include="Resources\ctgv0.4.2.ico" />
+    <Content Include="Resources\img\azhb3-bem61-001.ico" />
+    <Content Include="Resources\img\ctgv0.4.2.ico" />
   </ItemGroup>
 
   <ItemGroup>

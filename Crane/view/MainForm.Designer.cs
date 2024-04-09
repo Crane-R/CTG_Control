@@ -304,7 +304,7 @@
             exitBtn.TabIndex = 13;
             exitBtn.Text = "退出程序";
             exitBtn.UseVisualStyleBackColor = false;
-            exitBtn.Click += exitBtn_Click;
+            exitBtn.Click += ExitBtn_Click;
             // 
             // MainForm
             // 

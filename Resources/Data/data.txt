@@ -1,1 +1,1 @@
-[{"SourcePathValue":"E:\\待入库\\CTGv1.1.0测试文件\\源","TargetPathValue":"E:\\待入库\\CTGv1.1.0测试文件\\目","LatelyDateValue":"2024-01-17T15:39:36.1574077+08:00","IdValue":0}]
+[{"SourcePathValue":"E:\\CTG1.1.2\\源1\\校历","TargetPathValue":"E:\\CTG1.1.2\\目标","LatelyDateValue":"2024-04-09T12:34:06.1446811+08:00","IdValue":0}]
