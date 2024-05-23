@@ -2,7 +2,6 @@
 using CTG_Control.Crane.Model.Bean;
 using CTG_Control.Crane.Model.Dao;
 using CTG_Control.Crane.Service;
-using System.Configuration;
 
 namespace CTG_Control.crane.form
 {
@@ -22,6 +21,7 @@ namespace CTG_Control.crane.form
 
         private void AddForm_Load(object sender, EventArgs e)
         {
+            markNameBox.Text = Constants.MARK_NAME_BLANK;
             addSourcePath.Text = Constants.ADD_SOURCE_PATH_BLANK;
             addTargetPath.Text = ConfigService.GetValue("DefaultTargetPath");
         }
@@ -64,6 +64,7 @@ namespace CTG_Control.crane.form
         {
             string sourcePath = addSourcePath.Text;
             string targetPath = addTargetPath.Text;
+            string markName = markNameBox.Text;
             if ("".Equals(sourcePath) || "".Equals(targetPath)
                 || Constants.ADD_SOURCE_PATH_BLANK.Equals(sourcePath)
                 || Constants.ADD_TARGET_PATH_BLANK.Equals(targetPath))
@@ -74,8 +75,8 @@ namespace CTG_Control.crane.form
             }
 
             //写数据
-            DataDao.Add(new CompressItem(sourcePath, targetPath, DateTime.MinValue,IdService.GenerateId()));
-            mainForm.Init(); 
+            DataDao.Add(new CompressItem(IdService.GenerateId(), markName, sourcePath, targetPath, DateTime.MinValue));
+            mainForm.Init();
 
             //是否修改默认上传地址
             if (DefaultUpPathCBox.Checked == true)
@@ -84,6 +85,47 @@ namespace CTG_Control.crane.form
             }
 
             Close();
+        }
+
+        private void markNameBox_Click(object sender, EventArgs e)
+        {
+            markNameBox.Clear();
+        }
+
+        private void markNameBox_Leave(object sender, EventArgs e)
+        {
+            judgeText(markNameBox, Constants.MARK_NAME_BLANK);
+        }
+
+        private void addSourcePath_Leave(object sender, EventArgs e)
+        {
+            judgeText(addSourcePath, Constants.ADD_SOURCE_PATH_BLANK);
+        }
+
+        private void addTargetPath_Leave(object sender, EventArgs e)
+        {
+            judgeText(addTargetPath, Constants.ADD_TARGET_PATH_BLANK);
+        }
+
+        /// <summary>
+        /// 三输入框偶然聚合
+        /// </summary>
+        private void judgeText(TextBox textBox, string blankStr)
+        {
+            if (textBox.Text.Equals(blankStr))
+            {
+                textBox.ForeColor = Color.FromArgb(200, 200, 200);
+                return;
+            }
+            if (textBox.Text == "" || textBox.Text is null)
+            {
+                textBox.Text = blankStr;
+                textBox.ForeColor = Color.FromArgb(200, 200, 200);
+            }
+            else
+            {
+                textBox.ForeColor = Color.Black;
+            }
         }
 
     }

@@ -38,10 +38,6 @@
             addBtn = new Button();
             AllExecuteBtn = new Button();
             mainTable = new DataGridView();
-            id = new DataGridViewTextBoxColumn();
-            SourcePath = new DataGridViewTextBoxColumn();
-            TargetPath = new DataGridViewTextBoxColumn();
-            LatelyDate = new DataGridViewTextBoxColumn();
             mainNotifyIcon = new NotifyIcon(components);
             mainContextMenuStrip = new ContextMenuStrip(components);
             MinimalToolStripMenuItem = new ToolStripMenuItem();
@@ -54,6 +50,11 @@
             isStartUpCheckBox = new CheckBox();
             sfxCheckBox = new CheckBox();
             exitBtn = new Button();
+            id = new DataGridViewTextBoxColumn();
+            markName = new DataGridViewTextBoxColumn();
+            SourcePath = new DataGridViewTextBoxColumn();
+            TargetPath = new DataGridViewTextBoxColumn();
+            LatelyDate = new DataGridViewTextBoxColumn();
             contextMenuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)mainTable).BeginInit();
             mainContextMenuStrip.SuspendLayout();
@@ -123,7 +124,7 @@
             mainTable.AllowUserToDeleteRows = false;
             mainTable.BackgroundColor = SystemColors.Control;
             mainTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            mainTable.Columns.AddRange(new DataGridViewColumn[] { id, SourcePath, TargetPath, LatelyDate });
+            mainTable.Columns.AddRange(new DataGridViewColumn[] { id, markName, SourcePath, TargetPath, LatelyDate });
             mainTable.ContextMenuStrip = contextMenuMain;
             mainTable.Location = new Point(11, 12);
             mainTable.Margin = new Padding(2, 3, 2, 3);
@@ -134,40 +135,6 @@
             mainTable.TabIndex = 6;
             mainTable.CellContentClick += mainTable_CellContentClick;
             mainTable.CellMouseDown += MainTable_CellMouseDown;
-            // 
-            // id
-            // 
-            id.Frozen = true;
-            id.HeaderText = "ID";
-            id.MinimumWidth = 6;
-            id.Name = "id";
-            id.ReadOnly = true;
-            id.Width = 50;
-            // 
-            // SourcePath
-            // 
-            SourcePath.Frozen = true;
-            SourcePath.HeaderText = "源路径";
-            SourcePath.MinimumWidth = 500;
-            SourcePath.Name = "SourcePath";
-            SourcePath.Width = 500;
-            // 
-            // TargetPath
-            // 
-            TargetPath.Frozen = true;
-            TargetPath.HeaderText = "目标路径";
-            TargetPath.MinimumWidth = 500;
-            TargetPath.Name = "TargetPath";
-            TargetPath.Width = 500;
-            // 
-            // LatelyDate
-            // 
-            LatelyDate.Frozen = true;
-            LatelyDate.HeaderText = "最近执行日期";
-            LatelyDate.MinimumWidth = 6;
-            LatelyDate.Name = "LatelyDate";
-            LatelyDate.ReadOnly = true;
-            LatelyDate.Width = 250;
             // 
             // mainNotifyIcon
             // 
@@ -306,6 +273,47 @@
             exitBtn.UseVisualStyleBackColor = false;
             exitBtn.Click += ExitBtn_Click;
             // 
+            // id
+            // 
+            id.Frozen = true;
+            id.HeaderText = "ID";
+            id.MinimumWidth = 6;
+            id.Name = "id";
+            id.ReadOnly = true;
+            id.Width = 50;
+            // 
+            // markName
+            // 
+            markName.Frozen = true;
+            markName.HeaderText = "标识";
+            markName.Name = "markName";
+            markName.ReadOnly = true;
+            // 
+            // SourcePath
+            // 
+            SourcePath.Frozen = true;
+            SourcePath.HeaderText = "源路径";
+            SourcePath.MinimumWidth = 500;
+            SourcePath.Name = "SourcePath";
+            SourcePath.Width = 500;
+            // 
+            // TargetPath
+            // 
+            TargetPath.Frozen = true;
+            TargetPath.HeaderText = "目标路径";
+            TargetPath.MinimumWidth = 500;
+            TargetPath.Name = "TargetPath";
+            TargetPath.Width = 500;
+            // 
+            // LatelyDate
+            // 
+            LatelyDate.Frozen = true;
+            LatelyDate.HeaderText = "最近执行日期";
+            LatelyDate.MinimumWidth = 6;
+            LatelyDate.Name = "LatelyDate";
+            LatelyDate.ReadOnly = true;
+            LatelyDate.Width = 250;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
@@ -343,10 +351,6 @@
         private DataGridView mainTable;
         private ToolStripMenuItem sssToolStripMenuItem;
         private ToolStripMenuItem DeleteCurrent;
-        private DataGridViewTextBoxColumn id;
-        private DataGridViewTextBoxColumn SourcePath;
-        private DataGridViewTextBoxColumn TargetPath;
-        private DataGridViewTextBoxColumn LatelyDate;
         private NotifyIcon mainNotifyIcon;
         private ContextMenuStrip mainContextMenuStrip;
         private ToolStripMenuItem MinimalToolStripMenuItem;
@@ -360,5 +364,10 @@
         private CheckBox sfxCheckBox;
         private ToolStripMenuItem restoreItem;
         private Button exitBtn;
+        private DataGridViewTextBoxColumn id;
+        private DataGridViewTextBoxColumn markName;
+        private DataGridViewTextBoxColumn SourcePath;
+        private DataGridViewTextBoxColumn TargetPath;
+        private DataGridViewTextBoxColumn LatelyDate;
     }
 }

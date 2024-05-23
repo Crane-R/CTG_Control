@@ -11,9 +11,10 @@ namespace CTG_Control
         public static DataGridView mainTableData;
 
         private readonly int ID_INDEX = 0;
-        private readonly int SOURCE_PATH_INDEX = 1;
-        private readonly int TARGET_PATH_INDEX = 2;
-        private readonly int LATELY_DATE_INDEX = 3;
+        private readonly int MARK_NAME_INDEX = 1;
+        private readonly int SOURCE_PATH_INDEX = 2;
+        private readonly int TARGET_PATH_INDEX = 3;
+        private readonly int LATELY_DATE_INDEX = 4;
 
         //倒计时文本
         private readonly string COUNTDOWN_LABEL = "秒后启动同步程序";
@@ -94,6 +95,7 @@ namespace CTG_Control
                     row.Cells[TARGET_PATH_INDEX].Value = item.TargetPath;
                     row.Cells[LATELY_DATE_INDEX].Value = item.LatelyDate;
                     row.Cells[ID_INDEX].Value = item.Id;
+                    row.Cells[MARK_NAME_INDEX].Value= item.MarkName;
                     mainTableData.Rows.Add(row);
                 });
             }));
@@ -176,10 +178,11 @@ namespace CTG_Control
             DataGridViewRow dataGridViewRow = mainTableData.Rows[index];
             _ = DateTime.TryParse(dataGridViewRow.Cells[LATELY_DATE_INDEX].Value.ToString(), out DateTime dateTime);
             CompressItem compressItem = new CompressItem(
+                Convert.ToInt32(dataGridViewRow.Cells[ID_INDEX].Value.ToString()),
+                dataGridViewRow.Cells[MARK_NAME_INDEX].Value.ToString(),
                 dataGridViewRow.Cells[SOURCE_PATH_INDEX].Value.ToString(),
                 dataGridViewRow.Cells[TARGET_PATH_INDEX].Value.ToString(),
-                dateTime,
-                Convert.ToInt32(dataGridViewRow.Cells[0].Value.ToString())
+                dateTime
             );
             //new ProgressService().StartProgress(new FileCountService().FileLengthCount(compressItem.SourcePath), compressItem);
             ExecuteCompress(compressItem, true, false);

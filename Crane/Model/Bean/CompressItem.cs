@@ -8,20 +8,9 @@ namespace CTG_Control.Crane.Model.Bean
     [JsonObject(MemberSerialization.OptIn)]
     internal class CompressItem
     {
-
-        public CompressItem()
-        {
-            SourcePathValue = string.Empty;
-            TargetPathValue = string.Empty;
-        }
-        public CompressItem(string SourcePath, string TargetPath, DateTime LatelyDate, int Id)
-        {
-            SourcePathValue = SourcePath;
-            TargetPathValue = TargetPath;
-            LatelyDateValue = LatelyDate;
-            IdValue = Id;
-        }
-
+        /// <summary>
+        /// 为空不转为json
+        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         private string SourcePathValue;
         public string SourcePath
@@ -54,12 +43,36 @@ namespace CTG_Control.Crane.Model.Bean
             set { IdValue = value; }
         }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        private string MarkNameValue;
+        public string MarkName
+        {
+            get {return MarkNameValue ;}
+            set { MarkNameValue = value; }
+        }
+        
+
+        public CompressItem()
+        {
+            SourcePathValue = string.Empty;
+            TargetPathValue = string.Empty;
+        }
+        public CompressItem(int Id, string MarkName, string SourcePath, string TargetPath, DateTime LatelyDate)
+        {
+            SourcePathValue = SourcePath;
+            TargetPathValue = TargetPath;
+            LatelyDateValue = LatelyDate;
+            IdValue = Id;
+            MarkNameValue = MarkName;
+        }
+
         public static void TransferObjValue(CompressItem TargetObj, CompressItem OriginObj)
         {
             TargetObj.Id = OriginObj.Id;
             TargetObj.SourcePath = OriginObj.SourcePath;
             TargetObj.TargetPath = OriginObj.TargetPath;
             TargetObj.LatelyDate = OriginObj.LatelyDate;
+            TargetObj.MarkName = OriginObj.MarkName;
         }
 
     }
