@@ -4,7 +4,9 @@ namespace CTG_Control.Crane.Service
 {
     /// <summary>
     /// 进度条服务
+    /// 该服务已废弃
     /// </summary>
+    [Obsolete("因为该程序使用winrar指令执行压缩，无法跟踪进度，故进度条无实际意义", false)]
     internal class ProgressService
     {
 

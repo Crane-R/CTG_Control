@@ -8,7 +8,7 @@ namespace CTG_Control
 {
     public partial class MainForm : Form
     {
-        public static DataGridView mainTableData;
+        public static DataGridView? mainTableData;
 
         private readonly int ID_INDEX = 0;
         private readonly int MARK_NAME_INDEX = 1;
@@ -21,14 +21,15 @@ namespace CTG_Control
         private int COUNTDOWN_TIME = ConfigService.GetValueByInt("countDownTime");
         private int SHUT_DOWN_TIME = ConfigService.GetValueByInt("shutDownTime");
 
+        private readonly string SOURCE_BIT_SUM_LABEL = "项源目录大小总和：";
+
         private Thread countDownThread;
         private ManualResetEvent countDownChoke = new ManualResetEvent(true);
 
         public MainForm()
         {
-
-            WindowState = FormWindowState.Minimized;
             //窗体初始化
+            WindowState = FormWindowState.Minimized;
             StartPosition = FormStartPosition.CenterScreen;
             Text = Constants.PROGRAM_VERSION;
 
@@ -48,18 +49,9 @@ namespace CTG_Control
             {
                 notification.Checked = false;
             }
-
-            timeJudgeCheckBox.Checked = ConfigService.GetValue("isTimeJudge").Equals("1");
-
-            //判定开机自启
-            if (ConfigService.GetValueByBool("isStartUp"))
-            {
-                new StartUpService().OpenStartUp();
-            }
-            else
-            {
-                new StartUpService().CloseStartUp();
-            }
+            timeJudgeCheckBox.Checked = ConfigService.GetValueByBool("isTimeJudge");
+            isStartUpCheckBox.Checked = ConfigService.GetValueByBool("isStartUp");
+            sfxCheckBox.Checked = ConfigService.GetValueByBool("sfx");
 
             CheckForIllegalCrossThreadCalls = false;
 
@@ -76,7 +68,6 @@ namespace CTG_Control
                 SyExecuteAll();
             }));
             countDownThread.Start();
-
         }
 
         public void Init()
@@ -87,6 +78,8 @@ namespace CTG_Control
                 //表格数据初始化
                 List<CompressItem> compassItems = DataDao.ReadAll();
                 mainTableData.Rows.Clear();
+                FileCountService fileCountService = new FileCountService();
+                long sourceSum = 0;
                 compassItems.ForEach(item =>
                 {
                     DataGridViewRow row = new DataGridViewRow();
@@ -95,9 +88,11 @@ namespace CTG_Control
                     row.Cells[TARGET_PATH_INDEX].Value = item.TargetPath;
                     row.Cells[LATELY_DATE_INDEX].Value = item.LatelyDate;
                     row.Cells[ID_INDEX].Value = item.Id;
-                    row.Cells[MARK_NAME_INDEX].Value= item.MarkName;
+                    row.Cells[MARK_NAME_INDEX].Value = item.MarkName;
                     mainTableData.Rows.Add(row);
+                    sourceSum += fileCountService.FileLengthCount(item.SourcePath);
                 });
+                SourceBitSumLabel.Text = SOURCE_BIT_SUM_LABEL + fileCountService.FormatFileCount(sourceSum);
             }));
         }
 
@@ -208,7 +203,6 @@ namespace CTG_Control
 
                 //自动检测删除
                 deleteService.AutoJudgeDelete(compressItem.TargetPath, 72);
-
             }
             Init();
             try
@@ -234,8 +228,6 @@ namespace CTG_Control
         {
             int count = mainTableData.RowCount;
             List<CompressItem> compressItems = new List<CompressItem>();
-            long fileCount = 0;
-            FileCountService fileCountService = new FileCountService();
             for (int i = 0; i < count; i++)
             {
                 CompressItem compressItem = new();
@@ -244,10 +236,8 @@ namespace CTG_Control
                 _ = DateTime.TryParse(mainTableData.Rows[i].Cells[LATELY_DATE_INDEX].Value.ToString(), out DateTime dateTime);
                 compressItem.LatelyDate = dateTime;
                 compressItem.Id = Convert.ToInt32(mainTableData.Rows[i].Cells[ID_INDEX].Value.ToString());
-                fileCount += fileCountService.FileLengthCount(compressItem.SourcePath);
                 compressItems.Add(compressItem);
             }
-            //new ProgressService().StartProgress(fileCount, "一键执行");
             for (int i = 0; i < count; i++)
             {
                 ExecuteCompress(compressItems[i], false, true);
@@ -340,7 +330,7 @@ namespace CTG_Control
         private void StopSyBtn_Click(object sender, EventArgs e)
         {
             countDownChoke.Reset();
-            SyCountDownLabel.Text = "自动同步已被终结，下次启动还原";
+            SyCountDownLabel.Text = "自动同步已被终止，下次启动还原";
             this.StopSyBtn.Enabled = false;
             StopSyBtn.Hide();
         }
@@ -365,11 +355,30 @@ namespace CTG_Control
             ConfigService.SetValue("isTimeJudge", timeJudgeCheckBox.Checked ? "1" : "0");
         }
 
+        /// <summary>
+        /// 开机自启选项改变
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void isStartUpCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            ConfigService.SetValue("isStartUp", isStartUpCheckBox.Checked ? "1" : "0");
+            bool isStartUp = isStartUpCheckBox.Checked;
+            ConfigService.SetValue("isStartUp", isStartUp ? "1" : "0");
+            if (isStartUp)
+            {
+                new StartUpService().OpenStartUp();
+            }
+            else
+            {
+                new StartUpService().CloseStartUp();
+            }
         }
 
+        /// <summary>
+        /// 是否自解压选项改变
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void sfxCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             ConfigService.SetValue("sfx", sfxCheckBox.Checked ? "1" : "0");
@@ -425,7 +434,7 @@ namespace CTG_Control
             DirectoryInfo directory = new DirectoryInfo(sourceDir);
             DirectoryInfo? parentDir = directory.Parent;
             directory.Delete(true);
-            new ProgressService().StartProgress(new FileCountService().FileLengthCount(rarFileName), "项还原执行");
+            //new ProgressService().StartProgress(new FileCountService().FileLengthCount(rarFileName), "项还原执行");
             CompressService.DeCompressRar(rarFileName, parentDir.FullName);
         }
 

@@ -1,9 +1,5 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CTG_Control.Crane.Constant;
+using Microsoft.Win32;
 
 namespace CTG_Control.Crane.Service
 {
@@ -12,7 +8,7 @@ namespace CTG_Control.Crane.Service
     /// </summary>
     internal class StartUpService
     {
-        private string softwareName = "CTG_Control";
+        private string softwareName = Constants.PROGRAM_VERSION;
 
         private RegistryKey registryKey;
 

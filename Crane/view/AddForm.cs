@@ -65,12 +65,15 @@ namespace CTG_Control.crane.form
             string sourcePath = addSourcePath.Text;
             string targetPath = addTargetPath.Text;
             string markName = markNameBox.Text;
-            if ("".Equals(sourcePath) || "".Equals(targetPath)
+            if ("".Equals(sourcePath)
+                || "".Equals(targetPath)
                 || Constants.ADD_SOURCE_PATH_BLANK.Equals(sourcePath)
-                || Constants.ADD_TARGET_PATH_BLANK.Equals(targetPath))
+                || Constants.ADD_TARGET_PATH_BLANK.Equals(targetPath)
+                || "".Equals(markName)
+                || Constants.MARK_NAME_BLANK.Equals(markName)
+                )
             {
-                //请确认源路径和目标路径不为空
-                MessageBox.Show("请确认源路径和目标路径不为空", "提示");
+                MessageBox.Show("标识名、源路径、目标路径皆不可为空", "判空提示");
                 return;
             }
 
@@ -90,6 +93,7 @@ namespace CTG_Control.crane.form
         private void markNameBox_Click(object sender, EventArgs e)
         {
             markNameBox.Clear();
+            markNameBox.ForeColor = Color.Black;
         }
 
         private void markNameBox_Leave(object sender, EventArgs e)

@@ -11,7 +11,7 @@
         /// </summary>
         public FileCountService() { }
 
-        public int FileCount(string path) 
+        public int FileCount(string path)
         {
             int count = 0;
             count += Directory.GetFiles(path).Length;
@@ -23,9 +23,9 @@
             return count;
         }
 
-        public long FileLengthCount(string path) 
+        public long FileLengthCount(string path)
         {
-            if (File.Exists(path)) 
+            if (File.Exists(path))
             {
                 return new FileInfo(path).Length;
             }
@@ -43,6 +43,19 @@
             }
 
             return allByteLength;
+        }
+
+        public string FormatFileCount(long fileLength)
+        {
+            double newFileLen = Convert.ToDouble(fileLength);
+            string[] arr = { "B", "KB", "MB", "GB", "TB" };
+            int i = 0;
+            while (newFileLen >= 1024)
+            {
+                newFileLen /= 1024;
+                i++;
+            }
+            return Math.Round(newFileLen) + arr[i];
         }
 
     }
