@@ -11,6 +11,11 @@
         /// </summary>
         public FileCountService() { }
 
+        /// <summary>
+        /// 统计文件数量
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public int FileCount(string path)
         {
             int count = 0;
@@ -23,6 +28,11 @@
             return count;
         }
 
+        /// <summary>
+        /// 统计目录大小
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public long FileLengthCount(string path)
         {
             if (File.Exists(path))
@@ -31,7 +41,16 @@
             }
 
             long allByteLength = 0;
-            string[] directories = Directory.GetDirectories(path);
+            string[] directories = Array.Empty<string>();
+            try
+            {
+                directories = Directory.GetDirectories(path);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("该路径不存在");
+                return 0;
+            }
             string[] files = Directory.GetFiles(path);
             string[] children = new string[directories.Length + files.Length];
             Array.Copy(directories, 0, children, 0, directories.Length);
@@ -55,7 +74,7 @@
                 newFileLen /= 1024;
                 i++;
             }
-            return Math.Round(newFileLen) + arr[i];
+            return Math.Round(newFileLen, 2) + arr[i];
         }
 
     }

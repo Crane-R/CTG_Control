@@ -36,11 +36,15 @@
             ChooseTargetPath = new FolderBrowserDialog();
             DefaultUpPathCBox = new CheckBox();
             markNameBox = new TextBox();
+            isAuto = new CheckBox();
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
             SuspendLayout();
             // 
             // SureBtn
             // 
-            SureBtn.Location = new Point(561, 106);
+            SureBtn.Location = new Point(633, 97);
             SureBtn.Margin = new Padding(2, 3, 2, 3);
             SureBtn.Name = "SureBtn";
             SureBtn.Size = new Size(87, 26);
@@ -52,7 +56,7 @@
             // addSourcePath
             // 
             addSourcePath.ForeColor = SystemColors.ScrollBar;
-            addSourcePath.Location = new Point(35, 41);
+            addSourcePath.Location = new Point(107, 40);
             addSourcePath.Margin = new Padding(2, 3, 2, 3);
             addSourcePath.Name = "addSourcePath";
             addSourcePath.Size = new Size(613, 23);
@@ -63,7 +67,7 @@
             // addTargetPath
             // 
             addTargetPath.ForeColor = Color.Black;
-            addTargetPath.Location = new Point(35, 70);
+            addTargetPath.Location = new Point(107, 68);
             addTargetPath.Margin = new Padding(2, 3, 2, 3);
             addTargetPath.Name = "addTargetPath";
             addTargetPath.Size = new Size(613, 23);
@@ -74,7 +78,7 @@
             // DefaultUpPathCBox
             // 
             DefaultUpPathCBox.AutoSize = true;
-            DefaultUpPathCBox.Location = new Point(235, 111);
+            DefaultUpPathCBox.Location = new Point(12, 102);
             DefaultUpPathCBox.Margin = new Padding(2, 3, 2, 3);
             DefaultUpPathCBox.Name = "DefaultUpPathCBox";
             DefaultUpPathCBox.Size = new Size(195, 21);
@@ -85,18 +89,64 @@
             // markNameBox
             // 
             markNameBox.ForeColor = SystemColors.ScrollBar;
-            markNameBox.Location = new Point(35, 12);
+            markNameBox.Location = new Point(107, 9);
             markNameBox.Name = "markNameBox";
             markNameBox.Size = new Size(613, 23);
             markNameBox.TabIndex = 4;
             markNameBox.Click += markNameBox_Click;
             markNameBox.Leave += markNameBox_Leave;
             // 
+            // isAuto
+            // 
+            isAuto.AutoSize = true;
+            isAuto.Checked = true;
+            isAuto.CheckState = CheckState.Checked;
+            isAuto.Location = new Point(212, 102);
+            isAuto.Name = "isAuto";
+            isAuto.Size = new Size(99, 21);
+            isAuto.TabIndex = 5;
+            isAuto.Text = "是否自动备份";
+            isAuto.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.Location = new Point(12, 9);
+            label1.Name = "label1";
+            label1.Size = new Size(74, 21);
+            label1.TabIndex = 6;
+            label1.Text = "标识名：";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label2.Location = new Point(12, 40);
+            label2.Name = "label2";
+            label2.Size = new Size(74, 21);
+            label2.TabIndex = 7;
+            label2.Text = "源路径：";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label3.Location = new Point(12, 70);
+            label3.Name = "label3";
+            label3.Size = new Size(90, 21);
+            label3.TabIndex = 8;
+            label3.Text = "目标路径：";
+            // 
             // AddForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(684, 148);
+            ClientSize = new Size(734, 146);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(isAuto);
             Controls.Add(markNameBox);
             Controls.Add(DefaultUpPathCBox);
             Controls.Add(addTargetPath);
@@ -120,5 +170,9 @@
         private FolderBrowserDialog ChooseTargetPath;
         private CheckBox DefaultUpPathCBox;
         private TextBox markNameBox;
+        private CheckBox isAuto;
+        private Label label1;
+        private Label label2;
+        private Label label3;
     }
 }

@@ -1,7 +1,9 @@
-﻿using CTG_Control.Crane.Model.Bean;
+﻿using CTG_Control.Crane.Constant;
+using CTG_Control.Crane.Model.Bean;
 using CTG_Control.Crane.Model.Dao;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 
 namespace CTG_Control.Crane.Service
 {
@@ -77,7 +79,7 @@ namespace CTG_Control.Crane.Service
             registryKey.Close();
             string winrarDir = Path.GetDirectoryName(winrarPath);
             string commandOptions = string.Format(
-                "a -r -agyyyyMMddHHmm -ep1 -ibck \"{0}\" \"{1}\""
+                "a -r -ag" + Constants.DATATIME_FORMAT + " -ep1 -ibck \"{0}\" \"{1}\""
                 , targetFileName, sourcePath);
 
             ProcessStartInfo processStartInfo = new()
@@ -95,9 +97,10 @@ namespace CTG_Control.Crane.Service
             process.WaitForExit();
             process.Close();
 
-            if (ConfigService.GetValueByBool("sfx")) {
+            if (ConfigService.GetValueByBool("sfx"))
+            {
                 string commandOptions2 = string.Format(
-                   "a -r -agyyyyMMddHHmm -sfx -ep1 -ibck \"{0}\" \"{1}\""
+                   "a -r -ag" + Constants.DATATIME_FORMAT + " -sfx -ep1 -ibck \"{0}\" \"{1}\""
                    , targetFileName, sourcePath);
                 ProcessStartInfo processStartInfo2 = new()
                 {

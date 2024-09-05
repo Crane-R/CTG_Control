@@ -3,6 +3,7 @@ using CTG_Control.Crane.Constant;
 using CTG_Control.Crane.Model.Bean;
 using CTG_Control.Crane.Model.Dao;
 using CTG_Control.Crane.Service;
+using CTG_Control.Crane.view;
 
 namespace CTG_Control
 {
@@ -15,6 +16,7 @@ namespace CTG_Control
         private readonly int SOURCE_PATH_INDEX = 2;
         private readonly int TARGET_PATH_INDEX = 3;
         private readonly int LATELY_DATE_INDEX = 4;
+        private readonly int IS_AUTO_INDEX = 5;
 
         //倒计时文本
         private readonly string COUNTDOWN_LABEL = "秒后启动同步程序";
@@ -70,6 +72,9 @@ namespace CTG_Control
             countDownThread.Start();
         }
 
+        /// <summary>
+        /// 表格数据初始化
+        /// </summary>
         public void Init()
         {
             //https://blog.csdn.net/cxwl3sxl/article/details/8807763
@@ -89,6 +94,8 @@ namespace CTG_Control
                     row.Cells[LATELY_DATE_INDEX].Value = item.LatelyDate;
                     row.Cells[ID_INDEX].Value = item.Id;
                     row.Cells[MARK_NAME_INDEX].Value = item.MarkName;
+                    row.Cells[IS_AUTO_INDEX].Value = item.IsAutoBack;
+
                     mainTableData.Rows.Add(row);
                     sourceSum += fileCountService.FileLengthCount(item.SourcePath);
                 });
@@ -177,8 +184,10 @@ namespace CTG_Control
                 dataGridViewRow.Cells[MARK_NAME_INDEX].Value.ToString(),
                 dataGridViewRow.Cells[SOURCE_PATH_INDEX].Value.ToString(),
                 dataGridViewRow.Cells[TARGET_PATH_INDEX].Value.ToString(),
-                dateTime
+                dateTime,
+                (bool)dataGridViewRow.Cells[IS_AUTO_INDEX].Value
             );
+
             //new ProgressService().StartProgress(new FileCountService().FileLengthCount(compressItem.SourcePath), compressItem);
             ExecuteCompress(compressItem, true, false);
             Init();
@@ -194,6 +203,10 @@ namespace CTG_Control
             DeleteService deleteService = new DeleteService();
             for (int i = 0; i < count; i++)
             {
+                if (!Convert.ToBoolean(mainTableData.Rows[i].Cells[IS_AUTO_INDEX].Value))
+                {
+                    continue;
+                }
                 compressItem.SourcePath = mainTableData.Rows[i].Cells[SOURCE_PATH_INDEX].Value.ToString() ?? "源路径为空";
                 compressItem.TargetPath = mainTableData.Rows[i].Cells[TARGET_PATH_INDEX].Value.ToString() ?? "目标路径为空";
                 _ = DateTime.TryParse(mainTableData.Rows[i].Cells[LATELY_DATE_INDEX].Value.ToString(), out DateTime dateTime);
@@ -441,6 +454,16 @@ namespace CTG_Control
         private void ExitBtn_Click(object sender, EventArgs e)
         {
             System.Environment.Exit(0);
+        }
+
+        private void AboutBtn_Click(object sender, EventArgs e)
+        {
+            new AboutForm().ShowDialog();
+        }
+
+        private void mainTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            new SettingForm().ShowDialog();
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Text;
 using Newtonsoft.Json;
 using CTG_Control.Crane.Service;
-using System.Xml.Serialization;
 
 namespace CTG_Control.Crane.Model.Dao
 {

@@ -43,6 +43,7 @@
             SourcePath = new DataGridViewTextBoxColumn();
             TargetPath = new DataGridViewTextBoxColumn();
             LatelyDate = new DataGridViewTextBoxColumn();
+            itemSetBtn = new DataGridViewButtonColumn();
             mainNotifyIcon = new NotifyIcon(components);
             mainContextMenuStrip = new ContextMenuStrip(components);
             MinimalToolStripMenuItem = new ToolStripMenuItem();
@@ -57,6 +58,7 @@
             exitBtn = new Button();
             SourceBitSumLabel = new Label();
             label2 = new Label();
+            AboutBtn = new Button();
             contextMenuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)mainTable).BeginInit();
             mainContextMenuStrip.SuspendLayout();
@@ -93,10 +95,11 @@
             // 
             // addBtn
             // 
-            addBtn.BackColor = SystemColors.Control;
+            addBtn.BackColor = Color.LightSalmon;
             addBtn.Cursor = Cursors.Hand;
             addBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
-            addBtn.Location = new Point(974, 479);
+            addBtn.ForeColor = SystemColors.ControlLightLight;
+            addBtn.Location = new Point(969, 659);
             addBtn.Margin = new Padding(2, 3, 2, 3);
             addBtn.Name = "addBtn";
             addBtn.Size = new Size(121, 42);
@@ -107,11 +110,11 @@
             // 
             // AllExecuteBtn
             // 
-            AllExecuteBtn.BackColor = SystemColors.Control;
+            AllExecuteBtn.BackColor = SystemColors.ActiveCaption;
             AllExecuteBtn.Cursor = Cursors.Hand;
             AllExecuteBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
-            AllExecuteBtn.ForeColor = SystemColors.ActiveCaptionText;
-            AllExecuteBtn.Location = new Point(1099, 479);
+            AllExecuteBtn.ForeColor = SystemColors.ButtonFace;
+            AllExecuteBtn.Location = new Point(1094, 659);
             AllExecuteBtn.Margin = new Padding(2, 3, 2, 3);
             AllExecuteBtn.Name = "AllExecuteBtn";
             AllExecuteBtn.Size = new Size(121, 42);
@@ -126,15 +129,16 @@
             mainTable.AllowUserToDeleteRows = false;
             mainTable.BackgroundColor = SystemColors.Control;
             mainTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            mainTable.Columns.AddRange(new DataGridViewColumn[] { id, markName, SourcePath, TargetPath, LatelyDate });
+            mainTable.Columns.AddRange(new DataGridViewColumn[] { id, markName, SourcePath, TargetPath, LatelyDate, itemSetBtn });
             mainTable.ContextMenuStrip = contextMenuMain;
             mainTable.Location = new Point(11, 12);
             mainTable.Margin = new Padding(2, 3, 2, 3);
             mainTable.Name = "mainTable";
             mainTable.RowHeadersWidth = 51;
             mainTable.RowTemplate.Height = 29;
-            mainTable.Size = new Size(1334, 461);
+            mainTable.Size = new Size(1454, 629);
             mainTable.TabIndex = 6;
+            mainTable.CellClick += mainTable_CellClick;
             mainTable.CellContentClick += mainTable_CellContentClick;
             mainTable.CellMouseDown += MainTable_CellMouseDown;
             // 
@@ -179,7 +183,14 @@
             LatelyDate.MinimumWidth = 6;
             LatelyDate.Name = "LatelyDate";
             LatelyDate.ReadOnly = true;
-            LatelyDate.Width = 250;
+            LatelyDate.Width = 150;
+            // 
+            // itemSetBtn
+            // 
+            itemSetBtn.Frozen = true;
+            itemSetBtn.HeaderText = "设置";
+            itemSetBtn.Name = "itemSetBtn";
+            itemSetBtn.Resizable = DataGridViewTriState.True;
             // 
             // mainNotifyIcon
             // 
@@ -223,7 +234,7 @@
             SyCountDownLabel.AutoSize = true;
             SyCountDownLabel.Font = new Font("Microsoft YaHei UI", 12.1008406F, FontStyle.Bold, GraphicsUnit.Point);
             SyCountDownLabel.ForeColor = Color.FromArgb(192, 0, 0);
-            SyCountDownLabel.Location = new Point(11, 476);
+            SyCountDownLabel.Location = new Point(11, 654);
             SyCountDownLabel.Margin = new Padding(2, 0, 2, 0);
             SyCountDownLabel.MaximumSize = new Size(0, 132);
             SyCountDownLabel.Name = "SyCountDownLabel";
@@ -234,11 +245,11 @@
             // 
             // StopSyBtn
             // 
-            StopSyBtn.BackColor = Color.IndianRed;
+            StopSyBtn.BackColor = Color.Brown;
             StopSyBtn.Cursor = Cursors.Hand;
             StopSyBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
             StopSyBtn.ForeColor = SystemColors.ButtonHighlight;
-            StopSyBtn.Location = new Point(835, 479);
+            StopSyBtn.Location = new Point(830, 659);
             StopSyBtn.Margin = new Padding(2, 3, 2, 3);
             StopSyBtn.Name = "StopSyBtn";
             StopSyBtn.Size = new Size(135, 42);
@@ -252,7 +263,7 @@
             notification.AutoSize = true;
             notification.Checked = true;
             notification.CheckState = CheckState.Checked;
-            notification.Location = new Point(732, 479);
+            notification.Location = new Point(713, 686);
             notification.Margin = new Padding(2, 3, 2, 3);
             notification.Name = "notification";
             notification.Size = new Size(99, 21);
@@ -266,7 +277,7 @@
             timeJudgeCheckBox.AutoSize = true;
             timeJudgeCheckBox.Checked = true;
             timeJudgeCheckBox.CheckState = CheckState.Checked;
-            timeJudgeCheckBox.Location = new Point(732, 506);
+            timeJudgeCheckBox.Location = new Point(713, 659);
             timeJudgeCheckBox.Margin = new Padding(2, 3, 2, 3);
             timeJudgeCheckBox.Name = "timeJudgeCheckBox";
             timeJudgeCheckBox.Size = new Size(75, 21);
@@ -280,7 +291,7 @@
             isStartUpCheckBox.AutoSize = true;
             isStartUpCheckBox.Checked = true;
             isStartUpCheckBox.CheckState = CheckState.Checked;
-            isStartUpCheckBox.Location = new Point(641, 479);
+            isStartUpCheckBox.Location = new Point(622, 659);
             isStartUpCheckBox.Margin = new Padding(2, 3, 2, 3);
             isStartUpCheckBox.Name = "isStartUpCheckBox";
             isStartUpCheckBox.Size = new Size(75, 21);
@@ -294,7 +305,7 @@
             sfxCheckBox.AutoSize = true;
             sfxCheckBox.Checked = true;
             sfxCheckBox.CheckState = CheckState.Checked;
-            sfxCheckBox.Location = new Point(641, 506);
+            sfxCheckBox.Location = new Point(622, 686);
             sfxCheckBox.Margin = new Padding(2, 3, 2, 3);
             sfxCheckBox.Name = "sfxCheckBox";
             sfxCheckBox.Size = new Size(87, 21);
@@ -309,7 +320,7 @@
             exitBtn.Cursor = Cursors.Hand;
             exitBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
             exitBtn.ForeColor = SystemColors.ButtonHighlight;
-            exitBtn.Location = new Point(1224, 479);
+            exitBtn.Location = new Point(1344, 659);
             exitBtn.Margin = new Padding(2, 3, 2, 3);
             exitBtn.Name = "exitBtn";
             exitBtn.Size = new Size(121, 42);
@@ -323,7 +334,7 @@
             SourceBitSumLabel.AutoSize = true;
             SourceBitSumLabel.Font = new Font("Microsoft YaHei UI", 12.1008406F, FontStyle.Bold, GraphicsUnit.Point);
             SourceBitSumLabel.ForeColor = Color.Navy;
-            SourceBitSumLabel.Location = new Point(11, 503);
+            SourceBitSumLabel.Location = new Point(11, 692);
             SourceBitSumLabel.Margin = new Padding(2, 0, 2, 0);
             SourceBitSumLabel.MaximumSize = new Size(0, 132);
             SourceBitSumLabel.Name = "SourceBitSumLabel";
@@ -337,21 +348,37 @@
             label2.AutoSize = true;
             label2.Font = new Font("Microsoft YaHei UI", 12.1008406F, FontStyle.Bold, GraphicsUnit.Point);
             label2.ForeColor = Color.Navy;
-            label2.Location = new Point(303, 503);
+            label2.Location = new Point(338, 692);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.MaximumSize = new Size(0, 132);
             label2.Name = "label2";
-            label2.Size = new Size(95, 24);
+            label2.Size = new Size(112, 24);
             label2.TabIndex = 15;
-            label2.Text = "预估时间：";
+            label2.Text = "上次总用时：";
             label2.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // AboutBtn
+            // 
+            AboutBtn.BackColor = SystemColors.Info;
+            AboutBtn.Cursor = Cursors.Hand;
+            AboutBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
+            AboutBtn.ForeColor = SystemColors.ControlDarkDark;
+            AboutBtn.Location = new Point(1219, 659);
+            AboutBtn.Margin = new Padding(2, 3, 2, 3);
+            AboutBtn.Name = "AboutBtn";
+            AboutBtn.Size = new Size(121, 42);
+            AboutBtn.TabIndex = 16;
+            AboutBtn.Text = "关于软件";
+            AboutBtn.UseVisualStyleBackColor = false;
+            AboutBtn.Click += AboutBtn_Click;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(1356, 532);
+            ClientSize = new Size(1483, 725);
+            Controls.Add(AboutBtn);
             Controls.Add(label2);
             Controls.Add(SourceBitSumLabel);
             Controls.Add(exitBtn);
@@ -398,12 +425,14 @@
         private CheckBox sfxCheckBox;
         private ToolStripMenuItem restoreItem;
         private Button exitBtn;
+        private Label SourceBitSumLabel;
+        private Label label2;
+        private Button AboutBtn;
         private DataGridViewTextBoxColumn id;
         private DataGridViewTextBoxColumn markName;
         private DataGridViewTextBoxColumn SourcePath;
         private DataGridViewTextBoxColumn TargetPath;
         private DataGridViewTextBoxColumn LatelyDate;
-        private Label SourceBitSumLabel;
-        private Label label2;
+        private DataGridViewButtonColumn itemSetBtn;
     }
 }

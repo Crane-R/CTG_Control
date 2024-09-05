@@ -7,5 +7,7 @@
         public const string MARK_NAME_BLANK = "输入标识名";
 
         public const string PROGRAM_VERSION = "CTG_Control v1.2.0-beta";
+
+        public const string DATATIME_FORMAT = "yyyyMMddHHmmss";
     }
 }
