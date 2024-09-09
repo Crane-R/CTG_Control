@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CTG_Control.Crane.Constant;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -9,17 +10,18 @@ using System.Windows.Forms;
 
 namespace CTG_Control.Crane.view
 {
-    partial class AboutBox1 : Form
+    partial class AboutBox : Form
     {
-        public AboutBox1()
+        public AboutBox()
         {
             InitializeComponent();
             this.Text = String.Format("About {0}", AssemblyTitle);
-            this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
-            this.labelCopyright.Text = AssemblyCopyright;
-            this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription;
+            this.labelProductName.Text = "软件名称：" + AssemblyProduct;
+            this.labelVersion.Text = "版本："+Constants.VERSION;
+            this.labelCopyright.Text = "版权所有：Crane Resigned";
+            this.labelCompanyName.Text = "作者：周星学";
+            this.textBoxDescription.Text = "软件描述：\r\n中文名为："+Constants.PROGRAM_NAME_CN
+                +"\r\n能够执行定时备份的任务";
         }
 
         #region Assembly Attribute Accessors

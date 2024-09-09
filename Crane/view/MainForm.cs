@@ -15,15 +15,12 @@ namespace CTG_Control
         private readonly int MARK_NAME_INDEX = 1;
         private readonly int SOURCE_PATH_INDEX = 2;
         private readonly int TARGET_PATH_INDEX = 3;
-        private readonly int LATELY_DATE_INDEX = 4;
-        private readonly int IS_AUTO_INDEX = 5;
+        private readonly int IS_AUTO_INDEX = 4;
 
         //倒计时文本
         private readonly string COUNTDOWN_LABEL = "秒后启动同步程序";
         private int COUNTDOWN_TIME = ConfigService.GetValueByInt("countDownTime");
         private int SHUT_DOWN_TIME = ConfigService.GetValueByInt("shutDownTime");
-
-        private readonly string SOURCE_BIT_SUM_LABEL = "项源目录大小总和：";
 
         private Thread countDownThread;
         private ManualResetEvent countDownChoke = new ManualResetEvent(true);
@@ -58,6 +55,7 @@ namespace CTG_Control
             CheckForIllegalCrossThreadCalls = false;
 
             //启动同步倒计时
+            SyCountDownLabel.Text = COUNTDOWN_TIME + COUNTDOWN_LABEL;
             countDownThread = new(new ThreadStart(() =>
             {
                 for (int i = COUNTDOWN_TIME; i >= 0; i--)
@@ -89,17 +87,16 @@ namespace CTG_Control
                 {
                     DataGridViewRow row = new DataGridViewRow();
                     row.CreateCells(mainTableData);
-                    row.Cells[SOURCE_PATH_INDEX].Value = item.SourcePath;
-                    row.Cells[TARGET_PATH_INDEX].Value = item.TargetPath;
-                    row.Cells[LATELY_DATE_INDEX].Value = item.LatelyDate;
                     row.Cells[ID_INDEX].Value = item.Id;
                     row.Cells[MARK_NAME_INDEX].Value = item.MarkName;
-                    row.Cells[IS_AUTO_INDEX].Value = item.IsAutoBack;
-
+                    row.Cells[SOURCE_PATH_INDEX].Value = item.SourcePath;
+                    row.Cells[TARGET_PATH_INDEX].Value = item.TargetPath;
+                    row.Cells[IS_AUTO_INDEX].Value = item.IsAutoBack ? "是" : "否";
                     mainTableData.Rows.Add(row);
                     sourceSum += fileCountService.FileLengthCount(item.SourcePath);
                 });
-                SourceBitSumLabel.Text = SOURCE_BIT_SUM_LABEL + fileCountService.FormatFileCount(sourceSum);
+                TotalItemsSize.Text = fileCountService.FormatFileCount(sourceSum);
+                TotalLastPast.Text = ConfigService.GetValue("totalLastPast");
             }));
         }
 
@@ -125,7 +122,7 @@ namespace CTG_Control
             //时间检测：如果距离上次同步时间少于12h，则不同步
             if (ConfigService.GetValue("isTimeJudge").Equals("1")
                 && isJudgeTime
-                && DateTime.Now.Subtract(compressItem.LatelyDate).TotalHours < 12)
+                && DateTime.Now.Subtract(compressItem.LatelyDate).TotalHours < compressItem.BackInterval)
             {
                 return false;
             }
@@ -142,7 +139,14 @@ namespace CTG_Control
             //开始执行前禁用按钮
             ControlFunction(false);
 
+            //开始计时
+            DateTime startTime = DateTime.Now;
             CompressService.CompressRar(compressItem);
+            compressItem.LatelyDate = DateTime.Now;
+            //计时结束
+            compressItem.LastBackPast = Convert.ToDouble(DateTime.Now.Subtract(startTime).TotalMinutes);
+            DataDao.UpdateOne(compressItem);
+
             ControlFunction(true);
             return true;
         }
@@ -178,19 +182,15 @@ namespace CTG_Control
         {
             int index = mainTableData.CurrentRow.Index;
             DataGridViewRow dataGridViewRow = mainTableData.Rows[index];
-            _ = DateTime.TryParse(dataGridViewRow.Cells[LATELY_DATE_INDEX].Value.ToString(), out DateTime dateTime);
-            CompressItem compressItem = new CompressItem(
-                Convert.ToInt32(dataGridViewRow.Cells[ID_INDEX].Value.ToString()),
-                dataGridViewRow.Cells[MARK_NAME_INDEX].Value.ToString(),
-                dataGridViewRow.Cells[SOURCE_PATH_INDEX].Value.ToString(),
-                dataGridViewRow.Cells[TARGET_PATH_INDEX].Value.ToString(),
-                dateTime,
-                (bool)dataGridViewRow.Cells[IS_AUTO_INDEX].Value
-            );
-
-            //new ProgressService().StartProgress(new FileCountService().FileLengthCount(compressItem.SourcePath), compressItem);
+            CompressItem compressItem = DataDao.SelectById(Convert.ToInt32(dataGridViewRow.Cells[ID_INDEX].Value.ToString()));
             ExecuteCompress(compressItem, true, false);
             Init();
+        }
+
+        private int GetCurrentyRowId()
+        {
+            int currentRow = mainTableData.CurrentRow.Index;
+            return Convert.ToInt32(mainTableData.Rows[currentRow].Cells[ID_INDEX].Value.ToString());
         }
 
         /// <summary>
@@ -198,26 +198,30 @@ namespace CTG_Control
         /// </summary>
         private void SyExecuteAll()
         {
+            //开始计时
+            DateTime startTime = DateTime.Now;
+
             int count = mainTableData.RowCount;
             CompressItem compressItem = new();
             DeleteService deleteService = new DeleteService();
             for (int i = 0; i < count; i++)
             {
-                if (!Convert.ToBoolean(mainTableData.Rows[i].Cells[IS_AUTO_INDEX].Value))
+                compressItem = DataDao.SelectById(Convert.ToInt32(mainTableData.Rows[i].Cells[ID_INDEX].Value.ToString()));
+                if (!compressItem.IsAutoBack)
                 {
                     continue;
                 }
-                compressItem.SourcePath = mainTableData.Rows[i].Cells[SOURCE_PATH_INDEX].Value.ToString() ?? "源路径为空";
-                compressItem.TargetPath = mainTableData.Rows[i].Cells[TARGET_PATH_INDEX].Value.ToString() ?? "目标路径为空";
-                _ = DateTime.TryParse(mainTableData.Rows[i].Cells[LATELY_DATE_INDEX].Value.ToString(), out DateTime dateTime);
-                compressItem.LatelyDate = dateTime;
-                compressItem.Id = Convert.ToInt32(mainTableData.Rows[i].Cells[ID_INDEX].Value.ToString());
                 ExecuteCompress(compressItem, false, true);
 
                 //自动检测删除
                 deleteService.AutoJudgeDelete(compressItem.TargetPath, 72);
             }
             Init();
+
+            //结束计时
+            TotalLastPast.Text = DateTime.Now.Subtract(startTime).TotalMinutes.ToString("0.000");
+            ConfigService.SetValue("totalLastPast", TotalLastPast.Text);
+
             try
             {
                 Thread shutdownThread = new(new ThreadStart(() =>
@@ -243,12 +247,7 @@ namespace CTG_Control
             List<CompressItem> compressItems = new List<CompressItem>();
             for (int i = 0; i < count; i++)
             {
-                CompressItem compressItem = new();
-                compressItem.SourcePath = mainTableData.Rows[i].Cells[SOURCE_PATH_INDEX].Value.ToString() ?? "源路径为空";
-                compressItem.TargetPath = mainTableData.Rows[i].Cells[TARGET_PATH_INDEX].Value.ToString() ?? "目标路径为空";
-                _ = DateTime.TryParse(mainTableData.Rows[i].Cells[LATELY_DATE_INDEX].Value.ToString(), out DateTime dateTime);
-                compressItem.LatelyDate = dateTime;
-                compressItem.Id = Convert.ToInt32(mainTableData.Rows[i].Cells[ID_INDEX].Value.ToString());
+                CompressItem compressItem = DataDao.SelectById(Convert.ToInt32(mainTableData.Rows[i].Cells[ID_INDEX].Value.ToString()));
                 compressItems.Add(compressItem);
             }
             for (int i = 0; i < count; i++)
@@ -298,10 +297,7 @@ namespace CTG_Control
             // 注意判断关闭事件reason来源于窗体按钮，否则用菜单退出时无法退出!
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                //取消"关闭窗口"事件
-                e.Cancel = true;
-                //使关闭时窗口向右下角缩小的效果
-                WindowState = FormWindowState.Minimized;
+                System.Environment.Exit(0);
             }
         }
 
@@ -385,6 +381,9 @@ namespace CTG_Control
             {
                 new StartUpService().CloseStartUp();
             }
+            mainNotifyIcon.BalloonTipText = "当前是否开机自启？"+isStartUp;
+            //其实此参数已经弃用，具体时间由操作系统控制
+            mainNotifyIcon.ShowBalloonTip(1000);
         }
 
         /// <summary>
@@ -458,12 +457,15 @@ namespace CTG_Control
 
         private void AboutBtn_Click(object sender, EventArgs e)
         {
-            new AboutForm().ShowDialog();
+            new AboutBox().ShowDialog();
         }
 
         private void mainTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            new SettingForm().ShowDialog();
+            if (e.ColumnIndex == IS_AUTO_INDEX)
+            {
+                new DetailMore(GetCurrentyRowId(), this).ShowDialog();
+            }
         }
     }
 }

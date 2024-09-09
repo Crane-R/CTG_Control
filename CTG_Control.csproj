@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>Resources\img\aq1zt-7d7nq-001256.ico</ApplicationIcon>
+    <PackageIcon>PNG 02 (22).png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,8 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\img\azhb3-bem61-001.ico" />
-    <Content Include="Resources\img\ctgv0.4.2.ico" />
+    <Content Include="Resources\img\aq1zt-7d7nq-001256.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +35,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\img\PNG 02 %2822%29.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

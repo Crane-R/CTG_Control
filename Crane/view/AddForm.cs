@@ -78,7 +78,9 @@ namespace CTG_Control.crane.form
             }
 
             //写数据
-            DataDao.Add(new CompressItem(IdService.GenerateId(), markName, sourcePath, targetPath, DateTime.MinValue, isAuto.Checked));
+            DataDao.Add(new CompressItem(IdService.GenerateId(), markName, sourcePath,
+                targetPath, DateTime.MinValue, isAuto.Checked,
+                Convert.ToInt32(IntervalValue.Text.Equals("") ? ConfigService.GetValue("slowInterval") : IntervalValue.Text), -1));
             mainForm.Init();
 
             //是否修改默认上传地址
@@ -130,6 +132,15 @@ namespace CTG_Control.crane.form
             {
                 textBox.ForeColor = Color.Black;
             }
+        }
+
+        private void ChooseStandard_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox comboBox = sender as ComboBox;
+            string text = comboBox.SelectedItem.ToString();
+            BackIntervalTool backIntervalTool = new BackIntervalTool();
+            int hour = backIntervalTool.GetHourByStandardItemContent(text);
+            IntervalValue.Text = hour.ToString();
         }
 
     }

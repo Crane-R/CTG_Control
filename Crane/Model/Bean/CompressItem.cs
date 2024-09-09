@@ -13,93 +13,119 @@ namespace CTG_Control.Crane.Model.Bean
         /// 源路径
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        private string SourcePathValue;
+        private string _SourcePath;
         public string SourcePath
         {
-            get { return SourcePathValue; }
-            set { SourcePathValue = value; }
+            get { return _SourcePath; }
+            set { _SourcePath = value; }
         }
 
         /// <summary>
         /// 目标路径
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        private string TargetPathValue;
+        private string _TargetPath;
         public string TargetPath
         {
-            get { return TargetPathValue; }
-            set { TargetPathValue = value; }
+            get { return _TargetPath; }
+            set { _TargetPath = value; }
         }
 
         /// <summary>
         /// 最近执行日期
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        private DateTime LatelyDateValue;
+        private DateTime _LatelyDate;
         public DateTime LatelyDate
         {
-            get { return LatelyDateValue; }
-            set { LatelyDateValue = value; }
+            get { return _LatelyDate; }
+            set { _LatelyDate = value; }
         }
 
         /// <summary>
         /// id标识
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        private int IdValue;
+        private int _Id;
         public int Id
         {
-            get { return IdValue; }
-            set { IdValue = value; }
+            get { return _Id; }
+            set { _Id = value; }
         }
 
         /// <summary>
         /// 标识名
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        private string MarkNameValue;
+        private string _MarkName;
         public string MarkName
         {
-            get { return MarkNameValue; }
-            set { MarkNameValue = value; }
+            get { return _MarkName; }
+            set { _MarkName = value; }
         }
 
         /// <summary>
         /// 是否自动备份
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        private bool IsAutoBackValue;
+        private bool _IsAutoBack;
         public bool IsAutoBack
         {
-            get { return IsAutoBackValue; }
-            set { IsAutoBackValue = value; }
+            get { return _IsAutoBack; }
+            set { _IsAutoBack = value; }
         }
 
+        /// <summary>
+        /// 自动备份时间间隔
+        /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        private int _BackInterval;
+        public int BackInterval
+        {
+            get { return _BackInterval; }
+            set { _BackInterval = value; }
+        }
+
+        /// <summary>
+        /// 上次备份用时，单位始终是分钟
+        /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        private double _LastBackPast;
+        public double LastBackPast
+        {
+            get { return _LastBackPast; }
+            set { _LastBackPast = value; }
+        }
 
         public CompressItem()
         {
-            MarkNameValue = string.Empty;
-            SourcePathValue = string.Empty;
-            TargetPathValue = string.Empty;
+            _MarkName = string.Empty;
+            _SourcePath = string.Empty;
+            _TargetPath = string.Empty;
         }
-        public CompressItem(int Id, string MarkName, string SourcePath, string TargetPath, DateTime LatelyDate, bool isAutoBack)
+        public CompressItem(int id, string markName, string sourcePath, string targetPath,
+            DateTime latelyDate, bool isAutoBack, int backInterval, int lastBackPast)
         {
-            SourcePathValue = SourcePath;
-            TargetPathValue = TargetPath;
-            LatelyDateValue = LatelyDate;
-            IdValue = Id;
-            MarkNameValue = MarkName;
-            IsAutoBack = isAutoBack;
+            _SourcePath = sourcePath;
+            _TargetPath = targetPath;
+            _LatelyDate = latelyDate;
+            _Id = id;
+            _MarkName = markName;
+            _IsAutoBack = isAutoBack;
+            _BackInterval = backInterval;
+            _LastBackPast = lastBackPast;
         }
 
         public static void TransferObjValue(CompressItem TargetObj, CompressItem OriginObj)
         {
-            TargetObj.Id = OriginObj.Id;
-            TargetObj.SourcePath = OriginObj.SourcePath;
-            TargetObj.TargetPath = OriginObj.TargetPath;
-            TargetObj.LatelyDate = OriginObj.LatelyDate;
-            TargetObj.MarkName = OriginObj.MarkName;
-            TargetObj.IsAutoBack = OriginObj.IsAutoBack;
+            TargetObj._Id = OriginObj._Id;
+            TargetObj._SourcePath = OriginObj._SourcePath;
+            TargetObj._TargetPath = OriginObj._TargetPath;
+            TargetObj._LatelyDate = OriginObj._LatelyDate;
+            TargetObj._MarkName = OriginObj._MarkName;
+            TargetObj._IsAutoBack = OriginObj._IsAutoBack;
+            TargetObj._BackInterval = OriginObj._BackInterval;
+            TargetObj._LastBackPast = OriginObj._LastBackPast;
         }
 
     }

@@ -42,7 +42,6 @@
             markName = new DataGridViewTextBoxColumn();
             SourcePath = new DataGridViewTextBoxColumn();
             TargetPath = new DataGridViewTextBoxColumn();
-            LatelyDate = new DataGridViewTextBoxColumn();
             itemSetBtn = new DataGridViewButtonColumn();
             mainNotifyIcon = new NotifyIcon(components);
             mainContextMenuStrip = new ContextMenuStrip(components);
@@ -55,10 +54,12 @@
             timeJudgeCheckBox = new CheckBox();
             isStartUpCheckBox = new CheckBox();
             sfxCheckBox = new CheckBox();
-            exitBtn = new Button();
             SourceBitSumLabel = new Label();
             label2 = new Label();
             AboutBtn = new Button();
+            label1 = new Label();
+            TotalLastPast = new Label();
+            TotalItemsSize = new Label();
             contextMenuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)mainTable).BeginInit();
             mainContextMenuStrip.SuspendLayout();
@@ -69,26 +70,26 @@
             contextMenuMain.ImageScalingSize = new Size(20, 20);
             contextMenuMain.Items.AddRange(new ToolStripItem[] { sssToolStripMenuItem, DeleteCurrent, restoreItem });
             contextMenuMain.Name = "contextMenuMain";
-            contextMenuMain.Size = new Size(305, 70);
+            contextMenuMain.Size = new Size(423, 94);
             // 
             // sssToolStripMenuItem
             // 
             sssToolStripMenuItem.Name = "sssToolStripMenuItem";
-            sssToolStripMenuItem.Size = new Size(304, 22);
+            sssToolStripMenuItem.Size = new Size(422, 30);
             sssToolStripMenuItem.Text = "执行压缩（！注意确认左边三角标选择行）";
             sssToolStripMenuItem.Click += ExecuteBtn_Click;
             // 
             // DeleteCurrent
             // 
             DeleteCurrent.Name = "DeleteCurrent";
-            DeleteCurrent.Size = new Size(304, 22);
+            DeleteCurrent.Size = new Size(422, 30);
             DeleteCurrent.Text = "删除当前指向行项";
             DeleteCurrent.Click += DeleteCurrent_Click;
             // 
             // restoreItem
             // 
             restoreItem.Name = "restoreItem";
-            restoreItem.Size = new Size(304, 22);
+            restoreItem.Size = new Size(422, 30);
             restoreItem.Text = "从目标地址覆盖还原（点我默认第一个）";
             restoreItem.Click += restoreItem_Click;
             restoreItem.MouseHover += restoreItem_MouseHover;
@@ -99,10 +100,10 @@
             addBtn.Cursor = Cursors.Hand;
             addBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
             addBtn.ForeColor = SystemColors.ControlLightLight;
-            addBtn.Location = new Point(969, 659);
-            addBtn.Margin = new Padding(2, 3, 2, 3);
+            addBtn.Location = new Point(726, 740);
+            addBtn.Margin = new Padding(3, 4, 3, 4);
             addBtn.Name = "addBtn";
-            addBtn.Size = new Size(121, 42);
+            addBtn.Size = new Size(180, 60);
             addBtn.TabIndex = 4;
             addBtn.Text = "添加项";
             addBtn.UseVisualStyleBackColor = false;
@@ -114,10 +115,10 @@
             AllExecuteBtn.Cursor = Cursors.Hand;
             AllExecuteBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
             AllExecuteBtn.ForeColor = SystemColors.ButtonFace;
-            AllExecuteBtn.Location = new Point(1094, 659);
-            AllExecuteBtn.Margin = new Padding(2, 3, 2, 3);
+            AllExecuteBtn.Location = new Point(912, 740);
+            AllExecuteBtn.Margin = new Padding(3, 4, 3, 4);
             AllExecuteBtn.Name = "AllExecuteBtn";
-            AllExecuteBtn.Size = new Size(121, 42);
+            AllExecuteBtn.Size = new Size(180, 60);
             AllExecuteBtn.TabIndex = 5;
             AllExecuteBtn.Text = "一键执行";
             AllExecuteBtn.UseVisualStyleBackColor = false;
@@ -129,14 +130,14 @@
             mainTable.AllowUserToDeleteRows = false;
             mainTable.BackgroundColor = SystemColors.Control;
             mainTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            mainTable.Columns.AddRange(new DataGridViewColumn[] { id, markName, SourcePath, TargetPath, LatelyDate, itemSetBtn });
+            mainTable.Columns.AddRange(new DataGridViewColumn[] { id, markName, SourcePath, TargetPath, itemSetBtn });
             mainTable.ContextMenuStrip = contextMenuMain;
-            mainTable.Location = new Point(11, 12);
-            mainTable.Margin = new Padding(2, 3, 2, 3);
+            mainTable.Location = new Point(17, 17);
+            mainTable.Margin = new Padding(3, 4, 3, 4);
             mainTable.Name = "mainTable";
             mainTable.RowHeadersWidth = 51;
             mainTable.RowTemplate.Height = 29;
-            mainTable.Size = new Size(1454, 629);
+            mainTable.Size = new Size(1642, 704);
             mainTable.TabIndex = 6;
             mainTable.CellClick += mainTable_CellClick;
             mainTable.CellContentClick += mainTable_CellContentClick;
@@ -155,42 +156,37 @@
             // 
             markName.Frozen = true;
             markName.HeaderText = "标识";
+            markName.MinimumWidth = 8;
             markName.Name = "markName";
             markName.ReadOnly = true;
+            markName.Width = 150;
             // 
             // SourcePath
             // 
             SourcePath.Frozen = true;
             SourcePath.HeaderText = "源路径";
-            SourcePath.MinimumWidth = 500;
+            SourcePath.MinimumWidth = 600;
             SourcePath.Name = "SourcePath";
             SourcePath.ReadOnly = true;
-            SourcePath.Width = 500;
+            SourcePath.Width = 600;
             // 
             // TargetPath
             // 
             TargetPath.Frozen = true;
             TargetPath.HeaderText = "目标路径";
-            TargetPath.MinimumWidth = 500;
+            TargetPath.MinimumWidth = 600;
             TargetPath.Name = "TargetPath";
             TargetPath.ReadOnly = true;
-            TargetPath.Width = 500;
-            // 
-            // LatelyDate
-            // 
-            LatelyDate.Frozen = true;
-            LatelyDate.HeaderText = "最近执行日期";
-            LatelyDate.MinimumWidth = 6;
-            LatelyDate.Name = "LatelyDate";
-            LatelyDate.ReadOnly = true;
-            LatelyDate.Width = 150;
+            TargetPath.Width = 600;
             // 
             // itemSetBtn
             // 
             itemSetBtn.Frozen = true;
-            itemSetBtn.HeaderText = "设置";
+            itemSetBtn.HeaderText = "是否自动备份&更多";
+            itemSetBtn.MinimumWidth = 8;
             itemSetBtn.Name = "itemSetBtn";
             itemSetBtn.Resizable = DataGridViewTriState.True;
+            itemSetBtn.Width = 190;
             // 
             // mainNotifyIcon
             // 
@@ -205,42 +201,41 @@
             mainContextMenuStrip.ImageScalingSize = new Size(20, 20);
             mainContextMenuStrip.Items.AddRange(new ToolStripItem[] { MinimalToolStripMenuItem, MaximalToolStripMenuItem, ExitToolStripMenuItem });
             mainContextMenuStrip.Name = "mainContextMenuStrip";
-            mainContextMenuStrip.Size = new Size(113, 70);
+            mainContextMenuStrip.Size = new Size(135, 94);
             mainContextMenuStrip.Opening += mainContextMenuStrip_Opening;
             // 
             // MinimalToolStripMenuItem
             // 
             MinimalToolStripMenuItem.Name = "MinimalToolStripMenuItem";
-            MinimalToolStripMenuItem.Size = new Size(112, 22);
+            MinimalToolStripMenuItem.Size = new Size(134, 30);
             MinimalToolStripMenuItem.Text = "最小化";
             MinimalToolStripMenuItem.Click += MinimalToolStripMenuItem_Click;
             // 
             // MaximalToolStripMenuItem
             // 
             MaximalToolStripMenuItem.Name = "MaximalToolStripMenuItem";
-            MaximalToolStripMenuItem.Size = new Size(112, 22);
+            MaximalToolStripMenuItem.Size = new Size(134, 30);
             MaximalToolStripMenuItem.Text = "还原";
             MaximalToolStripMenuItem.Click += MaximalToolStripMenuItem_Click;
             // 
             // ExitToolStripMenuItem
             // 
             ExitToolStripMenuItem.Name = "ExitToolStripMenuItem";
-            ExitToolStripMenuItem.Size = new Size(112, 22);
+            ExitToolStripMenuItem.Size = new Size(134, 30);
             ExitToolStripMenuItem.Text = "退出";
             ExitToolStripMenuItem.Click += ExitToolStripMenuItem_Click;
             // 
             // SyCountDownLabel
             // 
             SyCountDownLabel.AutoSize = true;
-            SyCountDownLabel.Font = new Font("Microsoft YaHei UI", 12.1008406F, FontStyle.Bold, GraphicsUnit.Point);
+            SyCountDownLabel.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             SyCountDownLabel.ForeColor = Color.FromArgb(192, 0, 0);
-            SyCountDownLabel.Location = new Point(11, 654);
-            SyCountDownLabel.Margin = new Padding(2, 0, 2, 0);
-            SyCountDownLabel.MaximumSize = new Size(0, 132);
+            SyCountDownLabel.Location = new Point(17, 725);
+            SyCountDownLabel.MaximumSize = new Size(0, 186);
             SyCountDownLabel.Name = "SyCountDownLabel";
-            SyCountDownLabel.Size = new Size(166, 24);
+            SyCountDownLabel.Size = new Size(220, 31);
             SyCountDownLabel.TabIndex = 8;
-            SyCountDownLabel.Text = "10秒后启动同步程序";
+            SyCountDownLabel.Text = "x秒后启动同步程序";
             SyCountDownLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // StopSyBtn
@@ -249,12 +244,12 @@
             StopSyBtn.Cursor = Cursors.Hand;
             StopSyBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
             StopSyBtn.ForeColor = SystemColors.ButtonHighlight;
-            StopSyBtn.Location = new Point(830, 659);
-            StopSyBtn.Margin = new Padding(2, 3, 2, 3);
+            StopSyBtn.Location = new Point(1284, 740);
+            StopSyBtn.Margin = new Padding(3, 4, 3, 4);
             StopSyBtn.Name = "StopSyBtn";
-            StopSyBtn.Size = new Size(135, 42);
+            StopSyBtn.Size = new Size(375, 60);
             StopSyBtn.TabIndex = 7;
-            StopSyBtn.Text = "终止自动同步";
+            StopSyBtn.Text = "快单击我！！！快";
             StopSyBtn.UseVisualStyleBackColor = false;
             StopSyBtn.Click += StopSyBtn_Click;
             // 
@@ -263,10 +258,10 @@
             notification.AutoSize = true;
             notification.Checked = true;
             notification.CheckState = CheckState.Checked;
-            notification.Location = new Point(713, 686);
-            notification.Margin = new Padding(2, 3, 2, 3);
+            notification.Location = new Point(576, 767);
+            notification.Margin = new Padding(3, 4, 3, 4);
             notification.Name = "notification";
-            notification.Size = new Size(99, 21);
+            notification.Size = new Size(144, 28);
             notification.TabIndex = 9;
             notification.Text = "自动同步通知";
             notification.UseVisualStyleBackColor = true;
@@ -277,10 +272,10 @@
             timeJudgeCheckBox.AutoSize = true;
             timeJudgeCheckBox.Checked = true;
             timeJudgeCheckBox.CheckState = CheckState.Checked;
-            timeJudgeCheckBox.Location = new Point(713, 659);
-            timeJudgeCheckBox.Margin = new Padding(2, 3, 2, 3);
+            timeJudgeCheckBox.Location = new Point(576, 731);
+            timeJudgeCheckBox.Margin = new Padding(3, 4, 3, 4);
             timeJudgeCheckBox.Name = "timeJudgeCheckBox";
-            timeJudgeCheckBox.Size = new Size(75, 21);
+            timeJudgeCheckBox.Size = new Size(108, 28);
             timeJudgeCheckBox.TabIndex = 10;
             timeJudgeCheckBox.Text = "时间检测";
             timeJudgeCheckBox.UseVisualStyleBackColor = true;
@@ -291,10 +286,10 @@
             isStartUpCheckBox.AutoSize = true;
             isStartUpCheckBox.Checked = true;
             isStartUpCheckBox.CheckState = CheckState.Checked;
-            isStartUpCheckBox.Location = new Point(622, 659);
-            isStartUpCheckBox.Margin = new Padding(2, 3, 2, 3);
+            isStartUpCheckBox.Location = new Point(443, 731);
+            isStartUpCheckBox.Margin = new Padding(3, 4, 3, 4);
             isStartUpCheckBox.Name = "isStartUpCheckBox";
-            isStartUpCheckBox.Size = new Size(75, 21);
+            isStartUpCheckBox.Size = new Size(108, 28);
             isStartUpCheckBox.TabIndex = 11;
             isStartUpCheckBox.Text = "开机自启";
             isStartUpCheckBox.UseVisualStyleBackColor = true;
@@ -305,40 +300,24 @@
             sfxCheckBox.AutoSize = true;
             sfxCheckBox.Checked = true;
             sfxCheckBox.CheckState = CheckState.Checked;
-            sfxCheckBox.Location = new Point(622, 686);
-            sfxCheckBox.Margin = new Padding(2, 3, 2, 3);
+            sfxCheckBox.Location = new Point(443, 767);
+            sfxCheckBox.Margin = new Padding(3, 4, 3, 4);
             sfxCheckBox.Name = "sfxCheckBox";
-            sfxCheckBox.Size = new Size(87, 21);
+            sfxCheckBox.Size = new Size(126, 28);
             sfxCheckBox.TabIndex = 12;
             sfxCheckBox.Text = "创建自解压";
             sfxCheckBox.UseVisualStyleBackColor = true;
             sfxCheckBox.CheckedChanged += sfxCheckBox_CheckedChanged;
             // 
-            // exitBtn
-            // 
-            exitBtn.BackColor = SystemColors.ControlDarkDark;
-            exitBtn.Cursor = Cursors.Hand;
-            exitBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
-            exitBtn.ForeColor = SystemColors.ButtonHighlight;
-            exitBtn.Location = new Point(1344, 659);
-            exitBtn.Margin = new Padding(2, 3, 2, 3);
-            exitBtn.Name = "exitBtn";
-            exitBtn.Size = new Size(121, 42);
-            exitBtn.TabIndex = 13;
-            exitBtn.Text = "退出程序";
-            exitBtn.UseVisualStyleBackColor = false;
-            exitBtn.Click += ExitBtn_Click;
-            // 
             // SourceBitSumLabel
             // 
             SourceBitSumLabel.AutoSize = true;
-            SourceBitSumLabel.Font = new Font("Microsoft YaHei UI", 12.1008406F, FontStyle.Bold, GraphicsUnit.Point);
+            SourceBitSumLabel.Font = new Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             SourceBitSumLabel.ForeColor = Color.Navy;
-            SourceBitSumLabel.Location = new Point(11, 692);
-            SourceBitSumLabel.Margin = new Padding(2, 0, 2, 0);
-            SourceBitSumLabel.MaximumSize = new Size(0, 132);
+            SourceBitSumLabel.Location = new Point(17, 767);
+            SourceBitSumLabel.MaximumSize = new Size(0, 186);
             SourceBitSumLabel.Name = "SourceBitSumLabel";
-            SourceBitSumLabel.Size = new Size(163, 24);
+            SourceBitSumLabel.Size = new Size(201, 28);
             SourceBitSumLabel.TabIndex = 14;
             SourceBitSumLabel.Text = "项源目录大小总和：";
             SourceBitSumLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -346,15 +325,14 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Microsoft YaHei UI", 12.1008406F, FontStyle.Bold, GraphicsUnit.Point);
+            label2.Font = new Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             label2.ForeColor = Color.Navy;
-            label2.Location = new Point(338, 692);
-            label2.Margin = new Padding(2, 0, 2, 0);
-            label2.MaximumSize = new Size(0, 132);
+            label2.Location = new Point(12, 805);
+            label2.MaximumSize = new Size(0, 186);
             label2.Name = "label2";
-            label2.Size = new Size(112, 24);
+            label2.Size = new Size(369, 28);
             label2.TabIndex = 15;
-            label2.Text = "上次总用时：";
+            label2.Text = "上次自动备份总用时（不含倒计时）：";
             label2.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // AboutBtn
@@ -363,25 +341,56 @@
             AboutBtn.Cursor = Cursors.Hand;
             AboutBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
             AboutBtn.ForeColor = SystemColors.ControlDarkDark;
-            AboutBtn.Location = new Point(1219, 659);
-            AboutBtn.Margin = new Padding(2, 3, 2, 3);
+            AboutBtn.Location = new Point(1098, 740);
+            AboutBtn.Margin = new Padding(3, 4, 3, 4);
             AboutBtn.Name = "AboutBtn";
-            AboutBtn.Size = new Size(121, 42);
+            AboutBtn.Size = new Size(180, 60);
             AboutBtn.TabIndex = 16;
             AboutBtn.Text = "关于软件";
             AboutBtn.UseVisualStyleBackColor = false;
             AboutBtn.Click += AboutBtn_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.ForeColor = Color.Navy;
+            label1.Location = new Point(541, 805);
+            label1.Name = "label1";
+            label1.Size = new Size(54, 28);
+            label1.TabIndex = 17;
+            label1.Text = "分钟";
+            // 
+            // TotalLastPast
+            // 
+            TotalLastPast.AutoSize = true;
+            TotalLastPast.Location = new Point(387, 809);
+            TotalLastPast.Name = "TotalLastPast";
+            TotalLastPast.Size = new Size(21, 24);
+            TotalLastPast.TabIndex = 18;
+            TotalLastPast.Text = "0";
+            // 
+            // TotalItemsSize
+            // 
+            TotalItemsSize.AutoSize = true;
+            TotalItemsSize.Location = new Point(224, 771);
+            TotalItemsSize.Name = "TotalItemsSize";
+            TotalItemsSize.Size = new Size(43, 24);
+            TotalItemsSize.TabIndex = 19;
+            TotalItemsSize.Text = "0kb";
+            // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 17F);
+            AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(1483, 725);
+            ClientSize = new Size(1681, 852);
+            Controls.Add(TotalItemsSize);
+            Controls.Add(TotalLastPast);
+            Controls.Add(label1);
             Controls.Add(AboutBtn);
             Controls.Add(label2);
             Controls.Add(SourceBitSumLabel);
-            Controls.Add(exitBtn);
             Controls.Add(sfxCheckBox);
             Controls.Add(isStartUpCheckBox);
             Controls.Add(timeJudgeCheckBox);
@@ -391,8 +400,9 @@
             Controls.Add(StopSyBtn);
             Controls.Add(AllExecuteBtn);
             Controls.Add(addBtn);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(2, 3, 2, 3);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             FormClosing += MainForm_FormClosing;
@@ -424,7 +434,6 @@
         private CheckBox isStartUpCheckBox;
         private CheckBox sfxCheckBox;
         private ToolStripMenuItem restoreItem;
-        private Button exitBtn;
         private Label SourceBitSumLabel;
         private Label label2;
         private Button AboutBtn;
@@ -432,7 +441,9 @@
         private DataGridViewTextBoxColumn markName;
         private DataGridViewTextBoxColumn SourcePath;
         private DataGridViewTextBoxColumn TargetPath;
-        private DataGridViewTextBoxColumn LatelyDate;
         private DataGridViewButtonColumn itemSetBtn;
+        private Label label1;
+        private Label TotalLastPast;
+        private Label TotalItemsSize;
     }
 }

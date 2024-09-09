@@ -36,7 +36,7 @@ namespace CTG_Control.Crane.Model.Dao
             //文件检测
             if (!File.Exists(DATA_PATH))
             {
-                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo() ;
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.FileName = DATA_PATH;
                 //设置启动动作,确保以管理员身份运行
                 startInfo.Verb = "runas";
@@ -112,6 +112,17 @@ namespace CTG_Control.Crane.Model.Dao
                 ConfigService.SetValue("NextId", id.ToString());
             }
             return true;
+        }
+
+        public static CompressItem SelectById(int id)
+        {
+            List<CompressItem> compressItems = ReadAll();
+            CompressItem? compressItem = compressItems.Find(c => c.Id == id);
+            if (compressItem == null)
+            {
+                return null;
+            }
+            return compressItem;
         }
 
     }
