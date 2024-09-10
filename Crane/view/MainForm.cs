@@ -371,6 +371,11 @@ namespace CTG_Control
         /// <param name="e"></param>
         private void isStartUpCheckBox_CheckedChanged(object sender, EventArgs e)
         {
+            //开发模式自启动失效
+           string currentPath = PathService.GetApplicationPath();
+            if (currentPath.Contains("Projects")) {
+                return;
+            }
             bool isStartUp = isStartUpCheckBox.Checked;
             ConfigService.SetValue("isStartUp", isStartUp ? "1" : "0");
             if (isStartUp)
