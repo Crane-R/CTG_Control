@@ -372,8 +372,9 @@ namespace CTG_Control
         private void isStartUpCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             //开发模式自启动失效
-           string currentPath = PathService.GetApplicationPath();
-            if (currentPath.Contains("Projects")) {
+            string currentPath = PathService.GetApplicationPath();
+            if (currentPath.Contains("Projects"))
+            {
                 return;
             }
             bool isStartUp = isStartUpCheckBox.Checked;
@@ -386,7 +387,7 @@ namespace CTG_Control
             {
                 new StartUpService().CloseStartUp();
             }
-            mainNotifyIcon.BalloonTipText = "当前是否开机自启？"+isStartUp;
+            mainNotifyIcon.BalloonTipText = "当前是否开机自启？" + isStartUp;
             //其实此参数已经弃用，具体时间由操作系统控制
             mainNotifyIcon.ShowBalloonTip(1000);
         }

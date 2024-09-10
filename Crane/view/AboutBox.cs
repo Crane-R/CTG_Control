@@ -20,8 +20,11 @@ namespace CTG_Control.Crane.view
             this.labelVersion.Text = "版本："+Constants.VERSION;
             this.labelCopyright.Text = "版权所有：Crane Resigned";
             this.labelCompanyName.Text = "作者：周星学";
-            this.textBoxDescription.Text = "软件描述：\r\n中文名为："+Constants.PROGRAM_NAME_CN
-                +"\r\n能够执行定时备份的任务";
+            this.textBoxDescription.Text = "软件描述：" +
+                "\r\n中文名为："+Constants.PROGRAM_NAME_CN
+                + "\r\n能够执行定时备份的任务" +
+                "\r\n注意事项：软件卸载后如果处于自启状态会存在注册表残留，如果您在意的话，" +
+                "可以进入到注册表“计算机\\HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run”目录下删除有关CTG_Control的内容";
         }
 
         #region Assembly Attribute Accessors
