@@ -70,26 +70,26 @@
             contextMenuMain.ImageScalingSize = new Size(20, 20);
             contextMenuMain.Items.AddRange(new ToolStripItem[] { sssToolStripMenuItem, DeleteCurrent, restoreItem });
             contextMenuMain.Name = "contextMenuMain";
-            contextMenuMain.Size = new Size(423, 94);
+            contextMenuMain.Size = new Size(446, 100);
             // 
             // sssToolStripMenuItem
             // 
             sssToolStripMenuItem.Name = "sssToolStripMenuItem";
-            sssToolStripMenuItem.Size = new Size(422, 30);
+            sssToolStripMenuItem.Size = new Size(445, 32);
             sssToolStripMenuItem.Text = "执行压缩（！注意确认左边三角标选择行）";
             sssToolStripMenuItem.Click += ExecuteBtn_Click;
             // 
             // DeleteCurrent
             // 
             DeleteCurrent.Name = "DeleteCurrent";
-            DeleteCurrent.Size = new Size(422, 30);
+            DeleteCurrent.Size = new Size(445, 32);
             DeleteCurrent.Text = "删除当前指向行项";
             DeleteCurrent.Click += DeleteCurrent_Click;
             // 
             // restoreItem
             // 
             restoreItem.Name = "restoreItem";
-            restoreItem.Size = new Size(422, 30);
+            restoreItem.Size = new Size(445, 32);
             restoreItem.Text = "从目标地址覆盖还原（点我默认第一个）";
             restoreItem.Click += restoreItem_Click;
             restoreItem.MouseHover += restoreItem_MouseHover;
@@ -100,10 +100,10 @@
             addBtn.Cursor = Cursors.Hand;
             addBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
             addBtn.ForeColor = SystemColors.ControlLightLight;
-            addBtn.Location = new Point(726, 740);
+            addBtn.Location = new Point(807, 766);
             addBtn.Margin = new Padding(3, 4, 3, 4);
             addBtn.Name = "addBtn";
-            addBtn.Size = new Size(180, 60);
+            addBtn.Size = new Size(164, 62);
             addBtn.TabIndex = 4;
             addBtn.Text = "添加项";
             addBtn.UseVisualStyleBackColor = false;
@@ -115,10 +115,10 @@
             AllExecuteBtn.Cursor = Cursors.Hand;
             AllExecuteBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
             AllExecuteBtn.ForeColor = SystemColors.ButtonFace;
-            AllExecuteBtn.Location = new Point(912, 740);
+            AllExecuteBtn.Location = new Point(977, 766);
             AllExecuteBtn.Margin = new Padding(3, 4, 3, 4);
             AllExecuteBtn.Name = "AllExecuteBtn";
-            AllExecuteBtn.Size = new Size(180, 60);
+            AllExecuteBtn.Size = new Size(164, 62);
             AllExecuteBtn.TabIndex = 5;
             AllExecuteBtn.Text = "一键执行";
             AllExecuteBtn.UseVisualStyleBackColor = false;
@@ -132,12 +132,12 @@
             mainTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             mainTable.Columns.AddRange(new DataGridViewColumn[] { id, markName, SourcePath, TargetPath, itemSetBtn });
             mainTable.ContextMenuStrip = contextMenuMain;
-            mainTable.Location = new Point(17, 17);
+            mainTable.Location = new Point(15, 18);
             mainTable.Margin = new Padding(3, 4, 3, 4);
             mainTable.Name = "mainTable";
             mainTable.RowHeadersWidth = 51;
             mainTable.RowTemplate.Height = 29;
-            mainTable.Size = new Size(1642, 704);
+            mainTable.Size = new Size(1643, 733);
             mainTable.TabIndex = 6;
             mainTable.CellClick += mainTable_CellClick;
             mainTable.CellContentClick += mainTable_CellContentClick;
@@ -201,27 +201,27 @@
             mainContextMenuStrip.ImageScalingSize = new Size(20, 20);
             mainContextMenuStrip.Items.AddRange(new ToolStripItem[] { MinimalToolStripMenuItem, MaximalToolStripMenuItem, ExitToolStripMenuItem });
             mainContextMenuStrip.Name = "mainContextMenuStrip";
-            mainContextMenuStrip.Size = new Size(135, 94);
+            mainContextMenuStrip.Size = new Size(142, 100);
             mainContextMenuStrip.Opening += mainContextMenuStrip_Opening;
             // 
             // MinimalToolStripMenuItem
             // 
             MinimalToolStripMenuItem.Name = "MinimalToolStripMenuItem";
-            MinimalToolStripMenuItem.Size = new Size(134, 30);
+            MinimalToolStripMenuItem.Size = new Size(141, 32);
             MinimalToolStripMenuItem.Text = "最小化";
             MinimalToolStripMenuItem.Click += MinimalToolStripMenuItem_Click;
             // 
             // MaximalToolStripMenuItem
             // 
             MaximalToolStripMenuItem.Name = "MaximalToolStripMenuItem";
-            MaximalToolStripMenuItem.Size = new Size(134, 30);
+            MaximalToolStripMenuItem.Size = new Size(141, 32);
             MaximalToolStripMenuItem.Text = "还原";
             MaximalToolStripMenuItem.Click += MaximalToolStripMenuItem_Click;
             // 
             // ExitToolStripMenuItem
             // 
             ExitToolStripMenuItem.Name = "ExitToolStripMenuItem";
-            ExitToolStripMenuItem.Size = new Size(134, 30);
+            ExitToolStripMenuItem.Size = new Size(141, 32);
             ExitToolStripMenuItem.Text = "退出";
             ExitToolStripMenuItem.Click += ExitToolStripMenuItem_Click;
             // 
@@ -230,8 +230,8 @@
             SyCountDownLabel.AutoSize = true;
             SyCountDownLabel.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             SyCountDownLabel.ForeColor = Color.FromArgb(192, 0, 0);
-            SyCountDownLabel.Location = new Point(17, 725);
-            SyCountDownLabel.MaximumSize = new Size(0, 186);
+            SyCountDownLabel.Location = new Point(15, 755);
+            SyCountDownLabel.MaximumSize = new Size(0, 194);
             SyCountDownLabel.Name = "SyCountDownLabel";
             SyCountDownLabel.Size = new Size(220, 31);
             SyCountDownLabel.TabIndex = 8;
@@ -244,10 +244,10 @@
             StopSyBtn.Cursor = Cursors.Hand;
             StopSyBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
             StopSyBtn.ForeColor = SystemColors.ButtonHighlight;
-            StopSyBtn.Location = new Point(1284, 740);
+            StopSyBtn.Location = new Point(1317, 766);
             StopSyBtn.Margin = new Padding(3, 4, 3, 4);
             StopSyBtn.Name = "StopSyBtn";
-            StopSyBtn.Size = new Size(375, 60);
+            StopSyBtn.Size = new Size(341, 62);
             StopSyBtn.TabIndex = 7;
             StopSyBtn.Text = "快单击我！！！快";
             StopSyBtn.UseVisualStyleBackColor = false;
@@ -258,10 +258,10 @@
             notification.AutoSize = true;
             notification.Checked = true;
             notification.CheckState = CheckState.Checked;
-            notification.Location = new Point(576, 767);
+            notification.Location = new Point(562, 799);
             notification.Margin = new Padding(3, 4, 3, 4);
             notification.Name = "notification";
-            notification.Size = new Size(144, 28);
+            notification.Size = new Size(152, 29);
             notification.TabIndex = 9;
             notification.Text = "自动同步通知";
             notification.UseVisualStyleBackColor = true;
@@ -272,10 +272,10 @@
             timeJudgeCheckBox.AutoSize = true;
             timeJudgeCheckBox.Checked = true;
             timeJudgeCheckBox.CheckState = CheckState.Checked;
-            timeJudgeCheckBox.Location = new Point(576, 731);
+            timeJudgeCheckBox.Location = new Point(562, 759);
             timeJudgeCheckBox.Margin = new Padding(3, 4, 3, 4);
             timeJudgeCheckBox.Name = "timeJudgeCheckBox";
-            timeJudgeCheckBox.Size = new Size(108, 28);
+            timeJudgeCheckBox.Size = new Size(114, 29);
             timeJudgeCheckBox.TabIndex = 10;
             timeJudgeCheckBox.Text = "时间检测";
             timeJudgeCheckBox.UseVisualStyleBackColor = true;
@@ -286,10 +286,10 @@
             isStartUpCheckBox.AutoSize = true;
             isStartUpCheckBox.Checked = true;
             isStartUpCheckBox.CheckState = CheckState.Checked;
-            isStartUpCheckBox.Location = new Point(443, 731);
+            isStartUpCheckBox.Location = new Point(403, 761);
             isStartUpCheckBox.Margin = new Padding(3, 4, 3, 4);
             isStartUpCheckBox.Name = "isStartUpCheckBox";
-            isStartUpCheckBox.Size = new Size(108, 28);
+            isStartUpCheckBox.Size = new Size(114, 29);
             isStartUpCheckBox.TabIndex = 11;
             isStartUpCheckBox.Text = "开机自启";
             isStartUpCheckBox.UseVisualStyleBackColor = true;
@@ -300,10 +300,10 @@
             sfxCheckBox.AutoSize = true;
             sfxCheckBox.Checked = true;
             sfxCheckBox.CheckState = CheckState.Checked;
-            sfxCheckBox.Location = new Point(443, 767);
+            sfxCheckBox.Location = new Point(403, 799);
             sfxCheckBox.Margin = new Padding(3, 4, 3, 4);
             sfxCheckBox.Name = "sfxCheckBox";
-            sfxCheckBox.Size = new Size(126, 28);
+            sfxCheckBox.Size = new Size(133, 29);
             sfxCheckBox.TabIndex = 12;
             sfxCheckBox.Text = "创建自解压";
             sfxCheckBox.UseVisualStyleBackColor = true;
@@ -314,8 +314,8 @@
             SourceBitSumLabel.AutoSize = true;
             SourceBitSumLabel.Font = new Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             SourceBitSumLabel.ForeColor = Color.Navy;
-            SourceBitSumLabel.Location = new Point(17, 767);
-            SourceBitSumLabel.MaximumSize = new Size(0, 186);
+            SourceBitSumLabel.Location = new Point(15, 799);
+            SourceBitSumLabel.MaximumSize = new Size(0, 194);
             SourceBitSumLabel.Name = "SourceBitSumLabel";
             SourceBitSumLabel.Size = new Size(201, 28);
             SourceBitSumLabel.TabIndex = 14;
@@ -327,8 +327,8 @@
             label2.AutoSize = true;
             label2.Font = new Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             label2.ForeColor = Color.Navy;
-            label2.Location = new Point(12, 805);
-            label2.MaximumSize = new Size(0, 186);
+            label2.Location = new Point(11, 839);
+            label2.MaximumSize = new Size(0, 194);
             label2.Name = "label2";
             label2.Size = new Size(369, 28);
             label2.TabIndex = 15;
@@ -341,10 +341,10 @@
             AboutBtn.Cursor = Cursors.Hand;
             AboutBtn.Font = new Font("Microsoft YaHei UI", 10.2857141F, FontStyle.Bold, GraphicsUnit.Point);
             AboutBtn.ForeColor = SystemColors.ControlDarkDark;
-            AboutBtn.Location = new Point(1098, 740);
+            AboutBtn.Location = new Point(1147, 766);
             AboutBtn.Margin = new Padding(3, 4, 3, 4);
             AboutBtn.Name = "AboutBtn";
-            AboutBtn.Size = new Size(180, 60);
+            AboutBtn.Size = new Size(164, 62);
             AboutBtn.TabIndex = 16;
             AboutBtn.Text = "关于软件";
             AboutBtn.UseVisualStyleBackColor = false;
@@ -355,7 +355,7 @@
             label1.AutoSize = true;
             label1.Font = new Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             label1.ForeColor = Color.Navy;
-            label1.Location = new Point(541, 805);
+            label1.Location = new Point(492, 839);
             label1.Name = "label1";
             label1.Size = new Size(54, 28);
             label1.TabIndex = 17;
@@ -364,27 +364,27 @@
             // TotalLastPast
             // 
             TotalLastPast.AutoSize = true;
-            TotalLastPast.Location = new Point(387, 809);
+            TotalLastPast.Location = new Point(352, 843);
             TotalLastPast.Name = "TotalLastPast";
-            TotalLastPast.Size = new Size(21, 24);
+            TotalLastPast.Size = new Size(22, 25);
             TotalLastPast.TabIndex = 18;
             TotalLastPast.Text = "0";
             // 
             // TotalItemsSize
             // 
             TotalItemsSize.AutoSize = true;
-            TotalItemsSize.Location = new Point(224, 771);
+            TotalItemsSize.Location = new Point(204, 803);
             TotalItemsSize.Name = "TotalItemsSize";
-            TotalItemsSize.Size = new Size(43, 24);
+            TotalItemsSize.Size = new Size(42, 25);
             TotalItemsSize.TabIndex = 19;
             TotalItemsSize.Text = "0kb";
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(11F, 24F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(1681, 852);
+            ClientSize = new Size(1687, 887);
             Controls.Add(TotalItemsSize);
             Controls.Add(TotalLastPast);
             Controls.Add(label1);
