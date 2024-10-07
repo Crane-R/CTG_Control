@@ -80,7 +80,7 @@ namespace CTG_Control.crane.form
             //写数据
             DataDao.Add(new CompressItem(IdService.GenerateId(), markName, sourcePath,
                 targetPath, DateTime.MinValue, isAuto.Checked,
-                Convert.ToInt32(IntervalValue.Text.Equals("") ? ConfigService.GetValue("slowInterval") : IntervalValue.Text), -1));
+                Convert.ToInt32(IntervalValue.Text.Equals("") ? ConfigService.GetValue("slowInterval") : IntervalValue.Text), 0));
             mainForm.Init();
 
             //是否修改默认上传地址
