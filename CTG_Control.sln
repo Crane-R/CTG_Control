@@ -5,6 +5,8 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CTG_Control", "CTG_Control.csproj", "{1855584E-17D5-4114-A633-B7298A2FFD1E}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "CTG_Control_Setup", "..\CTG_Control_Setup\CTG_Control_Setup.vdproj", "{33787774-3776-4F65-81B9-A1BC4122A6AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{1855584E-17D5-4114-A633-B7298A2FFD1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1855584E-17D5-4114-A633-B7298A2FFD1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1855584E-17D5-4114-A633-B7298A2FFD1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33787774-3776-4F65-81B9-A1BC4122A6AD}.Debug|Any CPU.ActiveCfg = Debug
+		{33787774-3776-4F65-81B9-A1BC4122A6AD}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
