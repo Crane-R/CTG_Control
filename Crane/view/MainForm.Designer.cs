@@ -54,12 +54,10 @@
             timeJudgeCheckBox = new CheckBox();
             isStartUpCheckBox = new CheckBox();
             sfxCheckBox = new CheckBox();
-            SourceBitSumLabel = new Label();
             label2 = new Label();
             AboutBtn = new Button();
             label1 = new Label();
             TotalLastPast = new Label();
-            TotalItemsSize = new Label();
             contextMenuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)mainTable).BeginInit();
             mainContextMenuStrip.SuspendLayout();
@@ -309,25 +307,12 @@
             sfxCheckBox.UseVisualStyleBackColor = true;
             sfxCheckBox.CheckedChanged += sfxCheckBox_CheckedChanged;
             // 
-            // SourceBitSumLabel
-            // 
-            SourceBitSumLabel.AutoSize = true;
-            SourceBitSumLabel.Font = new Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
-            SourceBitSumLabel.ForeColor = Color.Navy;
-            SourceBitSumLabel.Location = new Point(16, 1058);
-            SourceBitSumLabel.MaximumSize = new Size(0, 186);
-            SourceBitSumLabel.Name = "SourceBitSumLabel";
-            SourceBitSumLabel.Size = new Size(201, 28);
-            SourceBitSumLabel.TabIndex = 14;
-            SourceBitSumLabel.Text = "项源目录大小总和：";
-            SourceBitSumLabel.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             label2.ForeColor = Color.Navy;
-            label2.Location = new Point(16, 1103);
+            label2.Location = new Point(16, 1064);
             label2.MaximumSize = new Size(0, 186);
             label2.Name = "label2";
             label2.Size = new Size(222, 28);
@@ -355,7 +340,7 @@
             label1.AutoSize = true;
             label1.Font = new Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             label1.ForeColor = Color.Navy;
-            label1.Location = new Point(491, 1104);
+            label1.Location = new Point(481, 1067);
             label1.Name = "label1";
             label1.Size = new Size(54, 28);
             label1.TabIndex = 17;
@@ -364,33 +349,22 @@
             // TotalLastPast
             // 
             TotalLastPast.AutoSize = true;
-            TotalLastPast.Location = new Point(340, 1107);
+            TotalLastPast.Location = new Point(329, 1067);
             TotalLastPast.Name = "TotalLastPast";
             TotalLastPast.Size = new Size(21, 24);
             TotalLastPast.TabIndex = 18;
             TotalLastPast.Text = "0";
-            // 
-            // TotalItemsSize
-            // 
-            TotalItemsSize.AutoSize = true;
-            TotalItemsSize.Location = new Point(340, 1062);
-            TotalItemsSize.Name = "TotalItemsSize";
-            TotalItemsSize.Size = new Size(43, 24);
-            TotalItemsSize.TabIndex = 19;
-            TotalItemsSize.Text = "0kb";
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(2085, 1144);
-            Controls.Add(TotalItemsSize);
+            ClientSize = new Size(2095, 1121);
             Controls.Add(TotalLastPast);
             Controls.Add(label1);
             Controls.Add(AboutBtn);
             Controls.Add(label2);
-            Controls.Add(SourceBitSumLabel);
             Controls.Add(sfxCheckBox);
             Controls.Add(isStartUpCheckBox);
             Controls.Add(timeJudgeCheckBox);
@@ -434,12 +408,10 @@
         private CheckBox isStartUpCheckBox;
         private CheckBox sfxCheckBox;
         private ToolStripMenuItem restoreItem;
-        private Label SourceBitSumLabel;
         private Label label2;
         private Button AboutBtn;
         private Label label1;
         private Label TotalLastPast;
-        private Label TotalItemsSize;
         private DataGridViewTextBoxColumn id;
         private DataGridViewTextBoxColumn markName;
         private DataGridViewTextBoxColumn SourcePath;

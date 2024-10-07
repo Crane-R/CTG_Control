@@ -94,10 +94,11 @@ namespace CTG_Control
                     row.Cells[TARGET_PATH_INDEX].Value = item.TargetPath;
                     row.Cells[IS_AUTO_INDEX].Value = item.IsAutoBack ? "是" : "否";
                     mainTableData.Rows.Add(row);
-                    sourceSum += fileCountService.FileLengthCount(item.SourcePath);
+                    //这个很耗时啊
+                    //sourceSum += fileCountService.FileLengthCount(item.SourcePath);
                     totalBackTime += item.LastBackPast;
                 });
-                TotalItemsSize.Text = fileCountService.FormatFileCount(sourceSum);
+                //TotalItemsSize.Text = fileCountService.FormatFileCount(sourceSum);
                 TotalLastPast.Text = totalBackTime.ToString("0.000");
             }));
         }
