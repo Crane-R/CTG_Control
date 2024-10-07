@@ -12,9 +12,11 @@ namespace CTG_Control.Crane.Constant
 
         public const string PROGRAM_NAME_CN = "压缩转移总控程序";
 
-        public const string VERSION = "v2.0.3-beta";
+        public const string VERSION = "v2.0.4-beta";
 
         public const string DATATIME_FORMAT = "yyyyMMddHHmmss";
+
+        public const string PUBLISH_DATE = "2024-10-07";
 
     }
 }

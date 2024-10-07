@@ -83,6 +83,7 @@ namespace CTG_Control
                 mainTableData.Rows.Clear();
                 FileCountService fileCountService = new FileCountService();
                 long sourceSum = 0;
+                double totalBackTime = 0;
                 compassItems.ForEach(item =>
                 {
                     DataGridViewRow row = new DataGridViewRow();
@@ -94,9 +95,10 @@ namespace CTG_Control
                     row.Cells[IS_AUTO_INDEX].Value = item.IsAutoBack ? "是" : "否";
                     mainTableData.Rows.Add(row);
                     sourceSum += fileCountService.FileLengthCount(item.SourcePath);
+                    totalBackTime += item.LastBackPast;
                 });
                 TotalItemsSize.Text = fileCountService.FormatFileCount(sourceSum);
-                TotalLastPast.Text = ConfigService.GetValue("totalLastPast");
+                TotalLastPast.Text = totalBackTime.ToString("0.000");
             }));
         }
 
@@ -198,9 +200,6 @@ namespace CTG_Control
         /// </summary>
         private void SyExecuteAll()
         {
-            //开始计时
-            DateTime startTime = DateTime.Now;
-
             int count = mainTableData.RowCount;
             CompressItem compressItem = new();
             DeleteService deleteService = new DeleteService();
@@ -217,10 +216,6 @@ namespace CTG_Control
                 deleteService.AutoJudgeDelete(compressItem.TargetPath, 72);
             }
             Init();
-
-            //结束计时
-            TotalLastPast.Text = DateTime.Now.Subtract(startTime).TotalMinutes.ToString("0.000");
-            ConfigService.SetValue("totalLastPast", TotalLastPast.Text);
 
             try
             {
