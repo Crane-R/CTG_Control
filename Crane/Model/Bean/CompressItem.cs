@@ -21,17 +21,6 @@ namespace CTG_Control.Crane.Model.Bean
         }
 
         /// <summary>
-        /// 目标路径
-        /// </summary>
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        private string _TargetPath;
-        public string TargetPath
-        {
-            get { return _TargetPath; }
-            set { _TargetPath = value; }
-        }
-
-        /// <summary>
         /// 最近执行日期
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -101,13 +90,11 @@ namespace CTG_Control.Crane.Model.Bean
         {
             _MarkName = string.Empty;
             _SourcePath = string.Empty;
-            _TargetPath = string.Empty;
         }
-        public CompressItem(int id, string markName, string sourcePath, string targetPath,
+        public CompressItem(int id, string markName, string sourcePath, 
             DateTime latelyDate, bool isAutoBack, int backInterval, int lastBackPast)
         {
             _SourcePath = sourcePath;
-            _TargetPath = targetPath;
             _LatelyDate = latelyDate;
             _Id = id;
             _MarkName = markName;
@@ -120,7 +107,6 @@ namespace CTG_Control.Crane.Model.Bean
         {
             TargetObj._Id = OriginObj._Id;
             TargetObj._SourcePath = OriginObj._SourcePath;
-            TargetObj._TargetPath = OriginObj._TargetPath;
             TargetObj._LatelyDate = OriginObj._LatelyDate;
             TargetObj._MarkName = OriginObj._MarkName;
             TargetObj._IsAutoBack = OriginObj._IsAutoBack;

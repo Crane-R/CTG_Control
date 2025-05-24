@@ -2,6 +2,9 @@
 using CTG_Control.Crane.Model.Bean;
 using CTG_Control.Crane.Model.Dao;
 using CTG_Control.Crane.Service;
+using System.IO;
+using System.Reflection.Metadata;
+using System.Windows.Forms;
 
 namespace CTG_Control.crane.form
 {
@@ -23,72 +26,60 @@ namespace CTG_Control.crane.form
         {
             markNameBox.Text = Constants.MARK_NAME_BLANK;
             addSourcePath.Text = Constants.ADD_SOURCE_PATH_BLANK;
-            addTargetPath.Text = ConfigService.GetValue("DefaultTargetPath");
         }
 
         private void AddSourcePath_Click(object sender, EventArgs e)
         {
-            Path_Click(Constants.ADD_SOURCE_PATH_BLANK, addSourcePath, ChooseSourcePath);
-        }
-
-        private void AddTargetPath_Click(object sender, EventArgs e)
-        {
-            Path_Click(Constants.ADD_TARGET_PATH_BLANK, addTargetPath, ChooseTargetPath);
-        }
-
-        private void Path_Click(string constant, TextBox path, FolderBrowserDialog folderBrowserDialog)
-        {
-            //C#和Java中this的指向或许有不同，
-            //在Java中这里应该是this.Text而C#是addSourcePath.Text
-            if (constant.Equals(path.Text))
+            if (Constants.ADD_SOURCE_PATH_BLANK.Equals(addSourcePath.Text))
             {
-                path.Text = null;
-                path.ForeColor = Color.Black;
+                addSourcePath.Text = null;
+                addSourcePath.ForeColor = Color.Black;
             }
-
-            folderBrowserDialog.Description = "请选择源路径";
-            //TODO选择路径框无法居中
-            folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
-
-            if (path.Text != null && path.Text.Length > 0)
+            if (!isFile.Checked)
             {
-                folderBrowserDialog.SelectedPath = path.Text;
+                ChooseSourcePath.Description = "请选择源路径";
+                ChooseSourcePath.RootFolder = Environment.SpecialFolder.MyComputer;
+                if (addSourcePath.Text != null && addSourcePath.Text.Length > 0)
+                {
+                    ChooseSourcePath.SelectedPath = addSourcePath.Text;
+                }
+                if (ChooseSourcePath.ShowDialog() == DialogResult.OK)
+                {
+                    addSourcePath.Text = ChooseSourcePath.SelectedPath;
+                }
             }
-            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            else
             {
-                path.Text = folderBrowserDialog.SelectedPath;
+                if (addSourcePath.Text != null && addSourcePath.Text.Length > 0)
+                {
+                    chooseBack.FileName = addSourcePath.Text;
+                }
+                if (chooseBack.ShowDialog() == DialogResult.OK)
+                {
+                    addSourcePath.Text = chooseBack.FileName;
+                }
             }
         }
 
         private void SureBtn_Click(object sender, EventArgs e)
         {
             string sourcePath = addSourcePath.Text;
-            string targetPath = addTargetPath.Text;
             string markName = markNameBox.Text;
             if ("".Equals(sourcePath)
-                || "".Equals(targetPath)
                 || Constants.ADD_SOURCE_PATH_BLANK.Equals(sourcePath)
-                || Constants.ADD_TARGET_PATH_BLANK.Equals(targetPath)
                 || "".Equals(markName)
                 || Constants.MARK_NAME_BLANK.Equals(markName)
                 )
             {
-                MessageBox.Show("标识名、源路径、目标路径皆不可为空", "判空提示");
+                MessageBox.Show("标识名、源路径不可为空", "判空提示");
                 return;
             }
 
             //写数据
             DataDao.Add(new CompressItem(IdService.GenerateId(), markName, sourcePath,
-                targetPath, DateTime.MinValue, isAuto.Checked,
+                 DateTime.MinValue, isAuto.Checked,
                 Convert.ToInt32(IntervalValue.Text.Equals("") ? ConfigService.GetValue("slowInterval") : IntervalValue.Text), 0));
             mainForm.Init();
-
-            //是否修改默认上传地址
-            if (DefaultUpPathCBox.Checked == true)
-            {
-                ConfigService.SetValue("DefaultTargetPath", targetPath);
-            }
-
             Close();
         }
 
@@ -106,11 +97,6 @@ namespace CTG_Control.crane.form
         private void addSourcePath_Leave(object sender, EventArgs e)
         {
             judgeText(addSourcePath, Constants.ADD_SOURCE_PATH_BLANK);
-        }
-
-        private void addTargetPath_Leave(object sender, EventArgs e)
-        {
-            judgeText(addTargetPath, Constants.ADD_TARGET_PATH_BLANK);
         }
 
         /// <summary>

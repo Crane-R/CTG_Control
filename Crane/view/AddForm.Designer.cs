@@ -31,28 +31,26 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddForm));
             SureBtn = new Button();
             addSourcePath = new TextBox();
-            addTargetPath = new TextBox();
             ChooseSourcePath = new FolderBrowserDialog();
-            ChooseTargetPath = new FolderBrowserDialog();
-            DefaultUpPathCBox = new CheckBox();
             markNameBox = new TextBox();
             isAuto = new CheckBox();
             label1 = new Label();
             label2 = new Label();
-            label3 = new Label();
             label4 = new Label();
             IntervalValue = new TextBox();
             IntervalUnit = new Label();
             ChooseStandard = new ComboBox();
+            chooseBack = new OpenFileDialog();
+            isFile = new CheckBox();
             SuspendLayout();
             // 
             // SureBtn
             // 
             SureBtn.Font = new Font("Microsoft YaHei UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            SureBtn.Location = new Point(969, 142);
+            SureBtn.Location = new Point(1000, 110);
             SureBtn.Margin = new Padding(3, 4, 3, 4);
             SureBtn.Name = "SureBtn";
-            SureBtn.Size = new Size(160, 60);
+            SureBtn.Size = new Size(129, 38);
             SureBtn.TabIndex = 0;
             SureBtn.Text = "确认";
             SureBtn.UseVisualStyleBackColor = true;
@@ -68,28 +66,6 @@
             addSourcePath.TabIndex = 1;
             addSourcePath.Click += AddSourcePath_Click;
             addSourcePath.Leave += addSourcePath_Leave;
-            // 
-            // addTargetPath
-            // 
-            addTargetPath.ForeColor = Color.Black;
-            addTargetPath.Location = new Point(168, 96);
-            addTargetPath.Margin = new Padding(3, 4, 3, 4);
-            addTargetPath.Name = "addTargetPath";
-            addTargetPath.Size = new Size(961, 30);
-            addTargetPath.TabIndex = 2;
-            addTargetPath.Click += AddTargetPath_Click;
-            addTargetPath.Leave += addTargetPath_Leave;
-            // 
-            // DefaultUpPathCBox
-            // 
-            DefaultUpPathCBox.AutoSize = true;
-            DefaultUpPathCBox.Location = new Point(19, 144);
-            DefaultUpPathCBox.Margin = new Padding(3, 4, 3, 4);
-            DefaultUpPathCBox.Name = "DefaultUpPathCBox";
-            DefaultUpPathCBox.Size = new Size(288, 28);
-            DefaultUpPathCBox.TabIndex = 3;
-            DefaultUpPathCBox.Text = "将该次目标地址设为默认上传点";
-            DefaultUpPathCBox.UseVisualStyleBackColor = true;
             // 
             // markNameBox
             // 
@@ -107,7 +83,7 @@
             isAuto.AutoSize = true;
             isAuto.Checked = true;
             isAuto.CheckState = CheckState.Checked;
-            isAuto.Location = new Point(19, 180);
+            isAuto.Location = new Point(19, 110);
             isAuto.Margin = new Padding(5, 4, 5, 4);
             isAuto.Name = "isAuto";
             isAuto.Size = new Size(144, 28);
@@ -137,21 +113,10 @@
             label2.TabIndex = 7;
             label2.Text = "源路径：";
             // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
-            label3.Location = new Point(19, 99);
-            label3.Margin = new Padding(5, 0, 5, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(117, 28);
-            label3.TabIndex = 8;
-            label3.Text = "目标路径：";
-            // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(401, 145);
+            label4.Location = new Point(184, 110);
             label4.Name = "label4";
             label4.Size = new Size(136, 24);
             label4.TabIndex = 9;
@@ -159,7 +124,7 @@
             // 
             // IntervalValue
             // 
-            IntervalValue.Location = new Point(543, 142);
+            IntervalValue.Location = new Point(326, 107);
             IntervalValue.Name = "IntervalValue";
             IntervalValue.Size = new Size(61, 30);
             IntervalValue.TabIndex = 10;
@@ -167,7 +132,7 @@
             // IntervalUnit
             // 
             IntervalUnit.AutoSize = true;
-            IntervalUnit.Location = new Point(610, 145);
+            IntervalUnit.Location = new Point(393, 110);
             IntervalUnit.Name = "IntervalUnit";
             IntervalUnit.Size = new Size(46, 24);
             IntervalUnit.TabIndex = 11;
@@ -177,29 +142,41 @@
             // 
             ChooseStandard.FormattingEnabled = true;
             ChooseStandard.Items.AddRange(new object[] { "慢速项", "中速项", "快速项" });
-            ChooseStandard.Location = new Point(662, 142);
+            ChooseStandard.Location = new Point(445, 106);
             ChooseStandard.Name = "ChooseStandard";
             ChooseStandard.Size = new Size(130, 32);
             ChooseStandard.TabIndex = 12;
             ChooseStandard.Text = "标准值选择";
             ChooseStandard.SelectedIndexChanged += ChooseStandard_SelectedIndexChanged;
             // 
+            // chooseBack
+            // 
+            chooseBack.FileName = "选择文件";
+            // 
+            // isFile
+            // 
+            isFile.AutoSize = true;
+            isFile.Location = new Point(629, 107);
+            isFile.Name = "isFile";
+            isFile.Size = new Size(108, 28);
+            isFile.TabIndex = 13;
+            isFile.Text = "备份文件";
+            isFile.UseVisualStyleBackColor = true;
+            // 
             // AddForm
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1153, 224);
+            ClientSize = new Size(1153, 168);
+            Controls.Add(isFile);
             Controls.Add(ChooseStandard);
             Controls.Add(IntervalUnit);
             Controls.Add(IntervalValue);
             Controls.Add(label4);
-            Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(isAuto);
             Controls.Add(markNameBox);
-            Controls.Add(DefaultUpPathCBox);
-            Controls.Add(addTargetPath);
             Controls.Add(addSourcePath);
             Controls.Add(SureBtn);
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -216,18 +193,16 @@
 
         private Button SureBtn;
         private TextBox addSourcePath;
-        private TextBox addTargetPath;
         private FolderBrowserDialog ChooseSourcePath;
-        private FolderBrowserDialog ChooseTargetPath;
-        private CheckBox DefaultUpPathCBox;
         private TextBox markNameBox;
         private CheckBox isAuto;
         private Label label1;
         private Label label2;
-        private Label label3;
         private Label label4;
         private TextBox IntervalValue;
         private Label IntervalUnit;
         private ComboBox ChooseStandard;
+        private OpenFileDialog chooseBack;
+        private CheckBox isFile;
     }
 }

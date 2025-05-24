@@ -14,8 +14,7 @@ namespace CTG_Control
         private readonly int ID_INDEX = 0;
         private readonly int MARK_NAME_INDEX = 1;
         private readonly int SOURCE_PATH_INDEX = 2;
-        private readonly int TARGET_PATH_INDEX = 3;
-        private readonly int IS_AUTO_INDEX = 4;
+        private readonly int IS_AUTO_INDEX = 3;
 
         //倒计时文本
         private readonly string COUNTDOWN_LABEL = "秒后启动同步程序";
@@ -36,21 +35,6 @@ namespace CTG_Control
             mainTableData = mainTable;
 
             mainNotifyIcon.Text = Constants.PROGRAM_VERSION;
-
-            if (ConfigService.GetValue("isNotify").Equals("1"))
-            {
-                notification.Checked = true;
-                mainNotifyIcon.BalloonTipText = ConfigService.GetValue("notificationText");
-                //其实此参数已经弃用，具体时间由操作系统控制
-                mainNotifyIcon.ShowBalloonTip(2000);
-            }
-            else
-            {
-                notification.Checked = false;
-            }
-            timeJudgeCheckBox.Checked = ConfigService.GetValueByBool("isTimeJudge");
-            isStartUpCheckBox.Checked = ConfigService.GetValueByBool("isStartUp");
-            sfxCheckBox.Checked = ConfigService.GetValueByBool("sfx");
 
             CheckForIllegalCrossThreadCalls = false;
 
@@ -91,7 +75,6 @@ namespace CTG_Control
                     row.Cells[ID_INDEX].Value = item.Id;
                     row.Cells[MARK_NAME_INDEX].Value = item.MarkName;
                     row.Cells[SOURCE_PATH_INDEX].Value = item.SourcePath;
-                    row.Cells[TARGET_PATH_INDEX].Value = item.TargetPath;
                     row.Cells[IS_AUTO_INDEX].Value = item.IsAutoBack ? "是" : "否";
                     mainTableData.Rows.Add(row);
                     //这个很耗时啊
@@ -100,6 +83,7 @@ namespace CTG_Control
                 });
                 //TotalItemsSize.Text = fileCountService.FormatFileCount(sourceSum);
                 TotalLastPast.Text = totalBackTime.ToString("0.000");
+                backLocationInput.Text = ConfigService.GetValue("DefaultTargetPath");
             }));
         }
 
@@ -118,11 +102,11 @@ namespace CTG_Control
         {
             if (CompressService.NotExistsWinRar())
             {
-                MessageBox.Show("压缩程序需要依赖WinRAR，但因WinRAR的压缩算法并不开源，故需要您电脑安装WinRAR才能使用此程序");
+                MessageBox.Show("程序需要依赖WinRAR，请先安装");
                 return false;
             }
 
-            //时间检测：如果距离上次同步时间少于12h，则不同步
+            //时间检测
             if (ConfigService.GetValue("isTimeJudge").Equals("1")
                 && isJudgeTime
                 && DateTime.Now.Subtract(compressItem.LatelyDate).TotalHours < compressItem.BackInterval)
@@ -130,16 +114,18 @@ namespace CTG_Control
                 return false;
             }
 
-            if (compressItem.SourcePath is null || compressItem.TargetPath is null)
+            if (compressItem.SourcePath is null)
             {
                 if (!isOneKey)
                 {
-                    MessageBox.Show("源路径或目标路径不可为空", "地址为空", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("源路径不可为空", "地址为空", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 return false;
             }
 
             //开始执行前禁用按钮
+            string text = SyCountDownLabel.Text;
+            SyCountDownLabel.Text = "正在执行中……";
             ControlFunction(false);
 
             //开始计时
@@ -150,30 +136,16 @@ namespace CTG_Control
             compressItem.LastBackPast = Convert.ToDouble(DateTime.Now.Subtract(startTime).TotalMinutes);
             DataDao.UpdateOne(compressItem);
 
+            SyCountDownLabel.Text = text;
             ControlFunction(true);
             return true;
         }
 
         private void ControlFunction(bool isAble)
         {
-            addBtn.Enabled = isAble;
-            AllExecuteBtn.Enabled = isAble;
             contextMenuMain.Enabled = isAble;
-            sfxCheckBox.Enabled = isAble;
-            isStartUpCheckBox.Enabled = isAble;
-            timeJudgeCheckBox.Enabled = isAble;
-            notification.Enabled = isAble;
             StopSyBtn.Enabled = isAble;
-        }
-
-        /// <summary>
-        /// 添加项
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void AddBtn_Click(object sender, EventArgs e)
-        {
-            new AddForm(this).ShowDialog();
+            backLocationLock.Enabled = isAble;
         }
 
         /// <summary>
@@ -214,7 +186,8 @@ namespace CTG_Control
                 ExecuteCompress(compressItem, false, true);
 
                 //自动检测删除
-                deleteService.AutoJudgeDelete(compressItem.TargetPath, 72);
+                string sourcePath = compressItem.SourcePath;
+                deleteService.AutoJudgeDelete(ConfigService.GetValue("DefaultTargetPath") + "\\" + sourcePath.Substring(sourcePath.LastIndexOf("\\") + 1), 72);
             }
             Init();
 
@@ -235,23 +208,6 @@ namespace CTG_Control
             {
                 Console.WriteLine(ex.ToString());
             }
-        }
-
-        private void AllExecuteBtn_Click(object sender, EventArgs e)
-        {
-            int count = mainTableData.RowCount;
-            List<CompressItem> compressItems = new List<CompressItem>();
-            for (int i = 0; i < count; i++)
-            {
-                CompressItem compressItem = DataDao.SelectById(Convert.ToInt32(mainTableData.Rows[i].Cells[ID_INDEX].Value.ToString()));
-                compressItems.Add(compressItem);
-            }
-            for (int i = 0; i < count; i++)
-            {
-                ExecuteCompress(compressItems[i], false, true);
-            }
-            MessageBox.Show("任务压缩执行完成");
-            Init();
         }
 
         private void MainTable_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
@@ -283,11 +239,6 @@ namespace CTG_Control
 
         }
 
-        private void mainContextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-
-        }
-
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             // 注意判断关闭事件reason来源于窗体按钮，否则用菜单退出时无法退出!
@@ -295,30 +246,6 @@ namespace CTG_Control
             {
                 System.Environment.Exit(0);
             }
-        }
-
-        private void mainNotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            WindowState = WindowState == FormWindowState.Minimized ?
-                FormWindowState.Normal : FormWindowState.Minimized;
-        }
-
-        private void MinimalToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            WindowState = FormWindowState.Minimized;
-        }
-
-        private void MaximalToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            WindowState = FormWindowState.Normal;
-        }
-
-        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            mainNotifyIcon.Visible = false;
-            Close();
-            Dispose();
-            Environment.Exit(Environment.ExitCode);
         }
 
         private void mainNotifyIcon_MouseClick(object sender, MouseEventArgs e)
@@ -335,67 +262,9 @@ namespace CTG_Control
         private void StopSyBtn_Click(object sender, EventArgs e)
         {
             countDownChoke.Reset();
-            SyCountDownLabel.Text = "自动同步已被终止，下次启动还原";
+            SyCountDownLabel.Text = "自动同步已被终止";
             this.StopSyBtn.Enabled = false;
             StopSyBtn.Hide();
-        }
-
-        /// <summary>
-        /// 检测修改是否通知
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void notification_CheckedChanged(object sender, EventArgs e)
-        {
-            ConfigService.SetValue("isNotify", notification.Checked ? "1" : "0");
-        }
-
-        /// <summary>
-        /// 时间检测
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void timeJudgeCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            ConfigService.SetValue("isTimeJudge", timeJudgeCheckBox.Checked ? "1" : "0");
-        }
-
-        /// <summary>
-        /// 开机自启选项改变
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void isStartUpCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            //开发模式自启动失效
-            string currentPath = PathService.GetApplicationPath();
-            if (currentPath.Contains("Projects"))
-            {
-                return;
-            }
-            bool isStartUp = isStartUpCheckBox.Checked;
-            ConfigService.SetValue("isStartUp", isStartUp ? "1" : "0");
-            if (isStartUp)
-            {
-                new StartUpService().OpenStartUp();
-            }
-            else
-            {
-                new StartUpService().CloseStartUp();
-            }
-            mainNotifyIcon.BalloonTipText = "当前是否开机自启？" + isStartUp;
-            //其实此参数已经弃用，具体时间由操作系统控制
-            mainNotifyIcon.ShowBalloonTip(1000);
-        }
-
-        /// <summary>
-        /// 是否自解压选项改变
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void sfxCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            ConfigService.SetValue("sfx", sfxCheckBox.Checked ? "1" : "0");
         }
 
         /// <summary>
@@ -422,7 +291,15 @@ namespace CTG_Control
         {
             List<ToolStripMenuItem> toolStripMenuItems = new List<ToolStripMenuItem>();
             DataGridViewRow currentRow = mainTableData.Rows[mainTableData.CurrentRow.Index];
-            string[] files = Directory.GetFiles(currentRow.Cells[TARGET_PATH_INDEX].Value.ToString());
+            string sourcePath = currentRow.Cells[SOURCE_PATH_INDEX].Value.ToString();
+            string targetPath = ConfigService.GetValue("DefaultTargetPath") + "\\"
+               + sourcePath.Substring(sourcePath.LastIndexOf("\\") + 1);
+            if (targetPath.Contains('.'))
+            {
+                targetPath = targetPath.Split(".")[0];
+            }
+            Directory.CreateDirectory(targetPath);
+            string[] files = Directory.GetFiles(targetPath);
             int len = files.Length;
             restoreItem.DropDownItems.Clear();
             for (int i = 0; i < len; i++)
@@ -447,27 +324,92 @@ namespace CTG_Control
             string sourceDir = currentRow.Cells[SOURCE_PATH_INDEX].Value.ToString();
             DirectoryInfo directory = new DirectoryInfo(sourceDir);
             DirectoryInfo? parentDir = directory.Parent;
-            directory.Delete(true);
-            //new ProgressService().StartProgress(new FileCountService().FileLengthCount(rarFileName), "项还原执行");
+            if ("".Equals(directory.Extension))
+            {
+                directory.Delete(true);
+            }
+            else
+            {
+                File.Delete(directory.FullName);
+            }
             CompressService.DeCompressRar(rarFileName, parentDir.FullName);
         }
 
-        private void ExitBtn_Click(object sender, EventArgs e)
-        {
-            System.Environment.Exit(0);
-        }
-
-        private void AboutBtn_Click(object sender, EventArgs e)
-        {
-            new AboutBox().ShowDialog();
-        }
-
+        /// <summary>
+        /// 展示更多页面
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void mainTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == IS_AUTO_INDEX)
             {
                 new DetailMore(GetCurrentyRowId(), this).ShowDialog();
             }
+        }
+
+        private void backLocationLock_Click(object sender, EventArgs e)
+        {
+            if (!backLocationInput.Enabled)
+            {
+                backLocationInput.Enabled = true;
+                backLocationLock.Text = "锁定备份路径";
+            }
+            else
+            {
+                backLocationInput.Enabled = false;
+                backLocationLock.Text = "解锁备份路径";
+            }
+        }
+
+        private void backLocationInput_Click(object sender, EventArgs e)
+        {
+            if (chooseBackLocation.ShowDialog() == DialogResult.OK)
+            {
+                backLocationInput.Text = chooseBackLocation.SelectedPath;
+            }
+        }
+
+        private void settingItem_Click(object sender, EventArgs e)
+        {
+            new SettingForm().ShowDialog();
+        }
+
+        private void addItem_Click(object sender, EventArgs e)
+        {
+            if ("".Equals(ConfigService.GetValue("DefaultTargetPath").ToString()))
+            {
+                MessageBox.Show("请先选择备份库位置");
+                return;
+            }
+            new AddForm(this).ShowDialog();
+        }
+
+        private void allExecute_Click(object sender, EventArgs e)
+        {
+            int count = mainTableData.RowCount;
+            List<CompressItem> compressItems = new List<CompressItem>();
+            for (int i = 0; i < count; i++)
+            {
+                CompressItem compressItem = DataDao.SelectById(Convert.ToInt32(mainTableData.Rows[i].Cells[ID_INDEX].Value.ToString()));
+                compressItems.Add(compressItem);
+            }
+            for (int i = 0; i < count; i++)
+            {
+                ExecuteCompress(compressItems[i], false, true);
+            }
+            MessageBox.Show("任务压缩执行完成");
+            Init();
+        }
+
+        private void aboutItem_Click(object sender, EventArgs e)
+        {
+            new AboutBox().ShowDialog();
+        }
+
+        private void backLocationInput_TextChanged(object sender, EventArgs e)
+        {
+            ConfigService.SetValue("DefaultTargetPath", backLocationInput.Text);
         }
     }
 }

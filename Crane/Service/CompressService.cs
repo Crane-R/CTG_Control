@@ -66,14 +66,20 @@ namespace CTG_Control.Crane.Service
         public static void CompressRar(CompressItem compressItem)
         {
             string sourcePath = compressItem.SourcePath;
-            string targetFileName = compressItem.TargetPath +
-              "\\" + sourcePath.Substring(sourcePath.LastIndexOf("\\") + 1) + "@.rar";
+            string targetPath = ConfigService.GetValue("DefaultTargetPath") + "\\"
+                + sourcePath.Substring(sourcePath.LastIndexOf("\\") + 1);
+            if (targetPath.Contains('.'))
+            {
+                targetPath = targetPath.Split(".")[0];
+            }
+            //如果目录不存在则创建
+            Directory.CreateDirectory(targetPath);
+            string targetFileName = targetPath + "\\" + sourcePath.Substring(sourcePath.LastIndexOf("\\") + 1) + "@.rar";
             //前置检测
             if (sourcePath is null || targetFileName is null)
             {
                 return;
             }
-
             RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(WINRAR_KEY);
             string winrarPath = registryKey.GetValue("").ToString();
             registryKey.Close();
