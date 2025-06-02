@@ -18,7 +18,7 @@ namespace CTG_Control.Crane.Constant
 
         public const string DATATIME_FORMAT = "yyyyMMddHHmmss";
 
-        public const string PUBLISH_DATE = "2025-05-24";
+        public const string PUBLISH_DATE = "2025-06-02";
 
     }
 }
