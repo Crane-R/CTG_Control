@@ -20,7 +20,7 @@ namespace CTG_Control.Crane.view
             this.labelProductName.Text = "软件名称：" + AssemblyProduct;
             this.labelVersion.Text = "当前版本：" + Constants.VERSION;
             this.labelCopyright.Text = "发布时间：" + Constants.PUBLISH_DATE;
-            this.labelCompanyName.Text = "版权所有：周星学@Crane Resigned";
+            this.labelCompanyName.Text = "版权所有：周星学@Xanthos";
             this.textBoxDescription.Text = "软件描述：" +
                 "\r\n中文名为：" + Constants.PROGRAM_NAME_CN
                 + "\r\n能够执行定时备份的任务" +
