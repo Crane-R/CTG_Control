@@ -8,3 +8,5 @@
 ## 适用场景
 自动备份
 
+## 最低所需
+.net6.0 SDK[下载 .NET (Linux、macOS 和 Windows) \| .NET](https://dotnet.microsoft.com/zh-cn/download)
