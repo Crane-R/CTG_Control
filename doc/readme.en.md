@@ -1,13 +1,16 @@
-[English](doc/readme.en.md) | [ÖÐÎÄ](readme.md)
+[English](doc/readme.en.md) | [ä¸­æ–‡](readme.md)
 
 # Application Name
-CTG_Control£¨Compress-Transfer-General-Control£©
+
+CTG\_Controlï¼ˆCompress-Transfer-General-Controlï¼‰
 
 # Purpose
+
 1. Used for backup work of specified directories, such as regularly backing up certain directories to a certain directory, and having other software such as cloud storage supervise this directory to complete automatic backup work.
 2. Also supports single file backup.
 
 # Feature
+
 1. Ability to create self extracting files.
 2. Enable self start.
 3. Send Windows notification when automatic synchronization is about to be executed.
