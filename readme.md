@@ -1,3 +1,5 @@
+[English](doc/readme.en.md) | [中文](readme.md)
+
 # 软件名
 压缩转移总控程序（CTG_Control）
 
