@@ -27,8 +27,19 @@ namespace CTG_Control.Crane.Service
             DateTime now = DateTime.Now;
             foreach (string fileName in files)
             {
-                string v = fileName.Split("@")[1].Split(".")[0];
-                DateTime dt = DateTime.ParseExact(v, Constants.DATATIME_FORMAT, CultureInfo.InvariantCulture);
+                string nameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                int timeSeparatorIndex = nameWithoutExtension.LastIndexOf("@");
+                if (timeSeparatorIndex < 0)
+                {
+                    continue;
+                }
+
+                string v = nameWithoutExtension.Substring(timeSeparatorIndex + 1);
+                if (!DateTime.TryParseExact(v, Constants.DATATIME_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dt))
+                {
+                    continue;
+                }
+
                 if (now.Subtract(dt).TotalHours > delayHours)
                 {
                     File.Delete(fileName);
