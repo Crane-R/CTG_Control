@@ -16,8 +16,8 @@ namespace CTG_Control
         private readonly int SOURCE_PATH_INDEX = 2;
         private readonly int IS_AUTO_INDEX = 3;
 
-        //µ¹¼ÆÊ±ÎÄ±¾
-        private readonly string COUNTDOWN_LABEL = "ÃëºóÆô¶¯Í¬²½³ÌĞò";
+        //å€’è®¡æ—¶æ–‡æœ¬
+        private readonly string COUNTDOWN_LABEL = "ç§’åå¯åŠ¨åŒæ­¥ç¨‹åº";
         private int COUNTDOWN_TIME = ConfigService.GetValueByInt("countDownTime");
         private int SHUT_DOWN_TIME = ConfigService.GetValueByInt("shutDownTime");
 
@@ -26,7 +26,7 @@ namespace CTG_Control
 
         public MainForm()
         {
-            //´°Ìå³õÊ¼»¯
+            //çª—ä½“åˆå§‹åŒ–
             WindowState = FormWindowState.Minimized;
             StartPosition = FormStartPosition.CenterScreen;
             Text = Constants.PROGRAM_VERSION;
@@ -38,7 +38,7 @@ namespace CTG_Control
 
             CheckForIllegalCrossThreadCalls = false;
 
-            //Æô¶¯Í¬²½µ¹¼ÆÊ±
+            //å¯åŠ¨åŒæ­¥å€’è®¡æ—¶
             SyCountDownLabel.Text = COUNTDOWN_TIME + COUNTDOWN_LABEL;
             countDownThread = new(new ThreadStart(() =>
             {
@@ -48,21 +48,24 @@ namespace CTG_Control
                     SyCountDownLabel.Text = COUNTDOWN_TIME-- + COUNTDOWN_LABEL;
                     Thread.Sleep(1000);
                 }
-                SyCountDownLabel.Text = "Í¬²½Ö¸ÁîÒÑ¾­ÏÂ´ï";
-                SyExecuteAll();
+                BeginInvoke(new Action(async () =>
+                {
+                    SyCountDownLabel.Text = "åŒæ­¥æŒ‡ä»¤å·²ç»ä¸‹è¾¾";
+                    await SyExecuteAllAsync();
+                }));
             }));
             countDownThread.Start();
         }
 
         /// <summary>
-        /// ±í¸ñÊı¾İ³õÊ¼»¯
+        /// è¡¨æ ¼æ•°æ®åˆå§‹åŒ–
         /// </summary>
         public void Init()
         {
             //https://blog.csdn.net/cxwl3sxl/article/details/8807763
             this.BeginInvoke(new Action(() =>
             {
-                //±í¸ñÊı¾İ³õÊ¼»¯
+                //è¡¨æ ¼æ•°æ®åˆå§‹åŒ–
                 List<CompressItem> compassItems = DataDao.ReadAll();
                 mainTableData.Rows.Clear();
                 FileCountService fileCountService = new FileCountService();
@@ -75,9 +78,9 @@ namespace CTG_Control
                     row.Cells[ID_INDEX].Value = item.Id;
                     row.Cells[MARK_NAME_INDEX].Value = item.MarkName;
                     row.Cells[SOURCE_PATH_INDEX].Value = item.SourcePath;
-                    row.Cells[IS_AUTO_INDEX].Value = item.IsAutoBack ? "ÊÇ" : "·ñ";
+                    row.Cells[IS_AUTO_INDEX].Value = item.IsAutoBack ? "æ˜¯" : "å¦";
                     mainTableData.Rows.Add(row);
-                    //Õâ¸öºÜºÄÊ±°¡
+                    //è¿™ä¸ªå¾ˆè€—æ—¶å•Š
                     //sourceSum += fileCountService.FileLengthCount(item.SourcePath);
                     totalBackTime += item.LastBackPast;
                 });
@@ -93,20 +96,20 @@ namespace CTG_Control
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="compressItem"></param>
-        /// <param name="isOneKey">Çø·ÖÊÇµ¥¶ÀÖ´ĞĞ»¹ÊÇÒ»¼üÖ´ĞĞ</param>
+        /// <param name="isOneKey">åŒºåˆ†æ˜¯å•ç‹¬æ‰§è¡Œè¿˜æ˜¯ä¸€é”®æ‰§è¡Œ</param>
         /// <returns></returns>
-        private bool ExecuteCompress(CompressItem compressItem, bool isOneKey, bool isJudgeTime)
+        private async Task<bool> ExecuteCompressAsync(CompressItem compressItem, bool isOneKey, bool isJudgeTime, int itemIndex = 0, int itemCount = 1)
         {
             if (CompressService.NotExistsWinRar())
             {
-                MessageBox.Show("³ÌĞòĞèÒªÒÀÀµWinRAR£¬ÇëÏÈ°²×°");
+                MessageBox.Show("ç¨‹åºéœ€è¦ä¾èµ–WinRARï¼Œè¯·å…ˆå®‰è£…");
                 return false;
             }
 
-            //Ê±¼ä¼ì²â
+            //æ—¶é—´æ£€æµ‹
             if (ConfigService.GetValue("isTimeJudge").Equals("1")
                 && isJudgeTime
                 && DateTime.Now.Subtract(compressItem.LatelyDate).TotalHours < compressItem.BackInterval)
@@ -118,27 +121,41 @@ namespace CTG_Control
             {
                 if (!isOneKey)
                 {
-                    MessageBox.Show("Ô´Â·¾¶²»¿ÉÎª¿Õ", "µØÖ·Îª¿Õ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("æºè·¯å¾„ä¸å¯ä¸ºç©º", "åœ°å€ä¸ºç©º", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 return false;
             }
 
-            //¿ªÊ¼Ö´ĞĞÇ°½ûÓÃ°´Å¥
             string text = SyCountDownLabel.Text;
-            SyCountDownLabel.Text = "ÕıÔÚÖ´ĞĞÖĞ¡­¡­";
-            ControlFunction(false);
-
-            //¿ªÊ¼¼ÆÊ±
             DateTime startTime = DateTime.Now;
-            CompressService.CompressRar(compressItem);
-            compressItem.LatelyDate = DateTime.Now;
-            //¼ÆÊ±½áÊø
-            compressItem.LastBackPast = Convert.ToDouble(DateTime.Now.Subtract(startTime).TotalMinutes);
-            DataDao.UpdateOne(compressItem);
+            try
+            {
+                SyCountDownLabel.Text = "æ­£åœ¨æ‰§è¡Œä¸­â€¦â€¦";
+                ControlFunction(false);
+                ShowCompressionProgress(compressItem.MarkName, 0);
+                Progress<int> progress = new(percent =>
+                {
+                    int totalPercent = Math.Min(100, ((itemIndex * 100) + percent) / itemCount);
+                    UpdateCompressionProgress(compressItem.MarkName, totalPercent);
+                });
 
-            SyCountDownLabel.Text = text;
-            ControlFunction(true);
-            return true;
+                await CompressService.CompressRarAsync(compressItem, progress);
+                compressItem.LatelyDate = DateTime.Now;
+                compressItem.LastBackPast = Convert.ToDouble(DateTime.Now.Subtract(startTime).TotalMinutes);
+                DataDao.UpdateOne(compressItem);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "å‹ç¼©å¤±è´¥", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            finally
+            {
+                SyCountDownLabel.Text = text;
+                HideCompressionProgress();
+                ControlFunction(true);
+            }
         }
 
         private void ControlFunction(bool isAble)
@@ -146,19 +163,57 @@ namespace CTG_Control
             contextMenuMain.Enabled = isAble;
             StopSyBtn.Enabled = isAble;
             backLocationLock.Enabled = isAble;
+            addItem.Enabled = isAble;
+            allExecute.Enabled = isAble;
+        }
+
+        private void ShowCompressionProgress(string markName, int percent)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() => ShowCompressionProgress(markName, percent)));
+                return;
+            }
+            compressionProgressBar.Style = ProgressBarStyle.Continuous;
+            compressionProgressBar.Value = Math.Max(0, Math.Min(100, percent));
+            compressionProgressBar.Visible = true;
+            compressionProgressLabel.Text = $"æ­£åœ¨å‹ç¼©ï¼š{markName} {compressionProgressBar.Value}%";
+            compressionProgressLabel.Visible = true;
+        }
+
+        private void UpdateCompressionProgress(string markName, int percent)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() => UpdateCompressionProgress(markName, percent)));
+                return;
+            }
+            compressionProgressBar.Value = Math.Max(0, Math.Min(100, percent));
+            compressionProgressLabel.Text = $"æ­£åœ¨å‹ç¼©ï¼š{markName} {compressionProgressBar.Value}%";
+        }
+
+        private void HideCompressionProgress()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(HideCompressionProgress));
+                return;
+            }
+            compressionProgressBar.Value = 0;
+            compressionProgressLabel.Text = "å‹ç¼©è¿›åº¦ï¼š0%";
         }
 
         /// <summary>
-        /// µ¥ÏîÖ´ĞĞ
+        /// å•é¡¹æ‰§è¡Œ
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ExecuteBtn_Click(object sender, EventArgs e)
+        private async void ExecuteBtn_Click(object sender, EventArgs e)
         {
             int index = mainTableData.CurrentRow.Index;
             DataGridViewRow dataGridViewRow = mainTableData.Rows[index];
             CompressItem compressItem = DataDao.SelectById(Convert.ToInt32(dataGridViewRow.Cells[ID_INDEX].Value.ToString()));
-            ExecuteCompress(compressItem, true, false);
+            await ExecuteCompressAsync(compressItem, true, false);
             Init();
         }
 
@@ -169,25 +224,27 @@ namespace CTG_Control
         }
 
         /// <summary>
-        /// ³ÌĞò×Ô¶¯Ö´ĞĞÑ¹Ëõ·½·¨
+        /// ç¨‹åºè‡ªåŠ¨æ‰§è¡Œå‹ç¼©æ–¹æ³•
         /// </summary>
-        private void SyExecuteAll()
+        private async Task SyExecuteAllAsync()
         {
             int count = mainTableData.RowCount;
-            CompressItem compressItem = new();
             DeleteService deleteService = new DeleteService();
             for (int i = 0; i < count; i++)
             {
-                compressItem = DataDao.SelectById(Convert.ToInt32(mainTableData.Rows[i].Cells[ID_INDEX].Value.ToString()));
+                CompressItem compressItem = DataDao.SelectById(Convert.ToInt32(mainTableData.Rows[i].Cells[ID_INDEX].Value.ToString()));
                 if (!compressItem.IsAutoBack)
                 {
                     continue;
                 }
-                ExecuteCompress(compressItem, false, true);
+                bool executed = await ExecuteCompressAsync(compressItem, false, true, i, count);
+                if (!executed)
+                {
+                    continue;
+                }
 
-                //×Ô¶¯¼ì²âÉ¾³ı
-                string sourcePath = compressItem.SourcePath;
-                deleteService.AutoJudgeDelete(ConfigService.GetValue("DefaultTargetPath") + "\\" + sourcePath.Substring(sourcePath.LastIndexOf("\\") + 1), 72);
+                //è‡ªåŠ¨æ£€æµ‹åˆ é™¤
+                deleteService.AutoJudgeDelete(CompressService.GetTargetDirectory(compressItem), 72);
             }
             Init();
 
@@ -197,7 +254,7 @@ namespace CTG_Control
                 {
                     for (int i = SHUT_DOWN_TIME; i >= 0; i--)
                     {
-                        SyCountDownLabel.Text = "×Ô¶¯Í¬²½ÒÑ¾­Íê³É£¬" + i + "Ãëºó½áÊø³ÌĞò";
+                        SyCountDownLabel.Text = "è‡ªåŠ¨åŒæ­¥å·²ç»å®Œæˆï¼Œ" + i + "ç§’åç»“æŸç¨‹åº";
                         Thread.Sleep(1000);
                     }
                     Environment.Exit(0);
@@ -224,7 +281,7 @@ namespace CTG_Control
         }
 
         /// <summary>
-        /// ÓÒ¼üÉ¾³ıµ±Ç°ĞĞ
+        /// å³é”®åˆ é™¤å½“å‰è¡Œ
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -241,7 +298,7 @@ namespace CTG_Control
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // ×¢ÒâÅĞ¶Ï¹Ø±ÕÊÂ¼şreasonÀ´Ô´ÓÚ´°Ìå°´Å¥£¬·ñÔòÓÃ²Ëµ¥ÍË³öÊ±ÎŞ·¨ÍË³ö!
+            // æ³¨æ„åˆ¤æ–­å…³é—­äº‹ä»¶reasonæ¥æºäºçª—ä½“æŒ‰é’®ï¼Œå¦åˆ™ç”¨èœå•é€€å‡ºæ—¶æ— æ³•é€€å‡º!
             if (e.CloseReason == CloseReason.UserClosing)
             {
                 System.Environment.Exit(0);
@@ -255,20 +312,20 @@ namespace CTG_Control
         }
 
         /// <summary>
-        /// ÖÕÖ¹°´Å¥
+        /// ç»ˆæ­¢æŒ‰é’®
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void StopSyBtn_Click(object sender, EventArgs e)
         {
             countDownChoke.Reset();
-            SyCountDownLabel.Text = "×Ô¶¯Í¬²½ÒÑ±»ÖÕÖ¹";
+            SyCountDownLabel.Text = "è‡ªåŠ¨åŒæ­¥å·²è¢«ç»ˆæ­¢";
             this.StopSyBtn.Enabled = false;
             StopSyBtn.Hide();
         }
 
         /// <summary>
-        /// »¹Ô­²Ëµ¥
+        /// è¿˜åŸèœå•
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -276,28 +333,23 @@ namespace CTG_Control
         {
             if (restoreItem.DropDownItems.Count == 0)
             {
-                MessageBox.Show("¸ÃÏîÃ»ÓĞ¿ÉÒÔ»¹Ô­µÄÎÄ¼ş");
+                MessageBox.Show("è¯¥é¡¹æ²¡æœ‰å¯ä»¥è¿˜åŸçš„æ–‡ä»¶");
                 return;
             }
             restoreSecondMenuClick(null, null);
         }
 
         /// <summary>
-        /// ¶¯Ì¬¼ÓÔØ¶ş¼¶²Ëµ¥
+        /// åŠ¨æ€åŠ è½½äºŒçº§èœå•
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void restoreItem_MouseHover(object sender, EventArgs e)
         {
             List<ToolStripMenuItem> toolStripMenuItems = new List<ToolStripMenuItem>();
-            DataGridViewRow currentRow = mainTableData.Rows[mainTableData.CurrentRow.Index];
-            string sourcePath = currentRow.Cells[SOURCE_PATH_INDEX].Value.ToString();
-            string targetPath = ConfigService.GetValue("DefaultTargetPath") + "\\"
-               + sourcePath.Substring(sourcePath.LastIndexOf("\\") + 1);
-            if (targetPath.Contains('.'))
-            {
-                targetPath = targetPath.Split(".")[0];
-            }
+            int id = GetCurrentyRowId();
+            CompressItem compressItem = DataDao.SelectById(id);
+            string targetPath = CompressService.GetTargetDirectory(compressItem);
             Directory.CreateDirectory(targetPath);
             string[] files = Directory.GetFiles(targetPath);
             int len = files.Length;
@@ -336,7 +388,7 @@ namespace CTG_Control
         }
 
         /// <summary>
-        /// Õ¹Ê¾¸ü¶àÒ³Ãæ
+        /// å±•ç¤ºæ›´å¤šé¡µé¢
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -353,12 +405,12 @@ namespace CTG_Control
             if (!backLocationInput.Enabled)
             {
                 backLocationInput.Enabled = true;
-                backLocationLock.Text = "Ëø¶¨±¸·İÂ·¾¶";
+                backLocationLock.Text = "é”å®šå¤‡ä»½è·¯å¾„";
             }
             else
             {
                 backLocationInput.Enabled = false;
-                backLocationLock.Text = "½âËø±¸·İÂ·¾¶";
+                backLocationLock.Text = "è§£é”å¤‡ä»½è·¯å¾„";
             }
         }
 
@@ -379,13 +431,13 @@ namespace CTG_Control
         {
             if ("".Equals(ConfigService.GetValue("DefaultTargetPath").ToString()))
             {
-                MessageBox.Show("ÇëÏÈÑ¡Ôñ±¸·İ¿âÎ»ÖÃ");
+                MessageBox.Show("è¯·å…ˆé€‰æ‹©å¤‡ä»½åº“ä½ç½®");
                 return;
             }
             new AddForm(this).ShowDialog();
         }
 
-        private void allExecute_Click(object sender, EventArgs e)
+        private async void allExecute_Click(object sender, EventArgs e)
         {
             int count = mainTableData.RowCount;
             List<CompressItem> compressItems = new List<CompressItem>();
@@ -396,9 +448,9 @@ namespace CTG_Control
             }
             for (int i = 0; i < count; i++)
             {
-                ExecuteCompress(compressItems[i], false, true);
+                await ExecuteCompressAsync(compressItems[i], false, true, i, count);
             }
-            MessageBox.Show("ÈÎÎñÑ¹ËõÖ´ĞĞÍê³É");
+            MessageBox.Show("ä»»åŠ¡å‹ç¼©æ‰§è¡Œå®Œæˆ");
             Init();
         }
 
@@ -410,6 +462,16 @@ namespace CTG_Control
         private void backLocationInput_TextChanged(object sender, EventArgs e)
         {
             ConfigService.SetValue("DefaultTargetPath", backLocationInput.Text);
+        }
+
+        private void SyCountDownLabel_Click(object sender, EventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void compressionProgressLabel_Click(object sender, EventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace CTG_Control.Crane.Constant
 
         public const string PROGRAM_NAME_CN = "压缩备份中心";
 
-        public const string VERSION = "v3.0.1";
+        public const string VERSION = "v3.1.1";
 
         public const string DATATIME_FORMAT = "yyyyMMddHHmmss";
 

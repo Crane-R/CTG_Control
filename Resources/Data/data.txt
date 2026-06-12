@@ -1,1 +1,1 @@
-[]
+[{"_SourcePath":"D:\\Game\\Snapshot 2.9.2\\.minecraft\\versions\\珊瑚海之城","_LatelyDate":"2026-06-12T23:30:56.0289369+08:00","_Id":1,"_MarkName":"11","_IsAutoBack":true,"_BackInterval":72,"_LastBackPast":1.0847246}]
