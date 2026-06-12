@@ -14,6 +14,8 @@ namespace CTG_Control.Crane.Service
     {
 
         private static readonly string WINRAR_KEY = @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\WinRAR.exe";
+        private static Process? currentCompressProcess;
+        private static readonly object processLock = new();
 
         private CompressService() { }
 
@@ -111,6 +113,17 @@ namespace CTG_Control.Crane.Service
             return ConfigService.GetValue("DefaultTargetPath") + "\\" + folderName;
         }
 
+        public static void ForceStopCompress()
+        {
+            lock (processLock)
+            {
+                if (currentCompressProcess is not null && !currentCompressProcess.HasExited)
+                {
+                    currentCompressProcess.Kill(true);
+                }
+            }
+        }
+
         private static string SanitizeFileName(string fileName)
         {
             foreach (char invalidChar in Path.GetInvalidFileNameChars())
@@ -151,12 +164,29 @@ namespace CTG_Control.Crane.Service
             process.OutputDataReceived += (_, e) => ReportProgress(e.Data, progress);
             process.ErrorDataReceived += (_, e) => ReportProgress(e.Data, progress);
             process.Start();
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-            await process.WaitForExitAsync();
-            if (process.ExitCode != 0)
+            lock (processLock)
             {
-                throw new InvalidOperationException($"WinRAR执行失败，退出码：{process.ExitCode}");
+                currentCompressProcess = process;
+            }
+            try
+            {
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                await process.WaitForExitAsync();
+                if (process.ExitCode != 0)
+                {
+                    throw new InvalidOperationException($"WinRAR执行失败，退出码：{process.ExitCode}");
+                }
+            }
+            finally
+            {
+                lock (processLock)
+                {
+                    if (ReferenceEquals(currentCompressProcess, process))
+                    {
+                        currentCompressProcess = null;
+                    }
+                }
             }
         }
 

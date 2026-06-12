@@ -57,6 +57,7 @@
             settingItem = new System.Windows.Forms.ToolStripMenuItem();
             compressionProgressBar = new System.Windows.Forms.ProgressBar();
             compressionProgressLabel = new System.Windows.Forms.Label();
+            forceStopSyncBtn = new System.Windows.Forms.Button();
             contextMenuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)mainTable).BeginInit();
             menuStrip1.SuspendLayout();
@@ -130,8 +131,24 @@
             StopSyBtn.UseVisualStyleBackColor = false;
             StopSyBtn.Click += StopSyBtn_Click;
             // 
+            // forceStopSyncBtn
+            //
+            forceStopSyncBtn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            forceStopSyncBtn.BackColor = System.Drawing.Color.DarkRed;
+            forceStopSyncBtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            forceStopSyncBtn.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.285714F, System.Drawing.FontStyle.Bold);
+            forceStopSyncBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            forceStopSyncBtn.Location = new System.Drawing.Point(1524, 876);
+            forceStopSyncBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            forceStopSyncBtn.Name = "forceStopSyncBtn";
+            forceStopSyncBtn.Size = new System.Drawing.Size(186, 42);
+            forceStopSyncBtn.TabIndex = 25;
+            forceStopSyncBtn.Text = "强制终止同步";
+            forceStopSyncBtn.UseVisualStyleBackColor = false;
+            forceStopSyncBtn.Click += forceStopSyncBtn_Click;
+            //
             // label2
-            // 
+            //
             label2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             label2.AutoSize = true;
             label2.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.5F);
@@ -339,6 +356,7 @@
             Controls.Add(label2);
             Controls.Add(mainTable);
             Controls.Add(SyCountDownLabel);
+            Controls.Add(forceStopSyncBtn);
             Controls.Add(StopSyBtn);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             Icon = ((System.Drawing.Icon)resources.GetObject("$this.Icon"));
@@ -384,5 +402,6 @@
         private DataGridViewButtonColumn itemSetBtn;
         private ProgressBar compressionProgressBar;
         private Label compressionProgressLabel;
+        private Button forceStopSyncBtn;
     }
 }

@@ -23,6 +23,7 @@ namespace CTG_Control
 
         private Thread countDownThread;
         private ManualResetEvent countDownChoke = new ManualResetEvent(true);
+        private bool forceStopRequested;
 
         public MainForm()
         {
@@ -147,12 +148,15 @@ namespace CTG_Control
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "压缩失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (!forceStopRequested)
+                {
+                    MessageBox.Show(ex.Message, "压缩失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 return false;
             }
             finally
             {
-                SyCountDownLabel.Text = text;
+                SyCountDownLabel.Text = forceStopRequested ? "同步已强制终止" : text;
                 HideCompressionProgress();
                 ControlFunction(true);
             }
@@ -210,6 +214,7 @@ namespace CTG_Control
         /// <param name="e"></param>
         private async void ExecuteBtn_Click(object sender, EventArgs e)
         {
+            forceStopRequested = false;
             int index = mainTableData.CurrentRow.Index;
             DataGridViewRow dataGridViewRow = mainTableData.Rows[index];
             CompressItem compressItem = DataDao.SelectById(Convert.ToInt32(dataGridViewRow.Cells[ID_INDEX].Value.ToString()));
@@ -228,10 +233,15 @@ namespace CTG_Control
         /// </summary>
         private async Task SyExecuteAllAsync()
         {
+            forceStopRequested = false;
             int count = mainTableData.RowCount;
             DeleteService deleteService = new DeleteService();
             for (int i = 0; i < count; i++)
             {
+                if (forceStopRequested)
+                {
+                    break;
+                }
                 CompressItem compressItem = DataDao.SelectById(Convert.ToInt32(mainTableData.Rows[i].Cells[ID_INDEX].Value.ToString()));
                 if (!compressItem.IsAutoBack)
                 {
@@ -247,6 +257,10 @@ namespace CTG_Control
                 deleteService.AutoJudgeDelete(CompressService.GetTargetDirectory(compressItem), 72);
             }
             Init();
+            if (forceStopRequested)
+            {
+                return;
+            }
 
             try
             {
@@ -322,6 +336,15 @@ namespace CTG_Control
             SyCountDownLabel.Text = "自动同步已被终止";
             this.StopSyBtn.Enabled = false;
             StopSyBtn.Hide();
+        }
+
+        private void forceStopSyncBtn_Click(object sender, EventArgs e)
+        {
+            forceStopRequested = true;
+            countDownChoke.Reset();
+            CompressService.ForceStopCompress();
+            SyCountDownLabel.Text = "同步已强制终止";
+            HideCompressionProgress();
         }
 
         /// <summary>
@@ -439,6 +462,7 @@ namespace CTG_Control
 
         private async void allExecute_Click(object sender, EventArgs e)
         {
+            forceStopRequested = false;
             int count = mainTableData.RowCount;
             List<CompressItem> compressItems = new List<CompressItem>();
             for (int i = 0; i < count; i++)
@@ -448,9 +472,13 @@ namespace CTG_Control
             }
             for (int i = 0; i < count; i++)
             {
+                if (forceStopRequested)
+                {
+                    break;
+                }
                 await ExecuteCompressAsync(compressItems[i], false, true, i, count);
             }
-            MessageBox.Show("任务压缩执行完成");
+            MessageBox.Show(forceStopRequested ? "任务压缩已强制终止" : "任务压缩执行完成");
             Init();
         }
 
