@@ -4,7 +4,7 @@
 
 CTG_Control (Compress-Transfer-General-Control) is a Windows desktop backup controller. It compresses specified files or folders into a unified backup directory. It supports dual-path backup with a local backup library and a cloud backup library, making it easy to sync with cloud storage, network drives, or other file-sync tools.
 
-Current version: `v3.1.1`
+Current version: `v3.2.2`
 
 ## Core Features
 
