@@ -366,3 +366,9 @@ FodyWeavers.xsd
 打包/
 Resources/Data/data.json
 Resources/Config/config.ini
+/output/
+/.idea/.idea.CTG_Control/.idea/.gitignore
+/.idea/.idea.CTG_Control/.idea/claudeCodeTabState.xml
+/.idea/.idea.CTG_Control/.idea/encodings.xml
+/.idea/.idea.CTG_Control/.idea/indexLayout.xml
+/.idea/.idea.CTG_Control/.idea/vcs.xml
