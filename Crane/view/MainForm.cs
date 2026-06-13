@@ -224,6 +224,7 @@ namespace CTG_Control
         private async void ExecuteBtn_Click(object sender, EventArgs e)
         {
             forceStopRequested = false;
+            if (mainTableData.CurrentRow == null) return;
             int index = mainTableData.CurrentRow.Index;
             DataGridViewRow dataGridViewRow = mainTableData.Rows[index];
             CompressItem compressItem = DataDao.SelectById(Convert.ToInt32(dataGridViewRow.Cells[ID_INDEX].Value.ToString()));
@@ -233,6 +234,7 @@ namespace CTG_Control
 
         private int GetCurrentyRowId()
         {
+            if (mainTableData.CurrentRow == null) return -1;
             int currentRow = mainTableData.CurrentRow.Index;
             return Convert.ToInt32(mainTableData.Rows[currentRow].Cells[ID_INDEX].Value.ToString());
         }
@@ -378,8 +380,9 @@ namespace CTG_Control
         /// <param name="e"></param>
         private void restoreItem_MouseHover(object sender, EventArgs e)
         {
-            List<ToolStripMenuItem> toolStripMenuItems = new List<ToolStripMenuItem>();
             int id = GetCurrentyRowId();
+            if (id < 0) return;
+            List<ToolStripMenuItem> toolStripMenuItems = new List<ToolStripMenuItem>();
             CompressItem compressItem = DataDao.SelectById(id);
             string targetPath = CompressService.GetTargetDirectory(compressItem);
             Directory.CreateDirectory(targetPath);
@@ -426,10 +429,9 @@ namespace CTG_Control
         /// <param name="e"></param>
         private void mainTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.ColumnIndex == IS_AUTO_INDEX)
-            {
-                new DetailMore(GetCurrentyRowId(), this).ShowDialog();
-            }
+            int id = GetCurrentyRowId();
+            if (id < 0 || e.ColumnIndex != IS_AUTO_INDEX) return;
+            new DetailMore(id, this).ShowDialog();
         }
 
         private void backLocationLock_Click(object sender, EventArgs e)
