@@ -63,22 +63,27 @@ dotnet publish CTG_Control.csproj \
 - `-p:PublishSingleFile=true`：将托管程序集打包为单个 exe
 - `-o output/publish`：发布输出目录
 
-### 步骤 3：复制资源文件到发布目录
+### 步骤 3：组织安装目录结构
+
+将发布输出和资源文件放入版本号子文件夹，使 SFX 解压后自带版本目录。
 
 ```bash
-mkdir -p output/publish/Resources/Config
-mkdir -p output/publish/Resources/Data  
-mkdir -p output/publish/Resources/img
+STAGING="output/staging/CTG_Control ${VERSION}"
 
-cp Resources/Config/config.ini output/publish/Resources/Config/
-cp Resources/Data/data.json output/publish/Resources/Data/
-cp -r Resources/img/* output/publish/Resources/img/
+mkdir -p "$STAGING/Resources/Config"
+mkdir -p "$STAGING/Resources/Data"
+mkdir -p "$STAGING/Resources/img"
+
+mv output/publish/CTG_Control.exe "$STAGING/"
+cp Resources/Config/config.ini "$STAGING/Resources/Config/"
+cp Resources/Data/data.json "$STAGING/Resources/Data/"
+cp -r Resources/img/* "$STAGING/Resources/img/"
 ```
 
 ### 步骤 4：删除调试符号文件（可选）
 
 ```bash
-rm -f output/publish/*.pdb
+rm -f output/staging/CTG_Control\ ${VERSION}/*.pdb
 ```
 
 ### 步骤 5：创建 SFX 自解压安装程序
@@ -88,7 +93,7 @@ rm -f output/publish/*.pdb
 ```
 ;The comment below contains SFX script commands
 
-Setup=CTG_Control.exe
+Setup="CTG_Control ${VERSION}\CTG_Control.exe"
 Overwrite=1
 Title=CTG Control 安装向导
 ```
@@ -98,19 +103,19 @@ Title=CTG Control 安装向导
 ```bash
 WINRAR_PATH="D:/Software/WinRAR/WinRAR.exe"
 cd output
-"$WINRAR_PATH" a -sfx -z"sfx_config.txt" -ep1 -r "CTG_Control_Setup ${VERSION}.exe" "publish/*"
+"$WINRAR_PATH" a -sfx -z"sfx_config.txt" -ep1 -r "CTG_Control_Setup ${VERSION}.exe" "staging/*"
 ```
 
 参数说明：
 - `-sfx`：创建自解压档案
 - `-z"sfx_config.txt"`：附加 SFX 脚本命令
-- `-ep1`：去除基础路径前缀
+- `-ep1`：去除 `staging/` 路径前缀，使 `CTG_Control ${VERSION}/` 成为压缩包内顶层目录
 - `-r`：递归包含子目录
 
 ### 步骤 6：清理临时文件
 
 ```bash
-rm -rf output/publish output/sfx_config.txt
+rm -rf output/publish output/staging output/sfx_config.txt
 ```
 
 ## 一键打包脚本（完整版）
@@ -128,6 +133,7 @@ OUTPUT_DIR="output"
 PUBLISH_DIR="$OUTPUT_DIR/publish"
 VERSION=$(grep -oP 'VERSION\s*=\s*"\K[^"]+' Crane/Constant/Constants.cs)  # 从 Constants.cs 取版本号
 SETUP_NAME="CTG_Control_Setup ${VERSION}.exe"
+STAGING_DIR="$OUTPUT_DIR/staging/CTG_Control ${VERSION}"
 
 echo "[1/5] 重置数据文件至初始状态..."
 cat > Resources/Config/config.ini << 'INIEOF'
@@ -160,30 +166,31 @@ dotnet publish CTG_Control.csproj \
   -p:IncludeNativeLibrariesForSelfExtract=true \
   -o "$PUBLISH_DIR"
 
-echo "[3/5] 复制资源文件..."
-mkdir -p "$PUBLISH_DIR/Resources/Config"
-mkdir -p "$PUBLISH_DIR/Resources/Data"
-mkdir -p "$PUBLISH_DIR/Resources/img"
-cp Resources/Config/config.ini "$PUBLISH_DIR/Resources/Config/"
-cp Resources/Data/data.json "$PUBLISH_DIR/Resources/Data/"
-cp -r Resources/img/* "$PUBLISH_DIR/Resources/img/"
-rm -f "$PUBLISH_DIR"/*.pdb
+echo "[3/5] 组织安装目录结构..."
+mkdir -p "$STAGING_DIR/Resources/Config"
+mkdir -p "$STAGING_DIR/Resources/Data"
+mkdir -p "$STAGING_DIR/Resources/img"
+mv "$PUBLISH_DIR/CTG_Control.exe" "$STAGING_DIR/"
+cp Resources/Config/config.ini "$STAGING_DIR/Resources/Config/"
+cp Resources/Data/data.json "$STAGING_DIR/Resources/Data/"
+cp -r Resources/img/* "$STAGING_DIR/Resources/img/"
+rm -f "$STAGING_DIR"/*.pdb
 
 echo "[4/5] 创建 SFX 安装程序..."
 cat > "$OUTPUT_DIR/sfx_config.txt" << 'SFXEOF'
 ;The comment below contains SFX script commands
 
-Setup=CTG_Control.exe
+Setup="CTG_Control ${VERSION}\CTG_Control.exe"
 Overwrite=1
 Title=CTG Control 安装向导
 SFXEOF
 
 cd "$OUTPUT_DIR"
-"$WINRAR" a -sfx -z"sfx_config.txt" -ep1 -r "$SETUP_NAME" "publish/*"
+"$WINRAR" a -sfx -z"sfx_config.txt" -ep1 -r "$SETUP_NAME" "staging/*"
 cd ..
 
 echo "[5/5] 清理临时文件..."
-rm -rf "$PUBLISH_DIR" "$OUTPUT_DIR/sfx_config.txt"
+rm -rf "$PUBLISH_DIR" "$STAGING_DIR" "$OUTPUT_DIR/sfx_config.txt"
 
 echo ""
 echo "============================================"
@@ -197,29 +204,30 @@ echo "============================================"
 运行 `CTG_Control_Setup.exe` 后：
 
 1. 显示解压对话框，用户选择目标目录（默认当前目录）
-2. 解压所有文件到目标目录：
-   - `CTG_Control.exe` — 主程序
-   - `Resources/Config/config.ini` — 配置文件
-   - `Resources/Data/data.json` — 数据文件
-   - `Resources/img/` — 图标和图片资源
+2. 解压所有文件到目标目录，压缩包内已包含 `CTG_Control <版本号>/` 顶层文件夹：
+   - `CTG_Control <版本号>/CTG_Control.exe` — 主程序
+   - `CTG_Control <版本号>/Resources/Config/config.ini` — 配置文件
+   - `CTG_Control <版本号>/Resources/Data/data.json` — 数据文件
+   - `CTG_Control <版本号>/Resources/img/` — 图标和图片资源
 3. 解压完成后自动启动 `CTG_Control.exe`
 
 ## 目录结构（安装后）/ Installed Directory Structure
 
 ```
-安装目录/
-├── CTG_Control.exe          # 主程序（自包含，含 .NET 运行时）
-└── Resources/
-    ├── Config/
-    │   └── config.ini       # 应用配置
-    ├── Data/
-    │   └── data.json        # 备份项数据
-    └── img/
-        ├── aq1zt-7d7nq-001256.ico
-        ├── acn9u-0l1s8-001.ico
-        ├── azhb3-bem61-001.ico
-        ├── PNG 02 (22).png
-        └── 微信图片_20240908210853.png
+<用户选择的目录>/
+└── CTG_Control v3.2.2/          # 版本号子文件夹（打包时内置）
+    ├── CTG_Control.exe          # 主程序（自包含，含 .NET 运行时）
+    └── Resources/
+        ├── Config/
+        │   └── config.ini       # 应用配置
+        ├── Data/
+        │   └── data.json        # 备份项数据
+        └── img/
+            ├── aq1zt-7d7nq-001256.ico
+            ├── acn9u-0l1s8-001.ico
+            ├── azhb3-bem61-001.ico
+            ├── PNG 02 (22).png
+            └── 微信图片_20240908210853.png
 ```
 
 ## 注意事项 / Notes
