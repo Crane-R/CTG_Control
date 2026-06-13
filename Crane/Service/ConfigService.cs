@@ -42,7 +42,7 @@ namespace CTG_Control.Crane.Service
                 Directory.CreateDirectory(dir);
             }
 
-            File.WriteAllText(PATH, "[system]\nDefaultTargetPath=\nCurrentDataCount=0\nNextId=0\nisNotify=0\nisTimeJudge=1\nisStartUp=0\nsfx=0\ncountDownTime=30\nshutDownTime=20\nnotificationText=备份执行同步\nfastInterval=24\nmiddleInterval=48\nslowInterval=72\ntotalLastPast=0\n", Encoding.UTF8);
+            File.WriteAllText(PATH, "[system]\nCloudTargetPath=\nLocalTargetPath=\nCurrentDataCount=0\nNextId=0\nisNotify=0\nisTimeJudge=1\nisStartUp=0\nsfx=0\ncountDownTime=30\nshutDownTime=20\nnotificationText=备份执行同步\nfastInterval=24\nmiddleInterval=48\nslowInterval=72\ntotalLastPast=0\n", Encoding.UTF8);
         }
 
         /*读配置文件*/
@@ -69,8 +69,33 @@ namespace CTG_Control.Crane.Service
             return GetValue(key).Equals("1");
         }
 
-        public static int GetValueByInt(string key) { 
+        public static int GetValueByInt(string key) {
             return Convert.ToInt32(GetValue(key));
+        }
+
+        private static bool IsConfigMissing(string val)
+        {
+            return val == "配置文件不存在，读取未成功!";
+        }
+
+        public static string GetCloudTargetPath()
+        {
+            string val = GetValue("CloudTargetPath");
+            if (IsConfigMissing(val))
+            {
+                val = GetValue("DefaultTargetPath");
+                if (!IsConfigMissing(val) && !string.IsNullOrEmpty(val))
+                {
+                    SetValue("CloudTargetPath", val);
+                }
+            }
+            return IsConfigMissing(val) ? "" : val;
+        }
+
+        public static string GetLocalTargetPath()
+        {
+            string val = GetValue("LocalTargetPath");
+            return IsConfigMissing(val) ? "" : val;
         }
 
         /*写配置文件*/

@@ -70,7 +70,7 @@ namespace CTG_Control.Crane.Service
             CompressRarAsync(compressItem, null).GetAwaiter().GetResult();
         }
 
-        public static async Task CompressRarAsync(CompressItem compressItem, IProgress<int>? progress)
+        public static async Task CompressRarAsync(CompressItem compressItem, IProgress<int>? progress, string? remark = null)
         {
             string sourcePath = compressItem.SourcePath;
             if (sourcePath is null)
@@ -80,7 +80,8 @@ namespace CTG_Control.Crane.Service
 
             string targetPath = GetTargetDirectory(compressItem);
             Directory.CreateDirectory(targetPath);
-            string targetFileName = targetPath + "\\" + compressItem.Id + "_" + compressItem.MarkName + "@.rar";
+            string remarkPart = string.IsNullOrWhiteSpace(remark) ? "" : "_" + SanitizeFileName(remark.Trim());
+            string targetFileName = targetPath + "\\" + compressItem.Id + "_" + compressItem.MarkName + remarkPart + "@.rar";
 
             RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(WINRAR_KEY);
             string winrarPath = registryKey.GetValue("").ToString();
@@ -104,13 +105,105 @@ namespace CTG_Control.Crane.Service
 
             progress?.Report(100);
             compressItem.LatelyDate = DateTime.Now;
+            RecordCompressSize(compressItem);
             DataDao.UpdateOne(compressItem);
+        }
+
+        private static void RecordCompressSize(CompressItem compressItem)
+        {
+            try
+            {
+                FileCountService fileCountService = new();
+                compressItem.BeforeSize = fileCountService.FileLengthCount(compressItem.SourcePath);
+
+                string targetDir = GetTargetDirectory(compressItem);
+                if (Directory.Exists(targetDir))
+                {
+                    var rarFiles = Directory.GetFiles(targetDir, "*.rar")
+                        .Select(f => new FileInfo(f))
+                        .OrderByDescending(f => f.LastWriteTime)
+                        .ToList();
+                    if (rarFiles.Count > 0)
+                    {
+                        compressItem.AfterSize = rarFiles[0].Length;
+                        if (compressItem.BeforeSize > 0)
+                        {
+                            compressItem.CompressionRatio = Math.Round(
+                                (double)compressItem.AfterSize / compressItem.BeforeSize * 100, 2);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // 计算大小失败不影响主流程
+            }
         }
 
         public static string GetTargetDirectory(CompressItem compressItem)
         {
             string folderName = SanitizeFileName(compressItem.Id + "_" + compressItem.MarkName);
-            return ConfigService.GetValue("DefaultTargetPath") + "\\" + folderName;
+            return ConfigService.GetLocalTargetPath() + "\\" + folderName;
+        }
+
+        public static string GetCloudTargetDirectory(CompressItem compressItem)
+        {
+            string folderName = SanitizeFileName(compressItem.Id + "_" + compressItem.MarkName);
+            return ConfigService.GetCloudTargetPath() + "\\" + folderName;
+        }
+
+        public static string UploadAllLatestToCloud()
+        {
+            string cloudPath = ConfigService.GetCloudTargetPath();
+            string localPath = ConfigService.GetLocalTargetPath();
+            if (string.IsNullOrEmpty(cloudPath))
+            {
+                return "请先设置云端备份库路径";
+            }
+            if (string.IsNullOrEmpty(localPath))
+            {
+                return "请先设置本地备份库路径";
+            }
+
+            List<CompressItem> items = DataDao.ReadAll();
+            int successCount = 0;
+            int failCount = 0;
+
+            foreach (CompressItem item in items)
+            {
+                string folderName = SanitizeFileName(item.Id + "_" + item.MarkName);
+                string localDir = localPath + "\\" + folderName;
+                string cloudDir = cloudPath + "\\" + folderName;
+
+                if (!Directory.Exists(localDir))
+                {
+                    continue;
+                }
+
+                FileInfo? latestFile = Directory.GetFiles(localDir, "*.rar")
+                    .Select(f => new FileInfo(f))
+                    .OrderByDescending(f => f.LastWriteTime)
+                    .FirstOrDefault();
+
+                if (latestFile == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    Directory.CreateDirectory(cloudDir);
+                    string destFile = Path.Combine(cloudDir, latestFile.Name);
+                    File.Copy(latestFile.FullName, destFile, true);
+                    successCount++;
+                }
+                catch
+                {
+                    failCount++;
+                }
+            }
+
+            return $"上传完成，成功：{successCount}，失败：{failCount}";
         }
 
         public static void ForceStopCompress()

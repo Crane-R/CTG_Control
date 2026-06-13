@@ -10,15 +10,32 @@ namespace CTG_Control.Crane.Constant
 
         public const string MARK_NAME_BLANK = "输入标识名";
 
-        public const string PROGRAM_VERSION = "CTG_Control " + VERSION;
-
         public const string PROGRAM_NAME_CN = "压缩备份中心";
 
-        public const string VERSION = "v3.1.1";
+        public const string VERSION = "v3.2.1";
 
         public const string DATATIME_FORMAT = "yyyyMMddHHmmss";
 
         public const string PUBLISH_DATE = "2026-06-13";
+
+        public static string PROGRAM_VERSION
+        {
+            get
+            {
+                string suffix = IsWithin30DaysOfPublish() ? "-rc" : "";
+                return "CTG_Control " + VERSION + suffix;
+            }
+        }
+
+        private static bool IsWithin30DaysOfPublish()
+        {
+            if (!DateTime.TryParseExact(PUBLISH_DATE, "yyyy-MM-dd", null,
+                    System.Globalization.DateTimeStyles.None, out DateTime publishDate))
+            {
+                return false;
+            }
+            return (DateTime.Now - publishDate).TotalDays <= 30;
+        }
 
     }
 }

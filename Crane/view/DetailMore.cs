@@ -30,6 +30,7 @@ namespace CTG_Control.Crane.view
             LastBackPast.Text = CompressItem.LastBackPast.ToString("0.0000000");
             IsAutoBack.Checked = CompressItem.IsAutoBack;
             IntervalValue.Text = CompressItem.BackInterval.ToString();
+            InitCompressSize();
         }
 
         private void ChooseStandard_SelectedIndexChanged(object sender, EventArgs e)
@@ -48,6 +49,23 @@ namespace CTG_Control.Crane.view
             DataDao.UpdateOne(CompressItem);
             MainForm.Init();
             Close();
+        }
+
+        private void InitCompressSize()
+        {
+            FileCountService fileCountService = new();
+            if (CompressItem.BeforeSize > 0)
+            {
+                LastBeforeSize.Text = fileCountService.FormatFileCount(CompressItem.BeforeSize);
+                LastAfterSize.Text = fileCountService.FormatFileCount(CompressItem.AfterSize);
+                LastCompressionRatio.Text = CompressItem.CompressionRatio + "%";
+            }
+            else
+            {
+                LastBeforeSize.Text = "-";
+                LastAfterSize.Text = "-";
+                LastCompressionRatio.Text = "-";
+            }
         }
 
         /// <summary>

@@ -39,6 +39,12 @@
             label3 = new Label();
             label5 = new Label();
             ChooseStandard = new ComboBox();
+            label6 = new Label();
+            LastBeforeSize = new Label();
+            label7 = new Label();
+            LastAfterSize = new Label();
+            label8 = new Label();
+            LastCompressionRatio = new Label();
             SuspendLayout();
             // 
             // IsAutoBack
@@ -75,7 +81,7 @@
             // 
             // SureBtn
             // 
-            SureBtn.Location = new Point(603, 251);
+            SureBtn.Location = new Point(603, 330);
             SureBtn.Margin = new Padding(5, 4, 5, 4);
             SureBtn.Name = "SureBtn";
             SureBtn.Size = new Size(168, 51);
@@ -148,12 +154,72 @@
             ChooseStandard.TabIndex = 13;
             ChooseStandard.Text = "标准值选择";
             ChooseStandard.SelectedIndexChanged += ChooseStandard_SelectedIndexChanged;
-            // 
+            //
+            // label6
+            //
+            label6.AutoSize = true;
+            label6.Location = new Point(19, 195);
+            label6.Name = "label6";
+            label6.Size = new Size(136, 24);
+            label6.TabIndex = 14;
+            label6.Text = "压缩前大小：";
+            //
+            // LastBeforeSize
+            //
+            LastBeforeSize.AutoSize = true;
+            LastBeforeSize.Location = new Point(175, 195);
+            LastBeforeSize.Name = "LastBeforeSize";
+            LastBeforeSize.Size = new Size(154, 24);
+            LastBeforeSize.TabIndex = 15;
+            LastBeforeSize.Text = "-";
+            //
+            // label7
+            //
+            label7.AutoSize = true;
+            label7.Location = new Point(19, 235);
+            label7.Name = "label7";
+            label7.Size = new Size(136, 24);
+            label7.TabIndex = 16;
+            label7.Text = "压缩后大小：";
+            //
+            // LastAfterSize
+            //
+            LastAfterSize.AutoSize = true;
+            LastAfterSize.Location = new Point(175, 235);
+            LastAfterSize.Name = "LastAfterSize";
+            LastAfterSize.Size = new Size(154, 24);
+            LastAfterSize.TabIndex = 17;
+            LastAfterSize.Text = "-";
+            //
+            // label8
+            //
+            label8.AutoSize = true;
+            label8.Location = new Point(19, 275);
+            label8.Name = "label8";
+            label8.Size = new Size(100, 24);
+            label8.TabIndex = 18;
+            label8.Text = "压缩比：";
+            //
+            // LastCompressionRatio
+            //
+            LastCompressionRatio.AutoSize = true;
+            LastCompressionRatio.Location = new Point(175, 275);
+            LastCompressionRatio.Name = "LastCompressionRatio";
+            LastCompressionRatio.Size = new Size(154, 24);
+            LastCompressionRatio.TabIndex = 19;
+            LastCompressionRatio.Text = "-";
+            //
             // DetailMore
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(790, 319);
+            ClientSize = new Size(790, 400);
+            Controls.Add(LastCompressionRatio);
+            Controls.Add(label8);
+            Controls.Add(LastAfterSize);
+            Controls.Add(label7);
+            Controls.Add(LastBeforeSize);
+            Controls.Add(label6);
             Controls.Add(ChooseStandard);
             Controls.Add(label5);
             Controls.Add(label3);
@@ -187,5 +253,11 @@
         private Label label3;
         private Label label5;
         private ComboBox ChooseStandard;
+        private Label label6;
+        private Label LastBeforeSize;
+        private Label label7;
+        private Label LastAfterSize;
+        private Label label8;
+        private Label LastCompressionRatio;
     }
 }

@@ -86,13 +86,47 @@ namespace CTG_Control.Crane.Model.Bean
             set { _LastBackPast = value; }
         }
 
+        /// <summary>
+        /// 压缩前大小（字节）
+        /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        private long _BeforeSize;
+        public long BeforeSize
+        {
+            get { return _BeforeSize; }
+            set { _BeforeSize = value; }
+        }
+
+        /// <summary>
+        /// 压缩后大小（字节）
+        /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        private long _AfterSize;
+        public long AfterSize
+        {
+            get { return _AfterSize; }
+            set { _AfterSize = value; }
+        }
+
+        /// <summary>
+        /// 压缩比（压缩后/压缩前 * 100）
+        /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        private double _CompressionRatio;
+        public double CompressionRatio
+        {
+            get { return _CompressionRatio; }
+            set { _CompressionRatio = value; }
+        }
+
         public CompressItem()
         {
             _MarkName = string.Empty;
             _SourcePath = string.Empty;
         }
-        public CompressItem(int id, string markName, string sourcePath, 
-            DateTime latelyDate, bool isAutoBack, int backInterval, int lastBackPast)
+        public CompressItem(int id, string markName, string sourcePath,
+            DateTime latelyDate, bool isAutoBack, int backInterval, int lastBackPast,
+            long beforeSize = 0, long afterSize = 0, double compressionRatio = 0)
         {
             _SourcePath = sourcePath;
             _LatelyDate = latelyDate;
@@ -101,6 +135,9 @@ namespace CTG_Control.Crane.Model.Bean
             _IsAutoBack = isAutoBack;
             _BackInterval = backInterval;
             _LastBackPast = lastBackPast;
+            _BeforeSize = beforeSize;
+            _AfterSize = afterSize;
+            _CompressionRatio = compressionRatio;
         }
 
         public static void TransferObjValue(CompressItem TargetObj, CompressItem OriginObj)
@@ -112,6 +149,9 @@ namespace CTG_Control.Crane.Model.Bean
             TargetObj._IsAutoBack = OriginObj._IsAutoBack;
             TargetObj._BackInterval = OriginObj._BackInterval;
             TargetObj._LastBackPast = OriginObj._LastBackPast;
+            TargetObj._BeforeSize = OriginObj._BeforeSize;
+            TargetObj._AfterSize = OriginObj._AfterSize;
+            TargetObj._CompressionRatio = OriginObj._CompressionRatio;
         }
 
     }

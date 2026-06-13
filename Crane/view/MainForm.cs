@@ -4,6 +4,7 @@ using CTG_Control.Crane.Model.Bean;
 using CTG_Control.Crane.Model.Dao;
 using CTG_Control.Crane.Service;
 using CTG_Control.Crane.view;
+using System.Diagnostics;
 
 namespace CTG_Control
 {
@@ -87,7 +88,8 @@ namespace CTG_Control
                 });
                 //TotalItemsSize.Text = fileCountService.FormatFileCount(sourceSum);
                 TotalLastPast.Text = totalBackTime.ToString("0.000");
-                backLocationInput.Text = ConfigService.GetValue("DefaultTargetPath");
+                localLocationInput.Text = ConfigService.GetLocalTargetPath();
+                backLocationInput.Text = ConfigService.GetCloudTargetPath();
             }));
         }
 
@@ -107,6 +109,12 @@ namespace CTG_Control
             if (CompressService.NotExistsWinRar())
             {
                 MessageBox.Show("程序需要依赖WinRAR，请先安装");
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(ConfigService.GetLocalTargetPath()))
+            {
+                MessageBox.Show("请先设置本地备份库路径", "路径为空", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
@@ -169,6 +177,7 @@ namespace CTG_Control
             backLocationLock.Enabled = isAble;
             addItem.Enabled = isAble;
             allExecute.Enabled = isAble;
+            uploadToCloudBtn.Enabled = isAble;
         }
 
         private void ShowCompressionProgress(string markName, int percent)
@@ -428,12 +437,14 @@ namespace CTG_Control
             if (!backLocationInput.Enabled)
             {
                 backLocationInput.Enabled = true;
-                backLocationLock.Text = "锁定备份路径";
+                localLocationInput.Enabled = true;
+                backLocationLock.Text = "锁定路径";
             }
             else
             {
                 backLocationInput.Enabled = false;
-                backLocationLock.Text = "解锁备份路径";
+                localLocationInput.Enabled = false;
+                backLocationLock.Text = "解锁路径";
             }
         }
 
@@ -452,9 +463,9 @@ namespace CTG_Control
 
         private void addItem_Click(object sender, EventArgs e)
         {
-            if ("".Equals(ConfigService.GetValue("DefaultTargetPath").ToString()))
+            if ("".Equals(ConfigService.GetLocalTargetPath()))
             {
-                MessageBox.Show("请先选择备份库位置");
+                MessageBox.Show("请先选择本地备份库位置");
                 return;
             }
             new AddForm(this).ShowDialog();
@@ -487,19 +498,53 @@ namespace CTG_Control
             new AboutBox().ShowDialog();
         }
 
+        private void openConfigItem_Click(object sender, EventArgs e)
+        {
+            string configPath = PathService.GetApplicationPath() + "/Resources/Config/config.ini";
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = configPath,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("无法打开配置文件：" + ex.Message, "提示");
+            }
+        }
+
         private void backLocationInput_TextChanged(object sender, EventArgs e)
         {
-            ConfigService.SetValue("DefaultTargetPath", backLocationInput.Text);
+            ConfigService.SetValue("CloudTargetPath", backLocationInput.Text);
+        }
+
+        private void localLocationInput_Click(object sender, EventArgs e)
+        {
+            if (chooseBackLocation.ShowDialog() == DialogResult.OK)
+            {
+                localLocationInput.Text = chooseBackLocation.SelectedPath;
+            }
+        }
+
+        private void localLocationInput_TextChanged(object sender, EventArgs e)
+        {
+            ConfigService.SetValue("LocalTargetPath", localLocationInput.Text);
+        }
+
+        private async void uploadToCloudBtn_Click(object sender, EventArgs e)
+        {
+            string result = CompressService.UploadAllLatestToCloud();
+            MessageBox.Show(result);
         }
 
         private void SyCountDownLabel_Click(object sender, EventArgs e)
         {
-            throw new System.NotImplementedException();
         }
 
         private void compressionProgressLabel_Click(object sender, EventArgs e)
         {
-            throw new System.NotImplementedException();
         }
     }
 }

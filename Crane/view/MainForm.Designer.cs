@@ -53,11 +53,15 @@
             功能ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             addItem = new System.Windows.Forms.ToolStripMenuItem();
             allExecute = new System.Windows.Forms.ToolStripMenuItem();
+            openConfigItem = new System.Windows.Forms.ToolStripMenuItem();
             aboutItem = new System.Windows.Forms.ToolStripMenuItem();
             settingItem = new System.Windows.Forms.ToolStripMenuItem();
             compressionProgressBar = new System.Windows.Forms.ProgressBar();
             compressionProgressLabel = new System.Windows.Forms.Label();
             forceStopSyncBtn = new System.Windows.Forms.Button();
+            uploadToCloudBtn = new System.Windows.Forms.Button();
+            label4 = new System.Windows.Forms.Label();
+            localLocationInput = new System.Windows.Forms.TextBox();
             contextMenuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)mainTable).BeginInit();
             menuStrip1.SuspendLayout();
@@ -106,7 +110,7 @@
             SyCountDownLabel.AutoSize = true;
             SyCountDownLabel.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Bold);
             SyCountDownLabel.ForeColor = System.Drawing.Color.FromArgb(((int)((byte)192)), ((int)((byte)0)), ((int)((byte)0)));
-            SyCountDownLabel.Location = new System.Drawing.Point(16, 887);
+            SyCountDownLabel.Location = new System.Drawing.Point(24, 1019);
             SyCountDownLabel.MaximumSize = new System.Drawing.Size(0, 163);
             SyCountDownLabel.Name = "SyCountDownLabel";
             SyCountDownLabel.Size = new System.Drawing.Size(220, 31);
@@ -122,7 +126,7 @@
             StopSyBtn.Cursor = System.Windows.Forms.Cursors.Hand;
             StopSyBtn.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.285714F, System.Drawing.FontStyle.Bold);
             StopSyBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            StopSyBtn.Location = new System.Drawing.Point(1319, 876);
+            StopSyBtn.Location = new System.Drawing.Point(1424, 1008);
             StopSyBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             StopSyBtn.Name = "StopSyBtn";
             StopSyBtn.Size = new System.Drawing.Size(186, 42);
@@ -131,29 +135,13 @@
             StopSyBtn.UseVisualStyleBackColor = false;
             StopSyBtn.Click += StopSyBtn_Click;
             // 
-            // forceStopSyncBtn
-            //
-            forceStopSyncBtn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            forceStopSyncBtn.BackColor = System.Drawing.Color.DarkRed;
-            forceStopSyncBtn.Cursor = System.Windows.Forms.Cursors.Hand;
-            forceStopSyncBtn.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.285714F, System.Drawing.FontStyle.Bold);
-            forceStopSyncBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            forceStopSyncBtn.Location = new System.Drawing.Point(1524, 876);
-            forceStopSyncBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            forceStopSyncBtn.Name = "forceStopSyncBtn";
-            forceStopSyncBtn.Size = new System.Drawing.Size(186, 42);
-            forceStopSyncBtn.TabIndex = 25;
-            forceStopSyncBtn.Text = "强制终止同步";
-            forceStopSyncBtn.UseVisualStyleBackColor = false;
-            forceStopSyncBtn.Click += forceStopSyncBtn_Click;
-            //
             // label2
-            //
+            // 
             label2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             label2.AutoSize = true;
             label2.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.5F);
             label2.ForeColor = System.Drawing.Color.Navy;
-            label2.Location = new System.Drawing.Point(293, 890);
+            label2.Location = new System.Drawing.Point(300, 1022);
             label2.MaximumSize = new System.Drawing.Size(0, 163);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(222, 28);
@@ -167,7 +155,7 @@
             label1.AutoSize = true;
             label1.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.5F);
             label1.ForeColor = System.Drawing.Color.Navy;
-            label1.Location = new System.Drawing.Point(672, 893);
+            label1.Location = new System.Drawing.Point(729, 1022);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(54, 28);
             label1.TabIndex = 17;
@@ -177,7 +165,7 @@
             // 
             TotalLastPast.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             TotalLastPast.AutoSize = true;
-            TotalLastPast.Location = new System.Drawing.Point(573, 893);
+            TotalLastPast.Location = new System.Drawing.Point(605, 1025);
             TotalLastPast.Name = "TotalLastPast";
             TotalLastPast.Size = new System.Drawing.Size(21, 24);
             TotalLastPast.TabIndex = 18;
@@ -192,13 +180,13 @@
             mainTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             mainTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] { id, markName, SourcePath, itemSetBtn });
             mainTable.ContextMenuStrip = contextMenuMain;
-            mainTable.Location = new System.Drawing.Point(24, 70);
+            mainTable.Location = new System.Drawing.Point(24, 147);
             mainTable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             mainTable.Name = "mainTable";
             mainTable.ReadOnly = true;
             mainTable.RowHeadersWidth = 51;
             mainTable.RowTemplate.Height = 29;
-            mainTable.Size = new System.Drawing.Size(1793, 798);
+            mainTable.Size = new System.Drawing.Size(1793, 857);
             mainTable.TabIndex = 6;
             mainTable.CellClick += mainTable_CellClick;
             mainTable.CellContentClick += mainTable_CellContentClick;
@@ -207,47 +195,51 @@
             // id
             // 
             id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            id.FillWeight = 51.202282F;
             id.HeaderText = "ID";
             id.MinimumWidth = 6;
             id.Name = "id";
             id.ReadOnly = true;
-            id.Width = 313;
+            id.Width = 223;
             // 
             // markName
             // 
             markName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            markName.FillWeight = 80.45977F;
             markName.HeaderText = "标识";
             markName.MinimumWidth = 100;
             markName.Name = "markName";
             markName.ReadOnly = true;
-            markName.Width = 314;
+            markName.Width = 350;
             // 
             // SourcePath
             // 
             SourcePath.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            SourcePath.FillWeight = 230.41031F;
             SourcePath.HeaderText = "备份路径";
             SourcePath.MinimumWidth = 800;
             SourcePath.Name = "SourcePath";
             SourcePath.ReadOnly = true;
-            SourcePath.Width = 800;
+            SourcePath.Width = 1002;
             // 
             // itemSetBtn
             // 
             itemSetBtn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            itemSetBtn.HeaderText = "更多";
+            itemSetBtn.FillWeight = 37.92762F;
+            itemSetBtn.HeaderText = "更多（自动？）";
             itemSetBtn.MinimumWidth = 8;
             itemSetBtn.Name = "itemSetBtn";
             itemSetBtn.ReadOnly = true;
             itemSetBtn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            itemSetBtn.Width = 313;
+            itemSetBtn.Width = 165;
             // 
             // backLocationInput
             // 
             backLocationInput.Enabled = false;
             backLocationInput.Font = new System.Drawing.Font("Segoe UI", 10F);
-            backLocationInput.Location = new System.Drawing.Point(162, 34);
+            backLocationInput.Location = new System.Drawing.Point(300, 94);
             backLocationInput.Name = "backLocationInput";
-            backLocationInput.Size = new System.Drawing.Size(660, 34);
+            backLocationInput.Size = new System.Drawing.Size(1341, 34);
             backLocationInput.TabIndex = 19;
             backLocationInput.Click += backLocationInput_Click;
             backLocationInput.TextChanged += backLocationInput_TextChanged;
@@ -256,21 +248,23 @@
             // 
             label3.AutoSize = true;
             label3.Font = new System.Drawing.Font("Segoe UI", 10F);
-            label3.Location = new System.Drawing.Point(24, 37);
+            label3.Location = new System.Drawing.Point(24, 97);
             label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(132, 28);
+            label3.Size = new System.Drawing.Size(172, 28);
             label3.TabIndex = 20;
-            label3.Text = "备份库路径：";
+            label3.Text = "云端备份库路径：";
             // 
             // backLocationLock
             // 
             backLocationLock.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right));
-            backLocationLock.Location = new System.Drawing.Point(1597, 36);
+            backLocationLock.BackColor = System.Drawing.Color.Goldenrod;
+            backLocationLock.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            backLocationLock.Location = new System.Drawing.Point(1647, 51);
             backLocationLock.Name = "backLocationLock";
-            backLocationLock.Size = new System.Drawing.Size(220, 30);
+            backLocationLock.Size = new System.Drawing.Size(170, 34);
             backLocationLock.TabIndex = 21;
             backLocationLock.Text = "解锁备份库路径";
-            backLocationLock.UseVisualStyleBackColor = true;
+            backLocationLock.UseVisualStyleBackColor = false;
             backLocationLock.Click += backLocationLock_Click;
             // 
             // menuStrip1
@@ -285,7 +279,7 @@
             // 
             // 功能ToolStripMenuItem
             // 
-            功能ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { addItem, allExecute, aboutItem, settingItem });
+            功能ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { addItem, allExecute, openConfigItem, aboutItem, settingItem });
             功能ToolStripMenuItem.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.5F);
             功能ToolStripMenuItem.Name = "功能ToolStripMenuItem";
             功能ToolStripMenuItem.Size = new System.Drawing.Size(70, 32);
@@ -294,37 +288,44 @@
             // addItem
             // 
             addItem.Name = "addItem";
-            addItem.Size = new System.Drawing.Size(198, 36);
+            addItem.Size = new System.Drawing.Size(240, 36);
             addItem.Text = "添加项";
             addItem.Click += addItem_Click;
             // 
             // allExecute
             // 
             allExecute.Name = "allExecute";
-            allExecute.Size = new System.Drawing.Size(198, 36);
+            allExecute.Size = new System.Drawing.Size(240, 36);
             allExecute.Text = "一键执行";
             allExecute.Click += allExecute_Click;
+            // 
+            // openConfigItem
+            // 
+            openConfigItem.Name = "openConfigItem";
+            openConfigItem.Size = new System.Drawing.Size(240, 36);
+            openConfigItem.Text = "打开配置文件";
+            openConfigItem.Click += openConfigItem_Click;
             // 
             // aboutItem
             // 
             aboutItem.Name = "aboutItem";
-            aboutItem.Size = new System.Drawing.Size(198, 36);
+            aboutItem.Size = new System.Drawing.Size(240, 36);
             aboutItem.Text = "关于软件";
             aboutItem.Click += aboutItem_Click;
             // 
             // settingItem
             // 
             settingItem.Name = "settingItem";
-            settingItem.Size = new System.Drawing.Size(198, 36);
+            settingItem.Size = new System.Drawing.Size(240, 36);
             settingItem.Text = "设置";
             settingItem.Click += settingItem_Click;
             // 
             // compressionProgressBar
             // 
             compressionProgressBar.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            compressionProgressBar.Location = new System.Drawing.Point(842, 883);
+            compressionProgressBar.Location = new System.Drawing.Point(858, 1020);
             compressionProgressBar.Name = "compressionProgressBar";
-            compressionProgressBar.Size = new System.Drawing.Size(456, 29);
+            compressionProgressBar.Size = new System.Drawing.Size(484, 29);
             compressionProgressBar.TabIndex = 23;
             // 
             // compressionProgressLabel
@@ -333,22 +334,77 @@
             compressionProgressLabel.AutoSize = true;
             compressionProgressLabel.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.5F);
             compressionProgressLabel.ForeColor = System.Drawing.Color.Navy;
-            compressionProgressLabel.Location = new System.Drawing.Point(842, 853);
+            compressionProgressLabel.Location = new System.Drawing.Point(858, 989);
             compressionProgressLabel.Name = "compressionProgressLabel";
             compressionProgressLabel.Size = new System.Drawing.Size(148, 28);
             compressionProgressLabel.TabIndex = 24;
             compressionProgressLabel.Text = "压缩进度：0%";
+            // 
+            // forceStopSyncBtn
+            // 
+            forceStopSyncBtn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            forceStopSyncBtn.BackColor = System.Drawing.Color.DarkRed;
+            forceStopSyncBtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            forceStopSyncBtn.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.285714F, System.Drawing.FontStyle.Bold);
+            forceStopSyncBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            forceStopSyncBtn.Location = new System.Drawing.Point(1631, 1008);
+            forceStopSyncBtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            forceStopSyncBtn.Name = "forceStopSyncBtn";
+            forceStopSyncBtn.Size = new System.Drawing.Size(186, 42);
+            forceStopSyncBtn.TabIndex = 25;
+            forceStopSyncBtn.Text = "强制终止同步";
+            forceStopSyncBtn.UseVisualStyleBackColor = false;
+            forceStopSyncBtn.Click += forceStopSyncBtn_Click;
+            // 
+            // uploadToCloudBtn
+            // 
+            uploadToCloudBtn.Anchor = ((System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right));
+            uploadToCloudBtn.BackColor = System.Drawing.Color.DodgerBlue;
+            uploadToCloudBtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            uploadToCloudBtn.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F, System.Drawing.FontStyle.Bold);
+            uploadToCloudBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            uploadToCloudBtn.Location = new System.Drawing.Point(1647, 97);
+            uploadToCloudBtn.Name = "uploadToCloudBtn";
+            uploadToCloudBtn.Size = new System.Drawing.Size(170, 34);
+            uploadToCloudBtn.TabIndex = 28;
+            uploadToCloudBtn.Text = "上传云端";
+            uploadToCloudBtn.UseVisualStyleBackColor = false;
+            uploadToCloudBtn.Click += uploadToCloudBtn_Click;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new System.Drawing.Font("Segoe UI", 10F);
+            label4.Location = new System.Drawing.Point(24, 57);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(172, 28);
+            label4.TabIndex = 26;
+            label4.Text = "本地备份库路径：";
+            // 
+            // localLocationInput
+            // 
+            localLocationInput.Enabled = false;
+            localLocationInput.Font = new System.Drawing.Font("Segoe UI", 10F);
+            localLocationInput.Location = new System.Drawing.Point(300, 54);
+            localLocationInput.Name = "localLocationInput";
+            localLocationInput.Size = new System.Drawing.Size(1341, 34);
+            localLocationInput.TabIndex = 27;
+            localLocationInput.Click += localLocationInput_Click;
+            localLocationInput.TextChanged += localLocationInput_TextChanged;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.SystemColors.Control;
-            ClientSize = new System.Drawing.Size(1829, 937);
+            ClientSize = new System.Drawing.Size(1829, 1063);
             Controls.Add(compressionProgressLabel);
             Controls.Add(compressionProgressBar);
             Controls.Add(menuStrip1);
             Controls.Add(backLocationLock);
+            Controls.Add(label4);
+            Controls.Add(localLocationInput);
+            Controls.Add(uploadToCloudBtn);
             Controls.Add(label3);
             Controls.Add(backLocationInput);
             Controls.Add(TotalLastPast);
@@ -381,27 +437,31 @@
         private ToolStripMenuItem DeleteCurrent;
         private NotifyIcon mainNotifyIcon;
         private System.Windows.Forms.Label SyCountDownLabel;
-        private Button StopSyBtn;
+        private System.Windows.Forms.Button StopSyBtn;
         private ToolStripMenuItem restoreItem;
-        private Label label2;
-        private Label label1;
-        private Label TotalLastPast;
-        private DataGridView mainTable;
-        public TextBox backLocationInput;
-        private Label label3;
-        private Button backLocationLock;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label TotalLastPast;
+        private System.Windows.Forms.DataGridView mainTable;
+        private System.Windows.Forms.TextBox backLocationInput;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button backLocationLock;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem 功能ToolStripMenuItem;
         private ToolStripMenuItem addItem;
         private ToolStripMenuItem allExecute;
         private ToolStripMenuItem aboutItem;
         private ToolStripMenuItem settingItem;
-        private DataGridViewTextBoxColumn id;
-        private DataGridViewTextBoxColumn markName;
+        private ToolStripMenuItem openConfigItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn markName;
         private DataGridViewTextBoxColumn SourcePath;
-        private DataGridViewButtonColumn itemSetBtn;
-        private ProgressBar compressionProgressBar;
-        private Label compressionProgressLabel;
-        private Button forceStopSyncBtn;
+        private System.Windows.Forms.DataGridViewButtonColumn itemSetBtn;
+        private System.Windows.Forms.ProgressBar compressionProgressBar;
+        private System.Windows.Forms.Label compressionProgressLabel;
+        private System.Windows.Forms.Button forceStopSyncBtn;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox localLocationInput;
+        private System.Windows.Forms.Button uploadToCloudBtn;
     }
 }

@@ -2,7 +2,7 @@
 
 # CTG_Control
 
-CTG_Control (Compress-Transfer-General-Control) is a Windows desktop backup controller. It compresses specified files or folders into a unified backup directory, which can then be synced by cloud storage, network drives, or other file-sync tools.
+CTG_Control (Compress-Transfer-General-Control) is a Windows desktop backup controller. It compresses specified files or folders into a unified backup directory. It supports dual-path backup with a local backup library and a cloud backup library, making it easy to sync with cloud storage, network drives, or other file-sync tools.
 
 Current version: `v3.1.1`
 
@@ -17,6 +17,7 @@ Current version: `v3.1.1`
 - Non-blocking UI during compression — the window can be minimized.
 - Force-stop an in-progress sync/compression task.
 - Restore from `.rar` files in the backup directory back to the original path.
+- Dual-path backup: local backup library + cloud backup library with one-click upload.
 - Time-interval check to avoid redundant backups (Compression Time Detection).
 - Create WinRAR self-extracting archives (SFX).
 - Auto-start with Windows.
@@ -84,9 +85,12 @@ No test project exists in this repository.
 
 ## Usage
 
-### 1. Set Backup Directory
+### 1. Set Backup Directories
 
-Select a backup target directory from the top of the main window. This is where all compressed results are saved.
+The main window has two backup paths at the top:
+
+- **Local Backup Library**: All compression output goes here — the primary storage for daily backups.
+- **Cloud Backup Library**: Holds files synced to the cloud. Click the "Upload to Cloud" button to copy the latest file for each item from the local library to the cloud library.
 
 ### 2. Add Backup Items
 
@@ -121,6 +125,10 @@ Illegal filename characters in the label are replaced with `_`.
 
 Right-click a backup item and select Restore to pick a `.rar` file from its backup directory and extract it back to the original source path.
 
+### 6. Upload to Cloud
+
+Click the "Upload to Cloud" button at the top-right of the main window. The program iterates all backup items and copies the latest `.rar` file from each item's local backup directory to the corresponding cloud backup directory. Set the cloud backup path to a cloud-synced folder (e.g., OneDrive, Dropbox) to achieve secondary cloud sync.
+
 ## Config & Data Files
 
 ```text
@@ -130,7 +138,8 @@ Resources/Data/data.json
 
 Key `config.ini` settings:
 
-- `DefaultTargetPath` — default backup directory
+- `LocalTargetPath` — local backup directory, all compression output goes here
+- `CloudTargetPath` — cloud backup directory for upload sync
 - `isNotify` — enable Windows notifications
 - `isTimeJudge` — enable compression time detection
 - `isStartUp` — enable auto-start with Windows
