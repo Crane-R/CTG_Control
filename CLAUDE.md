@@ -40,7 +40,7 @@ There is currently no test project in this repository, so `dotnet test` has noth
   - `SettingForm` toggles config-driven behavior such as notifications, time-interval checks, startup registration, and SFX archives.
   - `DetailMore` edits per-item details such as automatic backup settings.
 - `Crane/Model/Bean/CompressItem.cs` is the persisted backup-item model. It is serialized with Newtonsoft.Json.
-- `Crane/Model/Dao/DataDao.cs` is the persistence layer for backup items. It reads and writes JSON in `Resources/Data/data.txt` and also updates ID counters in config.
+- `Crane/Model/Dao/DataDao.cs` is the persistence layer for backup items. It reads and writes JSON in `Resources/Data/data.json` and also updates ID counters in config.
 - `Crane/Service/` contains application services:
   - `CompressService` wraps WinRAR command-line compression/decompression and updates backup timestamps.
   - `ConfigService` reads/writes `Resources/Config/config.ini` using Windows INI APIs from `kernel32`.
@@ -48,7 +48,7 @@ There is currently no test project in this repository, so `dotnet test` has noth
   - `StartUpService` writes/removes the current user's `Run` registry entry for startup launch.
   - `DeleteService`, `FileCountService`, `IdService`, and `BackIntervalTool` support retention cleanup, size formatting/counting, ID generation, and interval presets.
 - `Resources/Config/config.ini` stores application settings such as target path, ID counters, notification/time-judge/startup/SFX flags, countdown/shutdown timers, and interval defaults.
-- `Resources/Data/data.txt` stores the list of configured backup items as JSON.
+- `Resources/Data/data.json` stores the list of configured backup items as JSON.
 
 ## Important implementation notes
 

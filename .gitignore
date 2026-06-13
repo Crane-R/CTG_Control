@@ -364,3 +364,5 @@ FodyWeavers.xsd
 
 # custom
 打包/
+Resources/Data/data.json
+Resources/Config/config.ini

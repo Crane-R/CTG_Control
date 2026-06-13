@@ -145,7 +145,7 @@ D:\Backup\3_工作文档\3_工作文档@20260613123045.rar
 
 ```text
 Resources/Config/config.ini
-Resources/Data/data.txt
+Resources/Data/data.json
 ```
 
 `config.ini` 主要配置项包括：
@@ -161,7 +161,7 @@ Resources/Data/data.txt
 - `shutDownTime`：自动同步完成后退出倒计时秒数。
 - `fastInterval` / `middleInterval` / `slowInterval`：预设备份间隔小时数。
 
-`data.txt` 使用 JSON 保存备份项列表。
+`data.json` 使用 JSON 保存备份项列表。
 
 ## 备份项字段
 

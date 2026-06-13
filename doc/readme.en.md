@@ -125,7 +125,7 @@ Right-click a backup item and select Restore to pick a `.rar` file from its back
 
 ```text
 Resources/Config/config.ini
-Resources/Data/data.txt
+Resources/Data/data.json
 ```
 
 Key `config.ini` settings:
@@ -139,7 +139,7 @@ Key `config.ini` settings:
 - `shutDownTime` — auto-exit countdown in seconds
 - `fastInterval` / `middleInterval` / `slowInterval` — preset backup intervals in hours
 
-`data.txt` stores backup items in JSON format.
+`data.json` stores backup items in JSON format.
 
 ## Backup Item Fields
 

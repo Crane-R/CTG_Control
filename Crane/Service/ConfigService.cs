@@ -32,13 +32,23 @@ namespace CTG_Control.Crane.Service
             string filePath
         );
 
+        private static void EnsureConfigExists()
+        {
+            if (File.Exists(PATH)) return;
+
+            string dir = Path.GetDirectoryName(PATH);
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            File.WriteAllText(PATH, "[system]\nDefaultTargetPath=\nCurrentDataCount=0\nNextId=0\nisNotify=0\nisTimeJudge=1\nisStartUp=0\nsfx=0\ncountDownTime=30\nshutDownTime=20\nnotificationText=备份执行同步\nfastInterval=24\nmiddleInterval=48\nslowInterval=72\ntotalLastPast=0\n", Encoding.UTF8);
+        }
+
         /*读配置文件*/
         public static string GetValue(string section, string key)
         {
-            if (!File.Exists(PATH))
-            {
-                return string.Empty;
-            }
+            EnsureConfigExists();
             StringBuilder sb = new(255);
             GetPrivateProfileString(section, key, "配置文件不存在，读取未成功!", sb, 255, PATH);
             return sb.ToString();
